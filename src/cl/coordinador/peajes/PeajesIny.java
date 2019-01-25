@@ -235,7 +235,7 @@ public class PeajesIny {
         System.arraycopy(TxtTemp1, 0, nomEmp, 0, numEmpG);
 
         /************
-         * lee L’neas
+         * lee L‚Äôneas
          *************/
         TxtTemp1 = new String[2000];
         int numLineas = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
@@ -249,7 +249,7 @@ public class PeajesIny {
         }
 
         /**********************
-         * lee L’neas Troncales
+         * lee L‚Äôneas Troncales
          **********************/
         TxtTemp1 = new String[2000];
         TxtTemp2 = new String[2000];
@@ -288,8 +288,8 @@ public class PeajesIny {
             int l = Calc.Buscar(tmp[0], nomLinIT);
             if(l==-1){
              System.out.println("Error!!!");
-             System.out.println("L’nea Trocal - "+tmp[0]+" - en archivo Peaje"+Ano+".xls no se encuentra en la hoja 'lintron' del archivo Ent"+Ano+".xlsx");
-             System.out.println("Debe asegurarse que la L’neas del archivo AVI_COMA.xls se encuentren en la hoja 'lintron' y ejecutar el bot—n Peajes");
+             System.out.println("L‚Äônea Trocal - "+tmp[0]+" - en archivo Peaje"+Ano+".xls no se encuentra en la hoja 'lintron' del archivo Ent"+Ano+".xlsx");
+             System.out.println("Debe asegurarse que la L‚Äôneas del archivo AVI_COMA.xls se encuentren en la hoja 'lintron' y ejecutar el bot‚Äîn Peajes");
             }
             else{
             zonaLinPe[i]=zonaLinIT[l];
@@ -309,7 +309,7 @@ public class PeajesIny {
                 numLinTx++;
             }
         }
-        nomLinTx = new String[numLinTx];//solo registros Ïnico L’nea#Transmisor de hoja lintron
+        nomLinTx = new String[numLinTx];//solo registros √ènico L‚Äônea#Transmisor de hoja lintron
         String[] nomPropTx = new String[numLinTx];
 
         for (int i = 0; i < numLinTx; i++) {
@@ -330,7 +330,7 @@ public class PeajesIny {
         String libroEntradaP = DirBaseSal + slash + "Prorrata" + Ano + ".xlsx";
 
         /*****************************
-         * lee Prorratas de Generaci—n
+         * lee Prorratas de Generaci‚Äîn
          *****************************/
         prorrMesG = new double[numLinIT][numCen][numMeses];
         prorrMesGenTx = new double[numLinTx][numCen][numMeses];
@@ -390,7 +390,7 @@ public class PeajesIny {
         calcPagos=true;
 
         /******************************************
-         * Calcula Pagos por Inyecci—n de Centrales
+         * Calcula Pagos por Inyecci‚Äîn de Centrales
          ******************************************/
         double[][][] peajeLinCen = new double[numLinTx][numCen][numMeses];
         double[][][]  ItLinCen = new double[numLinTx][numCen][numMeses];
@@ -448,7 +448,7 @@ public class PeajesIny {
         
         
          /******************************************
-         * Calcula Excenci—n de Centrales
+         * Calcula Excenci‚Äîn de Centrales
          ******************************************/
         double[][] facPago=new double[numCen][numMeses];
         double[] CapConjExcep=new double[numMeses];
@@ -469,7 +469,7 @@ public class PeajesIny {
                         //}
                         //else{
                             //facPago[i][m]=1-(20-PotNeta[i])/11;
-                            facPago[i][m]=MGNC[i]; //MGNC es factor de exención
+                            facPago[i][m]=MGNC[i]; //MGNC es factor de exenci√≥n
                       //  }
                     //}
                     //else{
@@ -713,7 +713,7 @@ public class PeajesIny {
 
 
 
-        // Ordena los archivos de salida de Inyecci—n por empresas
+        // Ordena los archivos de salida de Inyecci‚Äîn por empresas
         int[] ng = Calc.OrdenarBurbujaStr(nomGen);
        nomGenO = new String[numCen];
         for (int i = 0; i < numCen; i++) {
@@ -904,12 +904,12 @@ public class PeajesIny {
                 "PagoIny" + Ano + ".xlsx";
         Escribe.crearLibro(libroSalidaGXLS);
         Escribe.creaH2F_3d_long(
-                "Pago de Peaje por Línea y Central [$]", peajeLinGO,
-                "Línea", nomLineasN,
+                "Pago de Peaje por L√≠nea y Central [$]", peajeLinGO,
+                "L√≠nea", nomLineasN,
                 "Central", nomGenO,
                 
                 
-                "Factor de Excención",MGNCO,
+                "Factor de Excenci√≥n",MGNCO,
                 
                 
                 "Mes", nomMes,
@@ -961,31 +961,31 @@ public class PeajesIny {
                  CapConjExcep,FCorrec,
                 "Central",nomGenO,
                 "Transmisor", nombreTx,
-                "Factor Excención", MGNCO,
+                "Factor Excenci√≥n", MGNCO,
                 //"PNeta", PotNetaO,
-                //"Inyecci—n Mensual", GenPromMesCenO,
+                //"Inyecci‚Äîn Mensual", GenPromMesCenO,
                 //"Factor",facPagoO ,
                 libroSalidaGXLS, nomMes[m],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
         }
         Escribe.crea_verificaIny(
-                  "Verifica Pagos de Inyecci—n",libroEntrada,
+                  "Verifica Pagos de Inyecci‚Äîn",libroEntrada,
                   "Mes",nomMes,
                   "Calculo", PagoInyMes,
-                  "Prorrata L’nea",pagoInyMesLin,
+                  "Prorrata L‚Äônea",pagoInyMesLin,
                   "Diferencia",
                   "verifica","#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.crea_verificaCalcPeajes(
-                  "Verifica c‡lculo de Peajes",libroEntrada,
+                  "Verifica c‚Ä°lculo de Peajes",libroEntrada,
                   "Mes",nomMes,
                   "Peajes", PeajeNMes,
                   "Pago Ret","Pago Iny","Diferencia",
                   "verifica","#,###,##0;[Red]-#,###,##0;\"-\"");
         EscribirPagos=true;
         long tFinalEscritura = System.currentTimeMillis();
-        System.out.println("Pagos de Inyecci—n Anual Calculados");
+        System.out.println("Pagos de Inyecci‚Äîn Anual Calculados");
         System.out.println("Tiempo Adquisicion de datos     : "+DosDecimales.format((tFinalLectura-tInicioLectura)/(1000.0*60))+" m");
-        System.out.println("Tiempo C‡lculo                  : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/(1000.0*60))+" m");
+        System.out.println("Tiempo C‚Ä°lculo                  : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/(1000.0*60))+" m");
         System.out.println("Tiempo Escritura de Resultados  : "+DosDecimales.format((tFinalEscritura-tInicioEscritura)/(1000.0*60))+" m");
         System.out.println();
     }
@@ -999,7 +999,7 @@ public class PeajesIny {
      libroSalidaGXLSMes= DirBaseSal + slash +"PagoIny" + nomMes[m] + ".xlsx";
      Escribe.crearLibro(libroSalidaGXLSMes);
      Escribe.creaLiquidacionMesIny(m,
-                "Pago de Peajes de Inyecci—n",peajeCenTxO,
+                "Pago de Peajes de Inyecci‚Äîn",peajeCenTxO,
                  AjusMGNCTxO,PagoTotCenTxO,
                  peajeGenO,AjusMGNCTotO,PagoTotCenO,
                 "Central",nomGenO,
@@ -1014,19 +1014,19 @@ public class PeajesIny {
                 
                 libroSalidaGXLSMes, nomMes[m],Ano,"#,###,##0;[Red]-#,###,##0;\"-\"");
      Escribe.creaProrrataMes(m,
-                "Participaci—n de Inyecciones [%]",prorrMesGenTx,"Participaci—n "+nomMes[m],
+                "Participaci‚Äîn de Inyecciones [%]",prorrMesGenTx,"Participaci‚Äîn "+nomMes[m],
                 "Cliente",nomGen,
-                "L’nea",  nomLinTx,
+                "L‚Äônea",  nomLinTx,
                 "AIC", zonaLinTx,
                 libroSalidaGXLSMes, "PartIny"+nomMes[m],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
     Escribe.creaProrrataMes_long(m,
-                "Pagos por Inyecci—n "+nomMes[m]+" [$]",
+                "Pagos por Inyecci‚Äîn "+nomMes[m]+" [$]",
                 peajeLinGO,
                 "Pago "+nomMes[m],
                 "Central",
                 nomGenO,
-                "L’nea",
+                "L‚Äônea",
                 nomLineasN,
                 "AIC",
                 zonaLinPe,
@@ -1035,7 +1035,7 @@ public class PeajesIny {
                 libroSalidaGXLSMes,
                 "PagoxLinea",
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
-    System.out.println("Archivo Pago de Inyecci—n Mensual creado");
+    System.out.println("Archivo Pago de Inyecci‚Äîn Mensual creado");
     System.out.println();
 
            }

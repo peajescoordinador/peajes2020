@@ -465,7 +465,7 @@ public class Lee {
                 TextoTemporal[numLineasT] = c1.toString().trim();
                 aux=Calc.Buscar(c2.toString().trim(), nombreLineas);
                 if(aux==-1) {
-                    System.out.println("La línea "+c2.toString().trim()+" en 'lintron' no se encuentra en 'lineas'");
+                    System.out.println("La l√≠nea "+c2.toString().trim()+" en 'lintron' no se encuentra en 'lineas'");
                 }
                 intAux1[numLineasT] = aux;
 
@@ -721,7 +721,7 @@ public class Lee {
                 TextoTemporal[numLineasIT[0]] = c1.getStringCellValue();
                 intAux1[numLineasIT[0]] = Calc.Buscar(c2.toString().trim(), nombreLineas);
                 Cell cTx = r.getCell(crefsTx[0].getCol());
-                txtTmp1[numLineasIT[0]] = c1.getStringCellValue()+"#"+cTx.getStringCellValue();//Lênea#Transmisor
+                txtTmp1[numLineasIT[0]] = c1.getStringCellValue()+"#"+cTx.getStringCellValue();//L√™nea#Transmisor
 
             int t = Calc.Buscar(txtTmp1[numLineasIT[0]], txtTmp);
             if (t == -1) {
@@ -742,7 +742,7 @@ public class Lee {
             numLineasIT[0]++;
             }
             for(int i=0;i<numLineasT;i++){
-                LineasT[i]=txtTmp[i];// registros “nicos Lênea#Transmisor
+                LineasT[i]=txtTmp[i];// registros ‚Äúnicos L√™nea#Transmisor
             //System.out.println(LineasT[i]+" "+ITE[i][0]);
             }
         }
@@ -771,7 +771,7 @@ public class Lee {
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             if(crefs.length!=numLineas*numCentrales*12)
-                System.out.println("Se eliminaron o agregaron Centrales, pero no se han calculado las Prorratas considerando esta modificación");
+                System.out.println("Se eliminaron o agregaron Centrales, pero no se han calculado las Prorratas considerando esta modificaci√≥n");
             for (int i=0; i<numLineas; i++) {
                 for (int j=0; j<numCentrales; j++) {
                     Row r = s.getRow(crefs[k*numMeses].getRow());
@@ -813,7 +813,7 @@ public class Lee {
                     for (int m=0; m<numMeses; m++) {
                         Cell c1 = null;
                         c1 = r.getCell(crefs[m].getCol());
-                        //System.out.println("líneas "+i+" cliente "+j+ " mes "+m);
+                        //System.out.println("l√≠neas "+i+" cliente "+j+ " mes "+m);
                         prorrataMesC[i][j][m] = c1.getNumericCellValue();
                     }
                     k++;
@@ -1028,8 +1028,8 @@ public class Lee {
                 Cell c5 = r.getCell(crefs[i+4].getCol());
                 TextoTemporal1[numBarras] = c2.toString().trim(); // Nombre
                 intAux3[numBarras][0] = (int) c3.getNumericCellValue(); // 1 si la barra es troncal, 0 en caso contrario
-                intAux3[numBarras][1] = (int) c4.getNumericCellValue(); // 0 si la barra estö en el AIC, 1 si estö en el norte y -1 si estö en el sur
-                intAux3[numBarras][2] = (int) c5.getNumericCellValue(); // 1 si la barra está en el SIC, -1 si la barra está en el SING
+                intAux3[numBarras][1] = (int) c4.getNumericCellValue(); // 0 si la barra est√∂ en el AIC, 1 si est√∂ en el norte y -1 si est√∂ en el sur
+                intAux3[numBarras][2] = (int) c5.getNumericCellValue(); // 1 si la barra est√° en el SIC, -1 si la barra est√° en el SING
                 numBarras++;
             }
         }
@@ -1124,7 +1124,7 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
                 Linea = r.getCell(crefs[i].getCol()).toString().trim();
                 indiceLinea = Calc.Buscar(Linea,nombreLineas);
                 //System.out.println(Linea);
-                if(indiceLinea==-1)System.out.println("La línea -"+Linea+"- en 'linman' no se encuentra definida en 'lineas'");
+                if(indiceLinea==-1)System.out.println("La l√≠nea -"+Linea+"- en 'linman' no se encuentra definida en 'lineas'");
                 for (int j=0; j<numEtapas; j++) {
                     
                     Cell c = r.getCell(crefs[i+j+1].getCol());
@@ -1176,7 +1176,7 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
                             "no posee una central de peajes asociada en 'centrales'");
                 }
                 intAux3[numGeneradores][1] = aux;
-                intAux3[numGeneradores][0] = (int) c5.getNumericCellValue()-1; // barra de conexiãn
+                intAux3[numGeneradores][0] = (int) c5.getNumericCellValue()-1; // barra de conexi√£n
                 if(intAux3[numGeneradores][0]==-1){
                     System.out.println("La barra del Generador: "+c4.toString().trim()+"#"+c3.toString().trim()+" se encuentra mal asignada");
                 }
@@ -1305,7 +1305,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
                     System.exit(0);
                     }
                     if(indiceLinea==-1){
-                        System.out.println("La línea "+Linea+" en 'orient' no se encuentra en la hoja 'lineas'");
+                        System.out.println("La l√≠nea "+Linea+" en 'orient' no se encuentra en la hoja 'lineas'");
                     System.exit(0);
                     }
                     
@@ -1431,7 +1431,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             }
                     cuenta1++;
             }
-            //Calcula la energêa mensual por Clave
+            //Calcula la energ√™a mensual por Clave
            for (int j=0; j<numClaves; j++) {
                 for(int e=0;e<numEtapas;e++) {
                         ConsClaveMes[j][paramEtapa[e]]
@@ -1551,7 +1551,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             }
                     cuenta1++;
             }
-            //Calcula la energêa mensual por Clave
+            //Calcula la energ√™a mensual por Clave
            for (int j=0; j<numClaves; j++) {
                 for(int e=0;e<numEtapas;e++) {
                         ConsClaveMes[j][paramEtapa[e]]
@@ -1672,7 +1672,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
                 Cell c2 = r.getCell(crefs[i+1].getCol());
                 Cell c3 = r.getCell(crefs[i+2].getCol());
                 TextoTemporal1[numLineasSistRed] = c2.toString().trim(); // Nombre
-                Aux[numLineasSistRed][0] = (float) c3.getNumericCellValue(); // Tensiãn
+                Aux[numLineasSistRed][0] = (float) c3.getNumericCellValue(); // Tensi√£n
                 numLineasSistRed++;
             }
         }

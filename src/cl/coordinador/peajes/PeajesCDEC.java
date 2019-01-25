@@ -146,7 +146,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(530, 44));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
-        jLabel1.setText("AÒo a evaluar:");
+        jLabel1.setText("A√±o a evaluar:");
 
         cuadroAnoAEvaluar.setEditable(true);
         cuadroAnoAEvaluar.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -278,7 +278,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(530, 44));
 
         cuadroSeleccionTipoCalculo.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        cuadroSeleccionTipoCalculo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AÒo a Evaluar = AÒo Base", "AÒo a Evaluar != AÒo Base" }));
+        cuadroSeleccionTipoCalculo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "A√±o a Evaluar = A√±o Base", "A√±o a Evaluar != A√±o Base" }));
         cuadroSeleccionTipoCalculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cuadroSeleccionTipoCalculoAccion(evt);
@@ -286,7 +286,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
-        jLabel4.setText("AÒo base:");
+        jLabel4.setText("A√±o base:");
 
         cuadroAnoBase.setEditable(true);
         cuadroAnoBase.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -297,7 +297,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         cuadroAnoBase.setPreferredSize(new java.awt.Dimension(70, 19));
 
         cuadroSeleccionTipoCalculo1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        cuadroSeleccionTipoCalculo1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "C·lculo de LiquidaciÛn", "C·lculo de ReliquidaciÛn" }));
+        cuadroSeleccionTipoCalculo1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "C√°lculo de Liquidaci√≥n", "C√°lculo de Reliquidaci√≥n" }));
         cuadroSeleccionTipoCalculo1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cuadroSeleccionTipoCalculo1Accion(evt);
@@ -348,7 +348,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
-        jLabel9.setText("Tiempo de ejecuciÛn:");
+        jLabel9.setText("Tiempo de ejecuci√≥n:");
 
         etiquetaTiempo.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         etiquetaTiempo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -356,7 +356,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         etiquetaTiempo.setPreferredSize(new java.awt.Dimension(100, 15));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jButton1.setText(" Pagos GeneraciÛn");
+        jButton1.setText(" Pagos Generaci√≥n");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -364,7 +364,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         });
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jButton2.setText("Liq. Mensual InyecciÛn");
+        jButton2.setText("Liq. Mensual Inyecci√≥n");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -448,7 +448,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jLabel20.setText("Pagos Anuales:");
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel21.setText("LiquidaciÛn");
+        jLabel21.setText("Liquidaci√≥n");
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -546,7 +546,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jSplitPane4.setPreferredSize(new java.awt.Dimension(250, 22));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jLabel8.setText("N∫ Barra Referencia");
+        jLabel8.setText("N¬∫ Barra Referencia");
         jLabel8.setMaximumSize(new java.awt.Dimension(65, 8));
         jLabel8.setMinimumSize(new java.awt.Dimension(65, 8));
         jLabel8.setPreferredSize(new java.awt.Dimension(65, 8));
@@ -568,7 +568,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jSplitPane1.setPreferredSize(new java.awt.Dimension(250, 22));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jLabel5.setText("N∫ HidrologÌas");
+        jLabel5.setText("N¬∫ Hidrolog√≠as");
         jLabel5.setMaximumSize(new java.awt.Dimension(65, 8));
         jLabel5.setMinimumSize(new java.awt.Dimension(65, 8));
         jLabel5.setPreferredSize(new java.awt.Dimension(65, 8));
@@ -591,7 +591,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jSplitPane2.setPreferredSize(new java.awt.Dimension(250, 22));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jLabel6.setText("N∫ Etapas/AÒo");
+        jLabel6.setText("N¬∫ Etapas/A√±o");
         jLabel6.setMaximumSize(new java.awt.Dimension(65, 8));
         jLabel6.setMinimumSize(new java.awt.Dimension(65, 8));
         jLabel6.setPreferredSize(new java.awt.Dimension(65, 8));
@@ -664,10 +664,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jPanel6.setPreferredSize(new java.awt.Dimension(600, 137));
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel14.setText("ReliquidaciÛn por IT");
+        jLabel14.setText("Reliquidaci√≥n por IT");
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jLabel15.setText("Directorio de Archivo LiquidaciÛnMes.xls");
+        jLabel15.setText("Directorio de Archivo Liquidaci√≥nMes.xls");
 
         DirectorioLiquidacion.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         DirectorioLiquidacion.setMaximumSize(new java.awt.Dimension(386, 18));
@@ -685,7 +685,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         DirectorioReliquidacion.setPreferredSize(new java.awt.Dimension(386, 18));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jLabel16.setText("Directorio ReliquidaciÛn");
+        jLabel16.setText("Directorio Reliquidaci√≥n");
 
         botonDirectorioLiq.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         botonDirectorioLiq.setText("Explorar");
@@ -704,7 +704,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         });
 
         botonCalcularReliq.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        botonCalcularReliq.setText("Calc. ReliquidaciÛn");
+        botonCalcularReliq.setText("Calc. Reliquidaci√≥n");
         botonCalcularReliq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonCalcularReliqcalcular(evt);
@@ -807,7 +807,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(botonEscReliq)
                     .add(botonCalcularReliq))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -870,7 +870,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .add(jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(textoCalculo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 30, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1035,11 +1035,11 @@ public class PeajesCDEC extends javax.swing.JFrame {
             
             File entrada = null;               //carpeta entrada
             File salida = null;                //carpeta entrada
-            int anoBase2 = 2004;               //a–o base
-            int anoAEvaluar2 = anoBase2;           //a–o a evaluar
+            int anoBase2 = 2004;               //a‚Äìo base
+            int anoAEvaluar2 = anoBase2;           //a‚Äìo a evaluar
             int tipoCalcSeleccionado2 = 1;  // tipo de calculo
             int numHidro2 = 49;              //numero de hidrologias
-            int numEtapasAno2 = 240;          //numero de etapas por a–o
+            int numEtapasAno2 = 240;          //numero de etapas por a‚Äìo
             int numSlack2 = 14;              //barra slack
             int offset2 = 36 ;                //offset de etapas
             boolean clientes2 = false;          //actualiza clientes
@@ -1051,21 +1051,21 @@ public class PeajesCDEC extends javax.swing.JFrame {
             argsMap.put(args[i], i);
                      
             if (argsMap.containsKey("-h")){
-                System.out.println("Uso: java -jar -Xmx900m PeajesCDECSIC.jar [-parámetros]\n\n"
-                        + "Parámetros obligatorios:\n"
+                System.out.println("Uso: java -jar -Xmx900m PeajesCDECSIC.jar [-par√°metros]\n\n"
+                        + "Par√°metros obligatorios:\n"
                         + "-i path\t\t\tDirectorio de entrada.\n"
                         + "-o path\t\t\tDirectorio de salida.\n"
-                        + "-hid hidrologías\tNúmero de hidrologías\n"
-                        + "-calculo num\t\tOpción de cálculo:\n"
+                        + "-hid hidrolog√≠as\tN√∫mero de hidrolog√≠as\n"
+                        + "-calculo num\t\tOpci√≥n de c√°lculo:\n"
                         + "\t\t\t1: asdf\n"
                         + "\t\t\t2: asdf\n"
                         + "\t\t\t3: asdf\n"
                         + "\t\t\t4: asdf\n"
                         + "\t\t\t5: asdf\n"
-                        + "Parámetros opcionales:\n"
-                        + "-abase a–o\t\tAño basae.\n"
-                        + "-aev a–o\t\tAño a evaluar.\n"
-                        + "-etapas etapas\t\tNúmero de etapas por año (defecto 240).\n"
+                        + "Par√°metros opcionales:\n"
+                        + "-abase a‚Äìo\t\tA√±o basae.\n"
+                        + "-aev a‚Äìo\t\tA√±o a evaluar.\n"
+                        + "-etapas etapas\t\tN√∫mero de etapas por a√±o (defecto 240).\n"
                         + "-slack barra\t\tBarra de referencia (defecto 14).\n"
                         + "-offset etapas\t\tOffset de Etapas (defecto 36).");
                 System.exit(0);
@@ -1082,12 +1082,12 @@ public class PeajesCDEC extends javax.swing.JFrame {
             
             }
             catch (NullPointerException e) {
-                System.err.println("Faltan argumentos, pruebe opción -h para ver ayuda");
+                System.err.println("Faltan argumentos, pruebe opci√≥n -h para ver ayuda");
                 System.exit(1);
             }
                     
             catch (NumberFormatException e) {
-                System.err.println("Argumento inválido, pruebe opción -h para ver ayuda");
+                System.err.println("Argumento inv√°lido, pruebe opci√≥n -h para ver ayuda");
                 System.exit(1);    
             }
             
@@ -1108,7 +1108,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 System.out.println("Advertencia, se usa valores por defecto para las siguientes opciones:\n");
             }
             catch (NumberFormatException e) {
-                System.err.println("Argumento inválido, pruebe opción -h para ver ayuda");
+                System.err.println("Argumento inv√°lido, pruebe opci√≥n -h para ver ayuda");
                 System.exit(1);    
             }
             try { //se intenta parsear el calculo a realizar
@@ -1119,7 +1119,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             
             }
             catch (NullPointerException e) {
-                System.err.println("No se ha especificado una opción de cálculo, use opcion -h para ver ayuda");
+                System.err.println("No se ha especificado una opci√≥n de c√°lculo, use opcion -h para ver ayuda");
                 System.exit(1);
             }
             
@@ -1268,7 +1268,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         selectorDirEnt.setCurrentDirectory(new File(selectorDirEnt.getCurrentDirectory()+File.separator+"DatosPeajes"+File.separator+cuadroAnoAEvaluar.getSelectedItem()));
         File directorio = selectorDirEnt.getCurrentDirectory();
         if(directorio0.equals(directorio)) {
-            JOptionPane.showMessageDialog(this,"Año a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,"A√±o a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
         }
         selectorDirEnt.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorDirEnt.showOpenDialog(this);
@@ -1291,7 +1291,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         selectorDirSal.setCurrentDirectory(new File(selectorDirSal.getCurrentDirectory()+File.separator+"DatosPeajes"+File.separator+cuadroAnoAEvaluar.getSelectedItem()));
         File directorio = selectorDirSal.getCurrentDirectory();
         if(directorio0.equals(directorio)) {
-            JOptionPane.showMessageDialog(this,"Año a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,"A√±o a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
         }
         selectorDirSal.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorDirSal.showOpenDialog(this);
@@ -1306,15 +1306,15 @@ public class PeajesCDEC extends javax.swing.JFrame {
     }
 
     private void habilitarAnoABase() {
-        tipoCalcSeleccionado=(cuadroSeleccionTipoCalculo.getSelectedItem().equals("Año a Evaluar = Año Base")?0:1);
+        tipoCalcSeleccionado=(cuadroSeleccionTipoCalculo.getSelectedItem().equals("A√±o a Evaluar = A√±o Base")?0:1);
         if(tipoCalcSeleccionado==0) cuadroAnoBase.setEnabled(false);
         else cuadroAnoBase.setEnabled(true);
     }
     
     private void seleccionTipoLiquidacion() {
-        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("Cálculo de Liquidación")?true:false);
-        if(LiquidacionReliquidacion) System.out.println("Seleccionado Cálculo de Liquidación");
-        else System.out.println("Seleccionado Cálculo de Reliquidación");
+        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("C√°lculo de Liquidaci√≥n")?true:false);
+        if(LiquidacionReliquidacion) System.out.println("Seleccionado C√°lculo de Liquidaci√≥n");
+        else System.out.println("Seleccionado C√°lculo de Reliquidaci√≥n");
     } 
     
 
@@ -1458,7 +1458,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         selectorDirSal.setCurrentDirectory(new File(selectorDirSal.getCurrentDirectory()+File.separator+"DatosPeajes"+File.separator+cuadroAnoAEvaluar.getSelectedItem()));
         File directorio = selectorDirSal.getCurrentDirectory();
         if(directorio0.equals(directorio)) {
-            JOptionPane.showMessageDialog(this,"Año a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,"A√±o a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
         }
         selectorDirSal.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorDirSal.showOpenDialog(this);
@@ -1481,7 +1481,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         mesAEvaluar = (String) Mes1.getSelectedItem();
         System.out.println("Calculando Peajes con IT Real...");
         Peajes.calculaPeajes(nombreDirEnt, nombreDirSal, anoAEvaluar);
-        System.out.println("Calculando Pagos de Inyección con IT Real...");
+        System.out.println("Calculando Pagos de Inyecci√≥n con IT Real...");
         PeajesIny.calculaPeajesIny(nombreDirEnt, nombreDirSal, anoAEvaluar,LiquidacionReliquidacion);
         PeajesIny.LiquiMesIny(mesAEvaluar,anoAEvaluar);
         System.out.println("Calculando Pagos de Retiro con IT Real...");
@@ -1490,7 +1490,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         PeajesRet.LiquiMesRet(mesAEvaluar,anoBase);
         EscribeArchivosFinales.EscribeLiqMes(mesAEvaluar,anoAEvaluar,nombreDirSal,nombreDirEnt, "");
         System.out.println("");
-        System.out.println("Ahora puede escribir los archivos de Reliquidación finales");
+        System.out.println("Ahora puede escribir los archivos de Reliquidaci√≥n finales");
     }
 
  private void EscReliquidacion() {
@@ -1505,10 +1505,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
             anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
         }
         mesAEvaluar = (String) Mes1.getSelectedItem();
-        System.out.println("Escribiendo Archivos de Reliquidación con IT Real...");
+        System.out.println("Escribiendo Archivos de Reliquidaci√≥n con IT Real...");
         Reliquidacion.Reliquidacion(nombreDirLiq, nombreDirReliq, mesAEvaluar,anoAEvaluar,fechaPago);
         System.out.println("");
-        System.out.println("Reliquidación "+mesAEvaluar+" finalizada");
+        System.out.println("Reliquidaci√≥n "+mesAEvaluar+" finalizada");
     }
  
     private void leePropiedades(){
@@ -1569,7 +1569,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         String ArchivoConfiguracion = DirBaseEntrada + slash +  "config.properties";
         System.out.println("Guardando archivo");
         
-        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("Cálculo de Liquidación")?true:false);
+        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("C√°lculo de Liquidaci√≥n")?true:false);
         
         int anoBase;
         if (tipoCalcSeleccionado==0) {

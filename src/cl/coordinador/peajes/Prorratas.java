@@ -88,7 +88,7 @@ public class Prorratas {
         }
 
         /*
-         * lee LÍneas Troncales
+         * lee L√çneas Troncales
          * ====================
          */
         intAux1=new int[2500];
@@ -141,7 +141,7 @@ public class Prorratas {
                 numLinTx++;
             }
         }
-        String[] nomLinTx = new String[numLinTx];//solo registros ìnico LÍnea#Transmisor
+        String[] nomLinTx = new String[numLinTx];//solo registros √¨nico L√çnea#Transmisor
         String[] nomPropTx = new String[numLinTx];
         String[] zona = new String[numLinTx];
         int[] datosLinIT = new int[numLinTx];
@@ -167,9 +167,9 @@ public class Prorratas {
             nomBar[i] = TxtTemp1[i];
             // 1 si la barra es troncal, 0 en caso contrario
             paramBarTroncal[i][0] = intAux3[i][0];
-            // 0 si la barra estˆ en el AIC, 1 si estˆ en el norte y -1 si estˆ en el sur
+            // 0 si la barra estÀÜ en el AIC, 1 si estÀÜ en el norte y -1 si estÀÜ en el sur
             paramBarTroncal[i][1] = intAux3[i][1];
-            // 1 si la barra está en el SIC, -1 si está en el SING
+            // 1 si la barra est√° en el SIC, -1 si est√° en el SING
             paramBarTroncal[i][2] = intAux3[i][2];
             if(paramBarTroncal[i][0] == 1){
                 numBarrasTroncales++;
@@ -202,7 +202,7 @@ public class Prorratas {
         Lee.leeEtapas(libroEntrada,duracionEta,numEtapas);
 
         /*
-         * Lectura de mantenimientos de lÍneas
+         * Lectura de mantenimientos de l√çneas
          * ===================================
          */
         // cambios en condicion operativa para cada linea en cada etapa.
@@ -260,7 +260,7 @@ public class Prorratas {
             
             
         /*****************************************
-        Lectura de orientaci„n de barras troncales
+        Lectura de orientaci‚Äûn de barras troncales
         ******************************************/
         int[][] orientBarTroncal=new int[numBarras][numLin];
         for(int i=0; i < numBarras; i++){
@@ -297,7 +297,7 @@ public class Prorratas {
         }
         else{
             numClaves=Lee.leeConsumos(libroEntrada, Temporal1,Temporal2,numEtapas
-                ,paramEtapa,duracionEta,Temporal3);//debe ademˆs escribir la hoja con los clientes
+                ,paramEtapa,duracionEta,Temporal3);//debe ademÀÜs escribir la hoja con los clientes
         }
 
         float[][] ConsumosClaves = new float[numClaves][numEtapas];
@@ -350,7 +350,7 @@ public class Prorratas {
         }
 
         TxtTemp2 = null;
-        //Escribe la energÍa consumida por Cliente 
+        //Escribe la energ√ça consumida por Cliente 
         //* ==============================================
 
         float[][] CMes = new float[numCli][numMeses];
@@ -368,7 +368,7 @@ public class Prorratas {
         }
 
         /*
-         * Lectura de Generacion (Despachos) y energ’a no suministrada
+         * Lectura de Generacion (Despachos) y energ‚Äôa no suministrada
          * ===========================================================
          */
         BufferedReader input = null;
@@ -485,7 +485,7 @@ public class Prorratas {
         String [] nombreLineasSistRed = new String[numLinSistRed];
         for(int i=0;i<numLinSistRed;i++){
             nombreLineasSistRed[i]=TxtTemp1[i];
-            //tensi„n lineas sistema reducido
+            //tensi‚Äûn lineas sistema reducido
             paramLinSistRed[i]=(int)(Math.round(Aux[i][0]));
         }
 
@@ -617,7 +617,7 @@ public class Prorratas {
             writer.append(',');
             writer.append("Hidrologia");
             writer.append(',');
-            writer.append("Línea");
+            writer.append("L√≠nea");
             writer.append(',');
             writer.append("Central");
             writer.append(',');
@@ -711,17 +711,17 @@ public class Prorratas {
             // Calcula Flujo DC y asignacion de perdidas
             // -----------------------------------------
             float[] R=new float[numLin];                   // resistencias en p.u
-            float[] perdI2R=new float[numLin];             // perdidas de cada l’nea segÏn I*I*R
-            float[] perdidas=new float[numLin];            // perdidas de cada l’nea segun diferencia entre Gx y Demanda
-            float[] perdMayor110=new float[numLin];        // perdidas de cada l’nea segun diferencia entre Gx y Demanda
-            float[] perdMenor110=new float[numLin];        // perdidas de cada l’nea segun diferencia entre Gx y Demanda
+            float[] perdI2R=new float[numLin];             // perdidas de cada l‚Äônea seg√èn I*I*R
+            float[] perdidas=new float[numLin];            // perdidas de cada l‚Äônea segun diferencia entre Gx y Demanda
+            float[] perdMayor110=new float[numLin];        // perdidas de cada l‚Äônea segun diferencia entre Gx y Demanda
+            float[] perdMenor110=new float[numLin];        // perdidas de cada l‚Äônea segun diferencia entre Gx y Demanda
             float[] perdRealesSistema=new float[numHid];   // perdidas del sistema
-            float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las l’neas de tensi—n > 110kV
-            float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las l’neas de tensi—n <= 110kV
+            float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las l‚Äôneas de tensi‚Äîn > 110kV
+            float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las l‚Äôneas de tensi‚Äîn <= 110kV
             float conSist;
             float[][] conAjustado=new float[numBarras][numHid];
             float[] genSist=new float[numHid];
-            float[] conMasPerd= new float[numBarras];      // consumos con asignacion de p?rdidas por iteraci—n [MW]
+            float[] conMasPerd= new float[numBarras];      // consumos con asignacion de p?rdidas por iteraci‚Äîn [MW]
             // Consumos con asignacion de p?rdidas por iteracion [MW]
             float[][] conMasPerdEta= new float[numBarras][numHid];
             for(int h=0;h<numHid;h++){
@@ -1062,7 +1062,7 @@ public class Prorratas {
                 }
             }
         }
-        // Procesa salida prorratas de generaci„n
+        // Procesa salida prorratas de generaci‚Äûn
         double[][][] prorrMesLinG = new double[numLinTx][numCen][numMeses];
         double[][] generacionMes = new double[numCen][numMeses];
         for(int m=0; m<numMeses; m++) {
@@ -1136,26 +1136,26 @@ public class Prorratas {
         String libroSalidaXLS = DirBaseSalida + slash + "Prorrata" + Ano + ".xlsx";
         Escribe.crearLibro(libroSalidaXLS);
         Escribe.creaH3F_3d_double(
-                "Prorratas de Generación", prorrMesLinG,
-                "Línea", nomLinTx,
+                "Prorratas de Generaci√≥n", prorrMesLinG,
+                "L√≠nea", nomLinTx,
                 "Central", nombreCentrales,
                 "Zona",zona,
                 "Mes", nombreMeses,
                 libroSalidaXLS,"ProrrGMes","0.000%;[Red]-0.000%;\"-\"");
         Escribe.creaH3F_3d_double(
                 "Prorratas de Consumo", prorrMesLinC,
-                "Línea",nomLinTx,
+                "L√≠nea",nomLinTx,
                 "Cliente",nomCli,
                 "Zona",zona,
                 "Mes", nombreMeses,
                 libroSalidaXLS,"ProrrCMes","0.000%;[Red]-0.000%;\"-\"");
         Escribe.creaH1F_2d_double(
-                "Prorratas por L’nea", prorrataLinea,
-                "Línea", nomLinTx,
+                "Prorratas por L‚Äônea", prorrataLinea,
+                "L√≠nea", nomLinTx,
                 "Mes", nombreMeses,
                 libroSalidaXLS, "ProrrLin","0.000%;[Red]-0.000%;\"-\"");
         Escribe.creaH1F_2d_double(
-                "Generación [GWh]", generacionMes,
+                "Generaci√≥n [GWh]", generacionMes,
                 "Central", nombreCentrales,
                 "Mes", nombreMeses,
                 libroSalidaXLS, "GMes","0.0;[Red]-0.0;\"-\"");
@@ -1165,9 +1165,9 @@ public class Prorratas {
                 "Mes", nombreMeses,
                 libroSalidaXLS, "CMes","0.0;[Red]-0.0;\"-\"");
         Escribe.creaH1F_2d_double(
-                "Detalle de prorratas de Generación", Calc.transponer(prorrAnoTroncG),
+                "Detalle de prorratas de Generaci√≥n", Calc.transponer(prorrAnoTroncG),
                 "Central", nomGen,
-                "L’nea", nomLinTx,
+                "L‚Äônea", nomLinTx,
                 libroSalidaXLS, "ProrrG","0.000%");
         Escribe.creaH1F_2d_double(
                 "Detalle de prorratas de Consumo", Calc.transponer(prorrAnoTroncC),
@@ -1187,7 +1187,7 @@ public class Prorratas {
 
         guardandoDatos=false;
         long tFinalEscritura = System.currentTimeMillis();
-        System.out.println("Tiempo Adquisición de datos     : "+DosDecimales.format((tFinalLectura-tInicioLectura)/1000.0)+" s");
+        System.out.println("Tiempo Adquisici√≥n de datos     : "+DosDecimales.format((tFinalLectura-tInicioLectura)/1000.0)+" s");
         System.out.println("Tiempo Calculos                 : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/1000.0)+" s");
         System.out.println("Tiempo Iteraciones              : "+DosDecimales.format((tfinIteraciones-tInicioCalculo)/1000.0)+" s");
         System.out.println("Tiempo Escritura de Resultados  : "+DosDecimales.format((tFinalEscritura-tInicioEscritura)/1000.0)+" s");

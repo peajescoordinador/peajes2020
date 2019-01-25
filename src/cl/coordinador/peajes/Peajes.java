@@ -78,7 +78,7 @@ public class Peajes {
         }
 
         /************
-         * lee Líneas
+         * lee L√≠neas
          *************/
         TxtTemp1 = new String[1500];
         int numLineas = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
@@ -99,7 +99,7 @@ public class Peajes {
         Lee.leeIndices(libroEntrada, dolar, interes);
 
         /**********************
-         * lee Líneas Troncales
+         * lee L√≠neas Troncales
          **********************/
         TxtTemp1 = new String[1500];
         TxtTemp2 = new String[1500];
@@ -147,8 +147,8 @@ public class Peajes {
                 int l = Calc.Buscar(nomLinTx[i], nomLinIT_Tx);
                 if(l==-1){
                     System.out.println("Error!!!");
-                    System.out.println("El tramo - "+nomLinTx[i]+" - de la hoja 'VATT' en archivo AVI_COMA.xls no posee una instalación Toncal con IT asociado en la hoja 'lintron'");
-                    System.out.println("Corregir y ejecutar nuevamente el botón Peajes");
+                    System.out.println("El tramo - "+nomLinTx[i]+" - de la hoja 'VATT' en archivo AVI_COMA.xls no posee una instalaci√≥n Toncal con IT asociado en la hoja 'lintron'");
+                    System.out.println("Corregir y ejecutar nuevamente el bot√≥n Peajes");
                     System.out.println();
                 }
                 else {
@@ -182,42 +182,42 @@ public class Peajes {
         Escribe.crearLibro(libroSalidaGXLS);
         Escribe.creaH1F_2d_long(
                 "Peajes [$]", peajeLin,
-                "Línea", nomLinTx,
+                "L√≠nea", nomLinTx,
                 "Mes", nomMes,
                 libroSalidaGXLS, "Peajes", "#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.creaH1F_2d_long(
-                "Ingreso Tarifario Energía Asignable a Generadores[$]", ITEGo,
-                "Línea", nomLinTx,
+                "Ingreso Tarifario Energ√≠a Asignable a Generadores[$]", ITEGo,
+                "L√≠nea", nomLinTx,
                 "Mes", nomMes,
                 libroSalidaGXLS, "ITEG", "#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.creaH1F_2d_long(
-                "Ingreso Tarifario Energía Asignable a Retiro[$]", ITERo,
-                "Línea", nomLinTx,
+                "Ingreso Tarifario Energ√≠a Asignable a Retiro[$]", ITERo,
+                "L√≠nea", nomLinTx,
                 "Mes", nomMes,
                 libroSalidaGXLS, "ITER", "#,###,##0;[Red]-#,###,##0;\"-\"");
         
         Escribe.creaH1F_2d_long(
-                "Ingreso Tarifario Energía [$]", ITEo,
-                "Línea", nomLinTx,
+                "Ingreso Tarifario Energ√≠a [$]", ITEo,
+                "L√≠nea", nomLinTx,
                 "Mes", nomMes,
                 libroSalidaGXLS, "ITE", "#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.creaH1F_2d_long(
                 "Ingreso Tarifario Potencia [$]", ITPo,
-                "Línea", nomLinTx,
+                "L√≠nea", nomLinTx,
                 "Mes", nomMes,
                 libroSalidaGXLS, "ITP", "#,###,##0;[Red]-#,###,##0;\"-\"");
         //modificar por formulas
         
         Escribe.creaH1F_2d_long(
                 "Ingreso Tarifario [$]", ITo,
-                "Línea", nomLinTx,
+                "L√≠nea", nomLinTx,
                 "Mes", nomMes,
                 libroSalidaGXLS, "IT", "#,###,##0;[Red]-#,###,##0;\"-\"");
         // \modificar por formulas
                
         Escribe.creaH1F_2d_long(
                 "VATT [$]", VATTLin,
-                "Línea", nomLinTx,
+                "L√≠nea", nomLinTx,
                 "Mes", nomMes,
                 libroSalidaGXLS, "VATT", "#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.crea_verifProrr(peajeLin,

@@ -23,7 +23,7 @@ public class EscribeArchivosFinales {
               if(mes.equals(nomMes[i]))
                   mesLiq=i;
           }
-    //Guarda en el arreglo de pago total e IT, sólo los pagos por inyecciones de cada empresa
+    //Guarda en el arreglo de pago total e IT, s√≥lo los pagos por inyecciones de cada empresa
     double[][][] RetMasInyEmpTx=new double[PeajesRet.numEmp][PeajesRet.numTx][numMeses];
     double[][][] RetMasInyItEmpTx=new double[PeajesRet.numEmp][PeajesRet.numTx][numMeses];
     double[][] TotPagoEmp=new double[PeajesRet.numEmp][numMeses];
@@ -49,12 +49,12 @@ public class EscribeArchivosFinales {
                }
 
      //Escribre Archivos
-     String libroSalidaGXLSMes= DirBaseSal + slash +"Liquidación" + nomMes[mesLiq] + ".xlsx";
+     String libroSalidaGXLSMes= DirBaseSal + slash +"Liquidaci√≥n" + nomMes[mesLiq] + ".xlsx";
 
      Escribe.crearLibro(libroSalidaGXLSMes);
-     //esta función es igual a creaLiquidacionMes, excepto por el formato de datos, unificar para tener una sola funci—n
+     //esta funci√≥n es igual a creaLiquidacionMes, excepto por el formato de datos, unificar para tener una sola funci‚Äîn
       Escribe.creaLiquidacion(mesLiq,
-                "Liquidación de Peajes del Sistema de Transmisión Troncal",
+                "Liquidaci√≥n de Peajes del Sistema de Transmisi√≥n Troncal",
                 PeajesIny.PagoEmpTxO,
                 PeajesRet.TotRetEmpTxO,
                 RetMasInyEmpTx,
@@ -67,14 +67,14 @@ public class EscribeArchivosFinales {
                 PeajesRet.nomEmpO,
                 "Transmisor",
                 PeajesRet.nombreTx,
-                "Cuadro N° 1: Cuadro de Pagos Total (Ver Notas 1 y 2)",
-                "Cuadro N° 2: Pagos por Inyección",
-                "Cuadro N° 3: Pagos por Retiro",
-                "Cuadro N° 4: IT Total",
+                "Cuadro N¬∞ 1: Cuadro de Pagos Total (Ver Notas 1 y 2)",
+                "Cuadro N¬∞ 2: Pagos por Inyecci√≥n",
+                "Cuadro N¬∞ 3: Pagos por Retiro",
+                "Cuadro N¬∞ 4: IT Total",
                 libroSalidaGXLSMes,"Total",Ano,FechPago,
                 "#,###,##0;[Red]-#,###,##0;\"-\"",
                 "(1) Valores Positivos: Usuarios Pagan, Valores Negativos: Usuarios Reciben",
-                "(2) Suma de Cuadros NÁ 2 y NÁ 3");
+                "(2) Suma de Cuadros N√Å 2 y N√Å 3");
       
      Escribe.creaLiquidacionMes(mesLiq,
                 "Pago de Peajes por Retiro",
@@ -100,14 +100,14 @@ public class EscribeArchivosFinales {
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
      
      Escribe.creaProrrataMes(mesLiq,
-                "Participación de Retiros [%]",PeajesRet.prorrMesC,"Participación "+nomMes[mesLiq],
+                "Participaci√≥n de Retiros [%]",PeajesRet.prorrMesC,"Participaci√≥n "+nomMes[mesLiq],
                 "Cliente",PeajesRet.nomCli,
-                "Línea",  PeajesRet.nomLinTx,
+                "L√≠nea",  PeajesRet.nomLinTx,
                 "AIC", PeajesRet.zonaLinTx,
                 libroSalidaGXLSMes, "PartRet"+nomMes[mesLiq],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
      Escribe.creaLiquidacionMes(mesLiq,
-                "Pago de Peajes por Inyección [$]",
+                "Pago de Peajes por Inyecci√≥n [$]",
                 PeajesIny.peajeEmpTxO,
                 PeajesIny.AjusMGNCEmpTxO,
                 PeajesIny.PagoEmpTxO,
@@ -120,16 +120,16 @@ public class EscribeArchivosFinales {
                 PeajesIny.nomEmpGO,
                 "Transmisor",
                 PeajesIny.nombreTx,
-                "Tabla 1-1: Pagos de Peajes de Inyección por Empresa",
-                "Tabla 1-2: Ajuste por Exención de MGNC",
-                "Tabla 1-3: Pagos de Peajes de Inyección Incluyendo Ajuste por MGNC",
-                "Tabla 1-4: IT por Inyección Incluyendo Ajuste por MGNC",
+                "Tabla 1-1: Pagos de Peajes de Inyecci√≥n por Empresa",
+                "Tabla 1-2: Ajuste por Exenci√≥n de MGNC",
+                "Tabla 1-3: Pagos de Peajes de Inyecci√≥n Incluyendo Ajuste por MGNC",
+                "Tabla 1-4: IT por Inyecci√≥n Incluyendo Ajuste por MGNC",
                 libroSalidaGXLSMes,
-                "Pje_Inyección",
+                "Pje_Inyecci√≥n",
                 Ano,
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
 Escribe.creaLiquidacionMesIny(mesLiq,
-                "Pago de Peajes de Inyección",
+                "Pago de Peajes de Inyecci√≥n",
                 PeajesIny.peajeCenTxO,
                 PeajesIny.AjusMGNCTxO,
                 PeajesIny.PagoTotCenTxO,
@@ -158,15 +158,15 @@ Escribe.creaLiquidacionMesIny(mesLiq,
             "Transmisor", PeajesIny.nombreTx,
             libroSalidaGXLSMes, "Ajus"+nomMes[mesLiq], Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
 Escribe.creaProrrataMes(mesLiq,
-                "Participación de Inyecciones [%]",PeajesIny.prorrMesGenTx,
-                "Participación "+nomMes[mesLiq],
+                "Participaci√≥n de Inyecciones [%]",PeajesIny.prorrMesGenTx,
+                "Participaci√≥n "+nomMes[mesLiq],
                 "Cliente",PeajesIny.nomGen,
-                "L’nea",  PeajesIny.nomLinTx,
+                "L‚Äônea",  PeajesIny.nomLinTx,
                 "AIC", PeajesIny.zonaLinTx,
                 libroSalidaGXLSMes, "PartIny"+nomMes[mesLiq],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
 System.out.println();
-System.out.println("Archivos de Liquidación Mensual terminados");
+System.out.println("Archivos de Liquidaci√≥n Mensual terminados");
 System.out.println();
 
       }
@@ -182,33 +182,33 @@ System.out.println();
         
         Escribe.crearLibro(libroSalidaGXLSAno);
         Escribe.crea_1TablaTx_1C(
-            "Pagos de Peajes de Inyección por Empresas (Valores en $)",PeajesIny.PeajeAnualEmpGTxO,
+            "Pagos de Peajes de Inyecci√≥n por Empresas (Valores en $)",PeajesIny.PeajeAnualEmpGTxO,
             PeajesIny. PeajeAnualEmpGO,
             "Empresa",PeajesIny.nomEmpGO,
             "Transmisor", PeajesIny.nombreTx,
             libroSalidaGXLSAno, "PagIny", Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.crea_1TablaTx_2C(
-            "Pagos de Peajes de Inyección por MGNC (Valores en $)",PeajesIny.peajeAnualMGNCTxO,
+            "Pagos de Peajes de Inyecci√≥n por MGNC (Valores en $)",PeajesIny.peajeAnualMGNCTxO,
             PeajesIny.peajeAnualMGNCO,
             "Central",PeajesIny.nomMGNCO,
             "Transmisor", PeajesIny.nombreTx,
             "P. Neta [MW]",PeajesIny.PotNetaMGNCO,
             libroSalidaGXLSAno, "PagMGNC", Ano, "#,##0.00");
         Escribe.crea_1TablaTx_2C(
-            "Excención de Pagos de Peajes de Inyección por MGNC (Valores en $)",PeajesIny.ExcenAnualMGNCTxO,
+            "Excenci√≥n de Pagos de Peajes de Inyecci√≥n por MGNC (Valores en $)",PeajesIny.ExcenAnualMGNCTxO,
             PeajesIny.ExcenAnualMGNCO,
             "Central",PeajesIny.nomMGNCO,
             "Transmisor", PeajesIny.nombreTx,
             "Factor Pago[%]",PeajesIny.facPagoMGNCO,
             libroSalidaGXLSAno, "ExcMGNC", Ano, "##0.00%");
         Escribe.crea_1TablaTx_1C(
-                 "Ajustes por Exención de MGNC (Valores en $)",PeajesIny.AjusMGNCAnualEmpTxO,
+                 "Ajustes por Exenci√≥n de MGNC (Valores en $)",PeajesIny.AjusMGNCAnualEmpTxO,
                  PeajesIny.AjusMGNCAnualEmpO,
                  "Central",PeajesIny.nomEmpGO,
                  "Transmisor", PeajesIny.nombreTx,
                  libroSalidaGXLSAno, "AjusIny", Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.crea_1TablaTx_1C(
-                 "Pagos de peajes de Inyección incluyendo ajustes por Exención de MGNC (Valores en $)",PeajesIny.PagoAnualEmpGTxO,
+                 "Pagos de peajes de Inyecci√≥n incluyendo ajustes por Exenci√≥n de MGNC (Valores en $)",PeajesIny.PagoAnualEmpGTxO,
                  PeajesIny.PagoAnualEmpGO,
                  "Central",PeajesIny.nomEmpGO,
                  "Transmisor", PeajesIny.nombreTx,

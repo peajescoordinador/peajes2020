@@ -324,7 +324,7 @@ public class PeajesRet {
         }
 
         /************
-         * lee L’neas
+         * lee L‚Äôneas
          *************/
         TxtTemp1 = new String[2000];
         int numLineas = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
@@ -338,7 +338,7 @@ public class PeajesRet {
         }
 
         /**********************
-         * lee L’neas Troncales
+         * lee L‚Äôneas Troncales
          **********************/
         TxtTemp1 = new String[2000];
         TxtTemp2 = new String[2000];
@@ -369,7 +369,7 @@ public class PeajesRet {
                 numLinTx++;
             }
         }
-        nomLinTx = new String[numLinTx];//solo registros Ïnico L’nea#Transmisor de hoja lintron
+        nomLinTx = new String[numLinTx];//solo registros √ènico L‚Äônea#Transmisor de hoja lintron
         String[] nomPropTx = new String[numLinTx];
         zonaLinTx= new int[numLinTx];
 
@@ -508,8 +508,8 @@ public class PeajesRet {
             int l2 = Calc.Buscar( nomLineasN[l], nomLinTx);//antes buscaba nomLinTxO con nomLinTx lineas de peajes ordenadas que era la salida de prorratas pero no estaba ordenada
             if(l2==-1){//ahora la variable nomLinTx son los registros unicos en orden de lintron (asi estaba salida de prorratas)
              System.out.println();
-             System.out.println("L’nea Trocal - "+nomLineasN[l]+" - en archivo Peaje"+Ano+".xls no se encuentra en la hoja 'lintron' del archivo Ent"+Ano+".xlsx");
-             System.out.println("Debe asegurarse que la L’neas en el archivo AVI_COMA.xls sean las mismas de la hoja 'lintron' y ejecutar el bot—n Peajes");
+             System.out.println("L‚Äônea Trocal - "+nomLineasN[l]+" - en archivo Peaje"+Ano+".xls no se encuentra en la hoja 'lintron' del archivo Ent"+Ano+".xlsx");
+             System.out.println("Debe asegurarse que la L‚Äôneas en el archivo AVI_COMA.xls sean las mismas de la hoja 'lintron' y ejecutar el bot‚Äîn Peajes");
             }
             else{
                 //System.out.println(l+" "+nomLineasN[l]+" "+l2+" "+PeajeN[l][1]+" "+nomLinTx[l2]+prorrMesC[l2][15][1]);
@@ -712,7 +712,7 @@ public class PeajesRet {
                         }
                  }
             }
-            else{//si no est‡ como empresa de generaci—n Busca si es una Distribuidora
+            else{//si no est‚Ä° como empresa de generaci‚Äîn Busca si es una Distribuidora
                 int l1 = Calc.Buscar(tmp[1], nomDx);
                  if(l1!=-1){
                     for(int i=0;i<numSumi;i++){
@@ -747,7 +747,7 @@ public class PeajesRet {
                     }   
                 }
                 if(l1==-1){//si no encuentra la empresa
-                    System.out.println("El Suministrador "+tmp[1]+" en 'clientes'"+" "+j+" no est‡ asignado como Distribuidora o como empresa de Generaci—n");
+                    System.out.println("El Suministrador "+tmp[1]+" en 'clientes'"+" "+j+" no est‚Ä° asignado como Distribuidora o como empresa de Generaci‚Äîn");
                 }
             }
         }
@@ -772,7 +772,7 @@ public class PeajesRet {
                         }
                  }
             }
-            else{//si no est‡ como empresa de generaci—n Busca si es una Distribuidora
+            else{//si no est‚Ä° como empresa de generaci‚Äîn Busca si es una Distribuidora
                 int l1 = Calc.Buscar(tmp[1], nomDx);
                  if(l1!=-1){
                     for(int i=0;i<numSumi;i++){
@@ -809,7 +809,7 @@ public class PeajesRet {
                     }   
                 }
                 if(l1==-1){//si no encuentra la empresa
-                    System.out.println("El Suministrador "+tmp[1]+" en 'clientes'"+" "+j+" no est‡ asignado como Distribuidora o como empresa de Generaci—n");
+                    System.out.println("El Suministrador "+tmp[1]+" en 'clientes'"+" "+j+" no est‚Ä° asignado como Distribuidora o como empresa de Generaci‚Äîn");
                 }
             }
         }
@@ -1129,7 +1129,7 @@ public class PeajesRet {
         for (int i = 0; i < numEmp; i++) {
             for (int j = 0; j < numTx; j++) {
                 for (int k = 0; k < numMeses; k++) {
-                    TotRetEmpTxO[i][j][k] = TotRetEmpTx[ne[i]][j][k];//Esto es lo que estar’a malo
+                    TotRetEmpTxO[i][j][k] = TotRetEmpTx[ne[i]][j][k];//Esto es lo que estar‚Äôa malo
                      TotAnualRetEmpTxO[i][j]+=TotRetEmpTxO[i][j][k];
                 }
             }
@@ -1271,7 +1271,7 @@ public class PeajesRet {
         for (int i = 0; i < numEmp; i++) {
             for (int j = 0; j < numTx; j++) {
                 for (int k = 0; k < numMeses; k++) {
-                    TotRetEmpTxO[i][j][k]= re2288toNomsumi[i] == -1? TotRetEmpTxO[i][j][k]:TotRetEmpTxO[i][j][k]+TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];//Esto es lo que estar’a malo
+                    TotRetEmpTxO[i][j][k]= re2288toNomsumi[i] == -1? TotRetEmpTxO[i][j][k]:TotRetEmpTxO[i][j][k]+TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];//Esto es lo que estar‚Äôa malo
                     TotRetEmpO[i][k]+=re2288toNomsumi[i] == -1?0:TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];
                     TotRetEmpTxRE2288OO[i][j][k] += re2288toNomsumi[i] == -1?0:TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];
                     TotRetEmpRE2288O[i][k]+= re2288toNomsumi[i] == -1?0:TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];
@@ -1324,8 +1324,8 @@ public class PeajesRet {
                 "PagoRet" + Ano + ".xlsx";
         Escribe.crearLibro(libroSalidaCXLS);
         Escribe.creaH2F_3d2_long(
-                "Pago de Peaje por Línea y Cliente [$]", peajeLinCO,
-                "Línea", nomLineasN,
+                "Pago de Peaje por L√≠nea y Cliente [$]", peajeLinCO,
+                "L√≠nea", nomLineasN,
                 "Cliente", nomCliO,
                 "Mes", nomMes,
                 libroSalidaCXLS, "PjeClienLin",
@@ -1458,11 +1458,11 @@ public class PeajesRet {
                   PagoCUAnual,ECUAnual,
                   "Mes",nomMes,
                   "Calculo", TotMensualRetEmp,
-                  "Prorrata L’nea",SumMensualPjeLin,
+                  "Prorrata L‚Äônea",SumMensualPjeLin,
                   "Diferencia",
                   "verifica","#,###,##0;[Red]-#,###,##0;\"-\"");
           Escribe.crea_verificaCalcPeajes(
-                  "Verifica Cálculo de Peajes",libroEntrada,
+                  "Verifica C√°lculo de Peajes",libroEntrada,
                   "Mes",nomMes,
                   "Peajes", PeajeNMes,
                   "Pago Ret","Pago Iny","Diferencia",
@@ -1470,7 +1470,7 @@ public class PeajesRet {
           long tFinalEscritura = System.currentTimeMillis();
           System.out.println("Pagos de Retiro Anual Calculados");
          System.out.println("Tiempo Adquisicion de datos     : "+DosDecimales.format((tFinalLectura-tInicioLectura)/1000.0)+" s");
-         System.out.println("Tiempo Cálculo                  : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/1000.0)+" s");
+         System.out.println("Tiempo C√°lculo                  : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/1000.0)+" s");
          System.out.println("Tiempo Escritura de Resultados  : "+DosDecimales.format((tFinalEscritura-tInicioEscritura)/1000.0)+" s");
          System.out.println();
     }
@@ -1506,9 +1506,9 @@ public class PeajesRet {
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
 
      Escribe.creaProrrataMes(m,
-                "Participación de Retiros [%]",prorrMesC,"Participación "+nomMes[m],
+                "Participaci√≥n de Retiros [%]",prorrMesC,"Participaci√≥n "+nomMes[m],
                 "Cliente",nomCli,
-                "L’nea",  nomLinTx,
+                "L‚Äônea",  nomLinTx,
                 "AIC", zonaLinTx,
                 libroSalidaGXLSMes, "PartRet"+nomMes[m],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");

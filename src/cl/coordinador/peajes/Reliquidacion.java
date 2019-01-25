@@ -34,16 +34,16 @@ static String[] nomMes = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
     private static String slash = File.separator;
         private static final int numMeses = 12;
 //craer un archivo que se llame reliquidacion con el resumen de los IT de facturaccion luego a este archivo se le ir?n agregadon hojas
-//leer el archivo liquidacion mes del directorio de la liquidaci‹n y copiar tablas y pegarlas en un nuevo archivo
+//leer el archivo liquidacion mes del directorio de la liquidaci‚Äπn y copiar tablas y pegarlas en un nuevo archivo
 //leer el archivo liquidacion mes del directorio de la RELIQUIDACION y copiar tablas y pegarlas en EL MISMO ARCHIVO
-// pegar funciones suma y resta para creear cuadro de liquidaci‹n
+// pegar funciones suma y resta para creear cuadro de liquidaci‚Äπn
 //copiar el ultimo cuadro en una hoja de pagos
 
 public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReliquidacion, String mes, int Ano,String Fpago){
 
-    String libroLiquidacion= DirectorioLiquidacion + slash +"Liquidación" + mes + ".xlsx";
-    String libroReliquidacion = DirectorioReliquidacion + slash +"Liquidación" + mes + ".xlsx";
-    File ArchivoReli= new File(DirectorioReliquidacion + slash +"Liquidación" + mes + ".xlsx");
+    String libroLiquidacion= DirectorioLiquidacion + slash +"Liquidaci√≥n" + mes + ".xlsx";
+    String libroReliquidacion = DirectorioReliquidacion + slash +"Liquidaci√≥n" + mes + ".xlsx";
+    File ArchivoReli= new File(DirectorioReliquidacion + slash +"Liquidaci√≥n" + mes + ".xlsx");
 
     int nummes=0;
 
@@ -223,7 +223,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                      rowcuadro = hojacuadro.createRow(i+5);
                      rowRitRel = hojarit.createRow(i+10+filas);//hoja detalle, celdas para pagos con IT Real
                      rowRitIT = hojarit.createRow(i+14+filas*2);//hoja detalle, celdas para diferencia entre IT estiamdo - IT Real
-                     //Lee datos en archivo de liquidaci‹n con IT estimado
+                     //Lee datos en archivo de liquidaci‚Äπn con IT estimado
                      for (int j=0; j<columnas+1; j++) {
                          rowliq = s.getRow(crefsliq[i*columnas].getRow());
                          cLiq = rowliq.getCell(j);
@@ -238,7 +238,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                                  }
                              }
                          }
-                         //copia datos en archivo de reliquidaci‹n rit.xls
+                         //copia datos en archivo de reliquidaci‚Äπn rit.xls
                          else{
                              tipo=cLiq.getCellType();
                              if(tipo==0){
@@ -325,21 +325,21 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                      }
             }
 
-            hojarit.createRow(3).createCell(1).setCellValue("1.- Liquidación de Peajes correspondiente a "+ mes+" de "+Ano+
+            hojarit.createRow(3).createCell(1).setCellValue("1.- Liquidaci√≥n de Peajes correspondiente a "+ mes+" de "+Ano+
                     " (Valores en $ indexados a "+ mes+" de "+Ano+ " ) con IT Estimados");
             hojarit.getRow(3).getCell(1).setCellStyle(estiloTitulo);
-            hojarit.createRow(filas+8).createCell(1).setCellValue("2.- Cálculo de Peajes correspondiente a "+ mes+" de "+Ano+
+            hojarit.createRow(filas+8).createCell(1).setCellValue("2.- C√°lculo de Peajes correspondiente a "+ mes+" de "+Ano+
                     "  (Valores en $ indexados a "+ mes+" de "+Ano+ ") con IT Reales");
             hojarit.getRow(filas+8).getCell(1).setCellStyle(estiloTitulo);
-            hojarit.createRow(12+filas*2).createCell(1).setCellValue("3.-Reliquidación de Ingresos Tarifarios correspondiente a "+ mes+" de "+Ano+
+            hojarit.createRow(12+filas*2).createCell(1).setCellValue("3.-Reliquidaci√≥n de Ingresos Tarifarios correspondiente a "+ mes+" de "+Ano+
                     " (Valores en $ indexados a "+ mes+" de "+Ano+ ")");
             hojarit.getRow(12+filas*2).getCell(1).setCellStyle(estiloTitulo);
             hojarit.createRow(16+filas*3).createCell(1).setCellValue("(1) Valores Positivos: Usuarios Pagan, Valores Negativos: Usuarios Reciben");
             hojarit.getRow(12+filas*2).getCell(1).setCellStyle(estiloTexto);
-            hojarit.createRow(17+filas*3).createCell(1).setCellValue("(2) Suma de Cuadros N° 2 y N° 3");
+            hojarit.createRow(17+filas*3).createCell(1).setCellValue("(2) Suma de Cuadros N¬∞ 2 y N¬∞ 3");
             hojarit.getRow(12+filas*2).getCell(1).setCellStyle(estiloTexto);
             
-            hojacuadro.createRow(2).createCell(1).setCellValue("Reliquidación de Ingresos Tarifarios");
+            hojacuadro.createRow(2).createCell(1).setCellValue("Reliquidaci√≥n de Ingresos Tarifarios");
             hojacuadro.getRow(2).getCell(1).setCellStyle(estiloTitulo);
             hojacuadro.createRow(3).createCell(1).setCellValue( mes+" de "+Ano);
             hojacuadro.getRow(3).getCell(1).setCellStyle(estiloTitulo);

@@ -311,7 +311,7 @@ public class Escribe {
             }
             if(numFilas!=nombreFilas.length){
                 System.out.println("Error!!!");
-                System.out.println("Las l抧eas registradas en "+nomHoja +" no coinciden con las l抧eas en 'VATT'");
+                System.out.println("Las l铆neas registradas en "+nomHoja +" no coinciden con las l铆neas en 'VATT'");
                 numFilas=nombreFilas.length;
             }
             // Titulos Filas y Datos
@@ -2948,7 +2948,7 @@ public class Escribe {
             row1 = hoja.getRow(4);
             Cell cellTC5 = row1.createCell(1);
             Cell cellTC6 = row1.createCell(2);
-            cellTC5.setCellValue("Factor de Correcci梟");
+            cellTC5.setCellValue("Factor de Correcci贸n");
             cellTC5.setCellStyle(estiloDatos);
             cellTC6.setCellValue(FC[mes]);
             cellTC6.setCellStyle(estiloDatos3);
@@ -2961,7 +2961,7 @@ public class Escribe {
            }
            //cellTC = rowTmp.createCell(6);
            cellTC = rowTmp.createCell(3);
-           cellTC.setCellValue("Pagos por Inyecci梟");
+           cellTC.setCellValue("Pagos por Inyecci贸n");
            cellTC.setCellStyle(estiloTitulo1);
            RefI = new CellReference(cellTC.getRowIndex(), cellTC.getColumnIndex());
            //RefF = new CellReference(cellTC.getRowIndex(),5+(4*dim2+1) );
@@ -2971,7 +2971,7 @@ public class Escribe {
 
            //cellTC = rowTmp.createCell(6+(4*dim2+1));
            cellTC = rowTmp.createCell(3+(4*dim2+1));
-           cellTC.setCellValue("Excenci梟 MGNC");
+           cellTC.setCellValue("Excenci贸n MGNC");
            cellTC.setCellStyle(estiloTitulo1);
            RefI = new CellReference(cellTC.getRowIndex(), cellTC.getColumnIndex());
            //RefF = new CellReference(cellTC.getRowIndex(),5+(5*dim2+2));
@@ -3232,7 +3232,7 @@ public class Escribe {
            }
 
            cellTC = rowTmp.getCell(2);
-           cellTC.setCellValue("Pagos por Inyecci躰");
+           cellTC.setCellValue("Pagos por Inyecci鈥筺");
            cellTC.setCellStyle(estiloTitulo1);
            CellReference RefI = new CellReference(cellTC.getRowIndex(), cellTC.getColumnIndex());
            CellReference RefF = new CellReference(cellTC.getRowIndex(), 1+(dim2+1));
@@ -3627,7 +3627,7 @@ static public void creaLiquidacionMesIny( int mes,
             }
 
            cellTC = row.createCell(6);
-           cellTC.setCellValue("Pagos por Inyecci梟");
+           cellTC.setCellValue("Pagos por Inyecci贸n");
            cellTC.setCellStyle(estiloTitulo1);
            CellReference RefI = new CellReference(cellTC.getRowIndex(), cellTC.getColumnIndex());
            CellReference RefF = new CellReference(cellTC.getRowIndex(),5+(dim2+1));
@@ -7185,7 +7185,7 @@ static public void creaLiquidacionMes( int mes,
                 }
                 }
                 else{
-                System.out.println("La l抧ea "+linea[i]+" en "+nomHoja+" no se encuentra en la hoja 'lintron'");
+                System.out.println("La l铆nea "+linea[i]+" en "+nomHoja+" no se encuentra en la hoja 'lintron'");
                 }
             }
 
@@ -7269,7 +7269,7 @@ static public void creaLiquidacionMes( int mes,
                 }
                 //}
                 if(l==-1){
-                System.out.println("La l抧ea "+linea[i]+ " en la hoja "+nomHoja+" no se encuentra en la hoja 'lintron'");
+                System.out.println("La l铆nea "+linea[i]+ " en la hoja "+nomHoja+" no se encuentra en la hoja 'lintron'");
                 }
             }
             // Graba y Cierra
@@ -7696,7 +7696,7 @@ static public void creaLiquidacionMes( int mes,
             reference = nomHoja+"!$B$2:"+cellRef.formatAsString(); // area reference
             //hoja.addMergedRegion(CellRangeAddress.valueOf(reference));
            cellT = row.createCell(5+dim3);
-           cellT.setCellValue("Participaci躰 de Suministradores sobre pagos de empresas Distribuidoras");
+           cellT.setCellValue("Participaci鈥筺 de Suministradores sobre pagos de empresas Distribuidoras");
            cellT.setCellStyle(estiloTitulo);
             // Graba y Cierra
             FileOutputStream archivoSalida = new FileOutputStream( nomLibro );

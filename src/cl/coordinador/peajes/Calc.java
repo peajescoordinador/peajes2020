@@ -3,7 +3,7 @@ package cl.coordinador.peajes;
 /**
  * @(#)calc.java
  *
- * Se implementan distintas funciones para c·lculos
+ * Se implementan distintas funciones para c√°lculos
  *
  * @author 
  * @version 1.00 2007/5/16
@@ -78,7 +78,7 @@ private static String slash=File.separator;
     	for(int l=0;l<numLineas;l++){
             if((int)datosLineas[l][5]==1){ //si linea activa
                 for(int b=0;b<numBarras;b++){
-                    if(barrasActivas[b][e]==true){ //si la barra est· activa
+                    if(barrasActivas[b][e]==true){ //si la barra est√° activa
                         barraA=(int)datosLineas[l][0];
                         barraB=(int)datosLineas[l][1];
                         Xag=XBarra.get(barraA,b);
@@ -167,7 +167,7 @@ private static String slash=File.separator;
     }
       
     //----------------------------------
-    //Determina Flujo de Potencia en funciÛn de GLDF, sin perdidas para una sola hidrologia
+    //Determina Flujo de Potencia en funci√≥n de GLDF, sin perdidas para una sola hidrologia
     //----------------------------------
     
     static public float[] FlujoDC_GLDF(float E[][][], float Consumos[][], int h, int e){
@@ -189,7 +189,7 @@ private static String slash=File.separator;
     }  
         
     //----------------------------------
-    //Determina Prorratas de GeneraciÛn
+    //Determina Prorratas de Generaci√≥n
     //----------------------------------
     
     static public float[][] CalculaProrrGx(float flujoDC[][], float D[][][], float Gx[][][],int datosGener[][],
@@ -230,9 +230,9 @@ private static String slash=File.separator;
                             sentidoFlujoLinea=(int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
                             for(int g=0;g<numGeneradores;g++){
                                 barraGx=datosGener[g][0];
-                                // si la barra de generacion est· en la misma area troncal que la linea, o la lÌnea est· en el AIC
+                                // si la barra de generacion est√° en la misma area troncal que la linea, o la l√≠nea est√° en el AIC
                                 if(paramBarTroncal[barraGx][1]==areaTroncal || areaTroncal==0){
-                                    // si est· fuera del AIC y el flujo apunta a ella  y la barra est· en el extremo contrario al AIC de la linea
+                                    // si est√° fuera del AIC y el flujo apunta a ella  y la barra est√° en el extremo contrario al AIC de la linea
                                     if(areaTroncal!=0 && (flujoDC[l][h]*sentidoFlujoLinea)>0 && orientBarTroncal[barraGx][l]==areaTroncal){
                                         if(Math.signum(flujoDC[l][h])==Math.signum(D[barraGx][l][h])){	//si esta aguas arriba del flujo
                                             genEquiv[g][l][h]=(float)(Gx[g][e][h]*Math.abs(D[barraGx][l][h]));
@@ -240,7 +240,7 @@ private static String slash=File.separator;
                                             genEquivTotal[l][h]+=genEquiv[g][l][h];
                                         }
                                     }
-                                    // si est· en AIC y flujo tiene = signo que GGDF
+                                    // si est√° en AIC y flujo tiene = signo que GGDF
                                     else if(areaTroncal==0 && (flujoDC[l][h]*D[barraGx][l][h])>0){
                                         genEquiv[g][l][h]=(float)(Gx[g][e][h]*D[barraGx][l][h]);
                                         genEquivTotal[l][h]+=genEquiv[g][l][h];
@@ -479,10 +479,10 @@ private static String slash=File.separator;
         }    	
 
         for(int l=0;l<numLineas;l++){
-            if((int)datosLineas[l][5]==1){						// si la linea est· en servicio
+            if((int)datosLineas[l][5]==1){						// si la linea est√° en servicio
                 if(flujoDC[l]!=0){
                     for(int b=0;b<numBarras;b++){
-                        if(Math.signum(flujoDC[l])==Math.signum(E[b][l][h])){           //si est· aguas abajo del flujo
+                        if(Math.signum(flujoDC[l])==Math.signum(E[b][l][h])){           //si est√° aguas abajo del flujo
                             ConsEquiv[b][l]=(float)(Math.abs(E[b][l][h]))*Consumos[b][h];
                             ConsEquivTotal[l]+=ConsEquiv[b][l];
                         }
@@ -555,8 +555,8 @@ private static String slash=File.separator;
     	
     	for(int h=0;h<numHid;h++){
             for(int l=0;l<numLineas;l++){
-                if((int)datosLineas[l][5]==1){						// si la linea est· en servicio
-                    if((int) datosLineas[l][6]==1){					// si la lÌnea es troncal
+                if((int)datosLineas[l][5]==1){						// si la linea est√° en servicio
+                    if((int) datosLineas[l][6]==1){					// si la l√≠nea es troncal
                         if(flujoDC[l][h]!=0){
                             areaTroncal=(int) datosLineas[l][7];			// AIC=>0, Norte=>1, Sur=>-1
                             sentidoFlujoLinea=(int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
@@ -575,16 +575,16 @@ private static String slash=File.separator;
                                     //barraCx2=sicosing;
                                     //System.out.println(c+" "+barraCx2);
 
-                                    // si la barra de consumo est· en la misma area troncal que la linea o en el AIC
+                                    // si la barra de consumo est√° en la misma area troncal que la linea o en el AIC
                                     if(paramBarTroncal[barraCx][1]==areaTroncal || areaTroncal==0){
-                                         // si est· fuera del AIC y flujo alejandose y la barra est· en el extremo contrario al AIC de la linea
+                                         // si est√° fuera del AIC y flujo alejandose y la barra est√° en el extremo contrario al AIC de la linea
                                         if(areaTroncal!=0 && flujoDC[l][h]*sentidoFlujoLinea<0 && orientBarTroncal[barraCx][l]==areaTroncal){
-                                            if(Math.signum(flujoDC[l][h])==Math.signum(E[barraCx][l][h])){	//si est· aguas abajo del flujo
+                                            if(Math.signum(flujoDC[l][h])==Math.signum(E[barraCx][l][h])){	//si est√° aguas abajo del flujo
                                             ConsEquiv[c][l][h]=(float)(Math.abs(E[barraCx][l][h]))*Consumos[c][e];
                                             ConsEquivTotal[l][h]+=ConsEquiv[c][l][h];
                                              }
                                         }
-                                         // si est· en AIC y flujo tiene = signo que GLDF
+                                         // si est√° en AIC y flujo tiene = signo que GLDF
                                         else if(areaTroncal==0 && (flujoDC[l][h]*E[barraCx][l][h])>0){
                                         ConsEquiv[c][l][h]=(float)(Math.abs(E[barraCx][l][h]))*Consumos[c][e];
                                         ConsEquivTotal[l][h]+=ConsEquiv[c][l][h];
@@ -641,7 +641,7 @@ private static String slash=File.separator;
     //----------------------------------    
         
     //----------------------------------
-    //Determina el valor m·ximo en un arreglo
+    //Determina el valor m√°ximo en un arreglo
     //----------------------------------
    static public float Maximo(float Arreglo[]){
     	int dim=Arreglo.length;
