@@ -7711,7 +7711,8 @@ static public void creaLiquidacionMes( int mes,
                 e.printStackTrace();
         }
     }
-         static public void CopiaHoja( String nomLibroE,String nomLibroS, String nomHoja) {
+        
+    static public void CopiaHoja(String nomLibroE, String nomLibroS, String nomHoja) {
         XSSFSheet hojae = null;
         XSSFSheet hojas = null;
         Cell cellTC = null;
@@ -7722,44 +7723,73 @@ static public void creaLiquidacionMes( int mes,
         short fila = 0;
         try {
             //POIFSFileSystem archivoEntrada = new //POIFSFileSystem(new FileInputStream( nomLibroE ));
-            XSSFWorkbook wbe = new XSSFWorkbook(new FileInputStream (nomLibroE));
-            int indice=wbe.getSheetIndex(nomHoja);
-            hojas=wbe.cloneSheet(indice);
-            
-            
+            XSSFWorkbook wbe = new XSSFWorkbook(new FileInputStream(nomLibroE));
+            int indice = wbe.getSheetIndex(nomHoja);
+            hojas = wbe.cloneSheet(indice);
+
             //POIFSFileSystem archivoSalidaC = new //POIFSFileSystem(new FileInputStream( nomLibroS ));
-            XSSFWorkbook wbs = new XSSFWorkbook(new FileInputStream( nomLibroS ));
+            XSSFWorkbook wbs = new XSSFWorkbook(new FileInputStream(nomLibroS));
             wbs.cloneSheet(indice);
 
-            FileOutputStream archivoSalida = new FileOutputStream( nomLibroS );
+            FileOutputStream archivoSalida = new FileOutputStream(nomLibroS);
             wbs.write(archivoSalida);
             archivoSalida.close();
-            System.out.println( "Acaba de crear la hoja xls " + nomHoja);
-            
-             }
-        catch (IOException e) {
-                System.out.println( "No se se puede acceder al archivo " + e.getMessage());
-        }
-        catch (Exception e) {
-                e.printStackTrace();
+            System.out.println("Acaba de crear la hoja xls " + nomHoja);
+
+        } catch (IOException e) {
+            System.out.println("No se se puede acceder al archivo " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
         }
     }
-         
- 
-         
-         static public void EscribePropiedades (Properties propiedades, String ruta) {
-             try {
-                 File f = new File(ruta);
-                 OutputStream out = new FileOutputStream( f );
-                 propiedades.store(out, "Parametros Peajator");
-                 out.close();
-             
-             }
-             
-             catch (Exception e ) {
-                e.printStackTrace();
-             }
-         
-         }
+
+    static public void EscribePropiedades(Properties propiedades, String ruta) {
+        try {
+            File f = new File(ruta);
+            OutputStream out = new FileOutputStream(f);
+            propiedades.store(out, "Parametros Peajator");
+            out.close();
+        } catch (IOException e) {
+            System.out.println("No se puede escribir archivo de configuracion en ruta " + ruta);
+            e.printStackTrace(System.out);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+    }
+    
+    /**
+     * Esta rutina verifica que el nombre del rango (u hoja) sea valido
+     * <br>Es decir, que no contenga caracteres prohibidos por Excel segun
+     * documenta getNameName() de poi v4.0.1 (literal):
+     * <li> Valid characters The first character of a name must be a letter, an
+     * underscore character (_), or a backslash (\). </li>
+     * <li>Remaining characters in the name can be letters, numbers, periods,
+     * and underscore characters. Cell references disallowed </li>
+     * <li>Names cannot be the same as a cell reference, such as Z$100 or R1C1.
+     * </li>
+     * <li>Spaces are not valid Spaces are not allowed as part of a name. </li>
+     * <li>Use the underscore character (_) and period (.) as word separators,
+     * such as, Sales_Tax or First.Quarter. Name length A name can contain up to
+     * 255 characters. Case sensitivity Names can contain uppercase and
+     * lowercase letters. </li>
+     *
+     * @param nombreOriginal nombre original del rango. null creara una nullpointerexception
+     * @return nombre verificado del rango
+     */
+    static public String creaNameExcelSeguro(String nombreOriginal) {
+        if (nombreOriginal.isEmpty()) {
+            return nombreOriginal;
+        }
+        String nombreSeguro = nombreOriginal.replaceAll("[^\\p{IsAlphabetic}^\\p{IsDigit}]", "_");
+        try {
+            String sFirstNumber = nombreSeguro.substring(0, 1);
+            int nFirstNumber = Integer.parseInt(sFirstNumber);
+            nombreSeguro = nombreSeguro.replaceFirst(sFirstNumber, "N" + nFirstNumber);
+        } catch (NumberFormatException e) {
+            //Continuar
+        }
+        return nombreSeguro;
+    }
+    
 }
 

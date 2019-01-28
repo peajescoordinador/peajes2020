@@ -175,7 +175,7 @@ System.out.println();
         String libroSalidaGXLSAno= DirBaseSal + slash +"Cuadros" +Ano + ".xlsx";
         
         
-        
+
         
         
         
@@ -212,7 +212,7 @@ System.out.println();
                  PeajesIny.PagoAnualEmpGO,
                  "Central",PeajesIny.nomEmpGO,
                  "Transmisor", PeajesIny.nombreTx,
-                 libroSalidaGXLSAno, "Pago+AjIny", Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
+                 libroSalidaGXLSAno, "Pago_AjIny", Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.crea_1TablaTx_1C(
                  "Pagos de peajes de Retiro por Suministrador (Valores en $)",PeajesRet.TotAnualPjeRetEmpTxO,
                  PeajesRet.TotAnualPjeRetEmpO,
@@ -231,7 +231,7 @@ System.out.println();
                  PeajesRet.TotConRe2288AnualPjeRetEmpO,
                  "Central",PeajesRet.nomEmpO,
                  "Transmisor", PeajesIny.nombreTx,
-                 libroSalidaGXLSAno, "PagoRet+RE2288", Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
+                 libroSalidaGXLSAno, "PagoRet_RE2288", Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
 
         if(PeajesRet.numClienExentos!=0){
         Escribe.crea_1TablaTx_1C(
