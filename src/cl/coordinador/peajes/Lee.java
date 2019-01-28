@@ -39,7 +39,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("clientes");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=2) {
@@ -73,7 +73,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("centrales");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=4) {
@@ -115,7 +115,7 @@ public class Lee {
             // Lectura de datos
             nomRangoInd = wb.getNameIndex("lineasVATT");
             nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i++) {
@@ -126,7 +126,7 @@ public class Lee {
             // Lectura de datos
             nomRangoInd = wb.getNameIndex("transmisores");
             nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i++) {
@@ -137,7 +137,7 @@ public class Lee {
             // Lectura de datos
             nomRangoInd = wb.getNameIndex("VATT");
             nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=numMeses) {
@@ -207,12 +207,12 @@ public class Lee {
 
             CellStyle estilo1 = wbEnt.createCellStyle();
             estilo1.setFont(font);
-            estilo1.setBorderRight(CellStyle.BORDER_THIN);
+            estilo1.setBorderRight(BorderStyle.THIN);
             estilo1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             CellStyle estilo2 = wbEnt.createCellStyle();
             estilo2.setFont(font);
-            estilo2.setBorderLeft(CellStyle.BORDER_THIN);
+            estilo2.setBorderLeft(BorderStyle.THIN);
             estilo2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
          // Datos
@@ -318,12 +318,12 @@ public class Lee {
 
             CellStyle estilo1 = wbEnt.createCellStyle();
             estilo1.setFont(font);
-            estilo1.setBorderRight(CellStyle.BORDER_THIN);
+            estilo1.setBorderRight(BorderStyle.THIN);
             estilo1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             CellStyle estilo2 = wbEnt.createCellStyle();
             estilo2.setFont(font);
-            estilo2.setBorderLeft(CellStyle.BORDER_THIN);
+            estilo2.setBorderLeft(BorderStyle.THIN);
             estilo2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
          // Datos
@@ -373,7 +373,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("deflin");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=12) {
@@ -446,15 +446,15 @@ public class Lee {
             CellReference[] crefsTx;
             int nomRangoInd = wb.getNameIndex("lintron");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             int nomRangoIndDatos = wb.getNameIndex("datosLintron");
             Name nomRangoDatos = wb.getNameAt(nomRangoIndDatos);
-            arefDatos = new AreaReference(nomRangoDatos.getRefersToFormula());
+            arefDatos = new AreaReference(nomRangoDatos.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsDatos = arefDatos.getAllReferencedCells();
             int nomRangoindDatosTx = wb.getNameIndex("transmisorIT");
             Name nomRangoDatosTx = wb.getNameAt(nomRangoindDatosTx);
-            arefTx = new AreaReference(nomRangoDatosTx.getRefersToFormula());
+            arefTx = new AreaReference(nomRangoDatosTx.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsTx = arefTx.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=2) {
@@ -530,20 +530,20 @@ public class Lee {
             CellReference[] crefsITP;
             int nomRangoInd = wb.getNameIndex("lintron");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             int nomRangoIndTx = wb.getNameIndex("transmisorIT");
             Name nomRangoTx = wb.getNameAt(nomRangoIndTx);
-            arefTx = new AreaReference(nomRangoTx.getRefersToFormula());
+            arefTx = new AreaReference(nomRangoTx.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsTx = arefTx.getAllReferencedCells();
             int nomRangoIndITE = wb.getNameIndex("ITE");
             Name nomRangoITE = wb.getNameAt(nomRangoIndITE);
-            arefITE = new AreaReference(nomRangoITE.getRefersToFormula());
+            arefITE = new AreaReference(nomRangoITE.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsITE = arefITE.getAllReferencedCells();
             int nomRangoIndITP = wb.getNameIndex("ITP");
             Name nomRangoITP = wb.getNameAt(nomRangoIndITP);
-            arefITP = new AreaReference(nomRangoITP.getRefersToFormula());
+            arefITP = new AreaReference(nomRangoITP.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsITP = arefITP.getAllReferencedCells();
             for (int i=0; i<crefs.length; i+=2) {
                 Row r = s.getRow(crefs[i].getRow());
@@ -605,7 +605,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("Peajes");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i = 0; i < crefs.length; i += 12) {
@@ -635,7 +635,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex(NombreRango);
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i = 0; i < crefs.length; i += 12) {
@@ -683,33 +683,33 @@ public class Lee {
             CellReference[] crefsITP;
             int nomRangoInd = wb.getNameIndex("lintron");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             
             int nomRangoIndTx = wb.getNameIndex("transmisorIT");
             Name nomRangoTx = wb.getNameAt(nomRangoIndTx);
-            arefTx = new AreaReference(nomRangoTx.getRefersToFormula());
+            arefTx = new AreaReference(nomRangoTx.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsTx = arefTx.getAllReferencedCells();
             
             int nomRangoIndITE = wb.getNameIndex("ITE");
             Name nomRangoITE = wb.getNameAt(nomRangoIndITE);
-            arefITE = new AreaReference(nomRangoITE.getRefersToFormula());
+            arefITE = new AreaReference(nomRangoITE.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsITE = arefITE.getAllReferencedCells();
             
             int nomRangoIndITEG = wb.getNameIndex("ITEG");
             Name nomRangoITEG = wb.getNameAt(nomRangoIndITEG);
-            arefITEG = new AreaReference(nomRangoITEG.getRefersToFormula());
+            arefITEG = new AreaReference(nomRangoITEG.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsITEG = arefITEG.getAllReferencedCells();
             
             int nomRangoIndITER = wb.getNameIndex("ITER");
             Name nomRangoITER = wb.getNameAt(nomRangoIndITER);
-            arefITER = new AreaReference(nomRangoITER.getRefersToFormula());
+            arefITER = new AreaReference(nomRangoITER.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsITER = arefITER.getAllReferencedCells();
             
             int nomRangoIndITP = wb.getNameIndex("ITP");
             Name nomRangoITP = wb.getNameAt(nomRangoIndITP);
-            arefITP = new AreaReference(nomRangoITP.getRefersToFormula());
+            arefITP = new AreaReference(nomRangoITP.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsITP = arefITP.getAllReferencedCells();
 
             for (int i=0; i<crefs.length; i+=2) {
@@ -767,7 +767,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("ProrrGMes");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             if(crefs.length!=numLineas*numCentrales*12)
@@ -803,7 +803,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("ProrrCMes");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             System.out.println(numLineas+" "+numClientes);
@@ -837,7 +837,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("GMes");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
               for (int i=0; i<crefs.length; i=i+(numMeses))  {
@@ -867,7 +867,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("CMesCli");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
 
@@ -875,7 +875,7 @@ public class Lee {
             CellReference[] crefs1;
             int nomRangoInd1 = wb.getNameIndex("CU");
             Name nomRango1 = wb.getNameAt(nomRangoInd1);
-            aref1 = new AreaReference(nomRango1.getRefersToFormula());
+            aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
 
               for (int i=0; i<crefs.length; i=i+(numMeses))  {
@@ -917,7 +917,7 @@ public class Lee {
         String Linea;
         try {
             XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));   
-            AreaReference arefFlujo = new AreaReference(wb.getNameAt(wb.getNameIndex("lineas_flujo")).getRefersToFormula());
+            AreaReference arefFlujo = new AreaReference(wb.getNameAt(wb.getNameIndex("lineas_flujo")).getRefersToFormula(), wb.getSpreadsheetVersion());
             CellReference[] crefsFlujo = arefFlujo.getAllReferencedCells();
             lineas = new int[crefsFlujo.length];
             Sheet s = wb.getSheet(crefsFlujo[0].getSheetName());
@@ -951,7 +951,7 @@ public class Lee {
         String Linea;
         try {
             XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));   
-            AreaReference arefFlujo = new AreaReference(wb.getNameAt(wb.getNameIndex(areaNombre)).getRefersToFormula());
+            AreaReference arefFlujo = new AreaReference(wb.getNameAt(wb.getNameIndex(areaNombre)).getRefersToFormula(), wb.getSpreadsheetVersion());
             CellReference[] crefsFlujo = arefFlujo.getAllReferencedCells();
             lineas = new int[crefsFlujo.length];
             Sheet s = wb.getSheet(crefsFlujo[0].getSheetName());
@@ -980,11 +980,11 @@ public class Lee {
             //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
             XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));
             // dolar
-            AreaReference arefDolar = new AreaReference(wb.getNameAt(wb.getNameIndex("dolar")).getRefersToFormula());
+            AreaReference arefDolar = new AreaReference(wb.getNameAt(wb.getNameIndex("dolar")).getRefersToFormula(), wb.getSpreadsheetVersion());
             CellReference[] crefsDolar = arefDolar.getAllReferencedCells();
             Sheet sDolar = wb.getSheet(crefsDolar[0].getSheetName());
             // inter?s
-            AreaReference arefInteres = new AreaReference(wb.getNameAt(wb.getNameIndex("interes")).getRefersToFormula());
+            AreaReference arefInteres = new AreaReference(wb.getNameAt(wb.getNameIndex("interes")).getRefersToFormula(), wb.getSpreadsheetVersion());
             CellReference[] crefsInteres = arefInteres.getAllReferencedCells();
             Sheet sInteres = wb.getSheet(crefsInteres[0].getSheetName());
             for (int m=0; m<numMeses; m++) {
@@ -1017,7 +1017,7 @@ public class Lee {
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("defbar");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=5) {
@@ -1051,7 +1051,7 @@ public static void leeConsumoxBarra(String libroEntrada, float[][] Consumos, int
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("consxbarra");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             if (crefs.length/numEtapas != numBarras) {
@@ -1085,7 +1085,7 @@ public static void leeConsumoxBarra(String libroEntrada, float[][] Consumos, int
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("etapas");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             if (crefs.length != numEtapas) {
@@ -1116,7 +1116,7 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("linman");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=(numEtapas+1)) {
@@ -1159,7 +1159,7 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("plpcnfce");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=5) {
@@ -1208,7 +1208,7 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("plpcnfce");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=5) {
@@ -1251,7 +1251,7 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("sumin");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i++) {
@@ -1285,8 +1285,8 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             int nomRangoInd3 = wb.getNameIndex("orientFil");
             Name nomRango1 = wb.getNameAt(nomRangoInd2);
             Name nomRango2 = wb.getNameAt(nomRangoInd3);
-            aref1 = new AreaReference(nomRango1.getRefersToFormula());
-            aref2 = new AreaReference(nomRango2.getRefersToFormula());
+            aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
+            aref2 = new AreaReference(nomRango2.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
             crefs2 = aref2.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs1[0].getSheetName());
@@ -1339,7 +1339,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("barcli");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
 
@@ -1393,7 +1393,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("consumos");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
 
@@ -1401,7 +1401,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs1;
             int nomRangoInd1 = wb.getNameIndex("CU");
             Name nomRango1 = wb.getNameAt(nomRangoInd1);
-            aref1 = new AreaReference(nomRango1.getRefersToFormula());
+            aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
 
             for (int i=0; i<crefs.length; i+=numEtapas) {
@@ -1458,7 +1458,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("CU");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
 
@@ -1466,7 +1466,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs1;
             int nomRangoInd1 = wb.getNameIndex("barcli");
             Name nomRango1 = wb.getNameAt(nomRangoInd1);
-            aref1 = new AreaReference(nomRango1.getRefersToFormula());
+            aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
 
                for (int i=0; i<crefs1.length; i+=5) {
@@ -1512,7 +1512,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("consumos");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
 
@@ -1520,7 +1520,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs1;
             int nomRangoInd1 = wb.getNameIndex("CU");
             Name nomRango1 = wb.getNameAt(nomRangoInd1);
-            aref1 = new AreaReference(nomRango1.getRefersToFormula());
+            aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
 
             for (int i=0; i<crefs.length; i+=numEtapas) {
@@ -1561,7 +1561,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             //Extrae los clientes asociados a los conusmos
             int nomRangoInd2 = wb.getNameIndex("barcli");
             Name nomRango2= wb.getNameAt(nomRangoInd2);
-            aref = new AreaReference(nomRango2.getRefersToFormula());
+            aref = new AreaReference(nomRango2.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
 
             for (int i=0; i<crefs.length; i+=5) {
@@ -1613,7 +1613,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             estilo.setFont(font);
             CellStyle estilo1 = wb.createCellStyle();
             estilo1.setFont(font);
-            estilo1.setAlignment(CellStyle.ALIGN_CENTER);
+            estilo1.setAlignment(HorizontalAlignment.CENTER);
 
 
          // Titulos Secundarios
@@ -1664,7 +1664,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("linPLP");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=3) {
@@ -1700,7 +1700,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("meses");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=2) {
@@ -1738,7 +1738,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             // Lectura de datos
             nomRangoInd = wb.getNameIndex("EmpEfir");
             nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i++) {
@@ -1750,7 +1750,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             // Lectura de datos
             nomRangoInd = wb.getNameIndex("Efirme");
             nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
             for (int i=0; i<crefs.length; i+=numMeses) {
@@ -1791,7 +1791,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
 
             nomRangoInd = wb.getNameIndex("Distr");
             nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
             for (numDx=0; numDx<crefs.length; numDx++) {
@@ -1805,7 +1805,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
                 tmp=i+1;
             nomRangoInd = wb.getNameIndex("ProrrDx"+tmp);
             nomRango = wb.getNameAt(nomRangoInd);
-            aref1 = new AreaReference(nomRango.getRefersToFormula());
+            aref1 = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
             sum=crefs1.length/numDx;
             for (numSum=0; numSum<sum; numSum++) {
@@ -1858,7 +1858,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
 
             nomRangoInd = wb.getNameIndex("sumRM88");
             nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula());
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
             for (numSum=0; numSum<crefs.length; numSum++) {
@@ -1870,7 +1870,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             
             nomRangoInd = wb.getNameIndex("ProrrRM88");
             nomRango = wb.getNameAt(nomRangoInd);
-            aref1 = new AreaReference(nomRango.getRefersToFormula());
+            aref1 = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
             // Lectura de datos
             //System.out.println(crefs1.length);

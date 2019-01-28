@@ -113,13 +113,13 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             CellStyle estiloDatosA = wbrit.createCellStyle();
             estiloDatosA.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatosA.setFont(font);
-            estiloDatosA.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatosA.setBorderRight(BorderStyle.THIN);
             estiloDatosA.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
             
             
@@ -130,37 +130,37 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
             Font fontTituloFila = wbrit.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wbrit.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderLeft(BorderStyle.THIN);
             estiloTituloFila.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             CellStyle estiloTituloFilaA = wbrit.createCellStyle();
             estiloTituloFilaA.setFont(fontTituloFila);
-            estiloTituloFilaA.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaA.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaA.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFilaA.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTituloFilaA.setBorderLeft(BorderStyle.THIN);
             estiloTituloFilaA.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFilaA.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFilaA.setBorderBottom(BorderStyle.THIN);
             estiloTituloFilaA.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFilaA.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFilaA.setBorderTop(BorderStyle.THIN);
             estiloTituloFilaA.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFilaA.setAlignment(CellStyle.ALIGN_CENTER);
-            estiloTituloFilaA.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            estiloTituloFilaA.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+            estiloTituloFilaA.setAlignment(HorizontalAlignment.CENTER);
+            estiloTituloFilaA.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+            estiloTituloFilaA.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             Font fontTitulo = wbrit.createFont();
             fontTitulo.setFontHeightInPoints((short)9);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wbrit.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
@@ -170,24 +170,24 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderRight(BorderStyle.THIN);
             estiloDatos4.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             CellStyle estiloDatos4A = wbrit.createCellStyle();
             estiloDatos4A.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4A.setFont(font);
-            estiloDatos4A.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos4A.setBorderRight(BorderStyle.THIN);
             estiloDatos4A.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4A.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4A.setBorderBottom(BorderStyle.THIN);
             estiloDatos4A.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4A.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4A.setBorderTop(BorderStyle.THIN);
             estiloDatos4A.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4A.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            estiloDatos4A.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+            estiloDatos4A.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+            estiloDatos4A.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             AreaReference arefliq;
             CellReference[] crefsliq;
@@ -196,7 +196,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
 
             int nomRangoInd = wb.getNameIndex("Total");
             Name nomRango = wb.getNameAt(nomRangoInd);
-            arefliq = new AreaReference(nomRango.getRefersToFormula());
+            arefliq = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsliq = arefliq.getAllReferencedCells();
             Sheet s = wb.getSheet(crefsliq[0].getSheetName());
             c4=arefliq.getLastCell();
@@ -205,12 +205,12 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
            
             int nomRangoIndRe = wbRel.getNameIndex("Total");
             Name nomRangoRe = wbRel.getNameAt(nomRangoIndRe);
-            arefReliq = new AreaReference(nomRangoRe.getRefersToFormula());
+            arefReliq = new AreaReference(nomRangoRe.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsReliq = arefReliq.getAllReferencedCells();
             Sheet sRel = wbRel.getSheet(crefsReliq[0].getSheetName());
             
            int k=0;
-           int tipo=0;
+           CellType tipo = CellType.BLANK;
            int aux=0;
            int a=0;
            int indcolTot=300;
@@ -241,17 +241,21 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                          //copia datos en archivo de reliquidaci‹n rit.xls
                          else{
                              tipo=cLiq.getCellType();
-                             if(tipo==0){
-                             cRit.setCellValue(cLiq.getNumericCellValue());
-                             cRit.setCellStyle(estiloDatos1);
-                             }
-                             else if(tipo==1){
-                             cRit.setCellValue(cLiq.toString());
-                             cRit.setCellStyle(estiloTituloFila);
-                             }
-                             else if(tipo==2){
-                             cRit.setCellFormula(cLiq.getCellFormula());
-                             cRit.setCellStyle(estiloDatos4);
+                             if(null!=tipo)switch (tipo) {
+                                 case NUMERIC:
+                                     cRit.setCellValue(cLiq.getNumericCellValue());
+                                     cRit.setCellStyle(estiloDatos1);
+                                     break;
+                                 case STRING:
+                                     cRit.setCellValue(cLiq.toString());
+                                     cRit.setCellStyle(estiloTituloFila);
+                                     break;
+                                 case FORMULA:
+                                     cRit.setCellFormula(cLiq.getCellFormula());
+                                     cRit.setCellStyle(estiloDatos4);
+                                     break;
+                                 default:
+                                     break;
                              }
                              hojarit.autoSizeColumn(j);
                          }
@@ -266,58 +270,58 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                          }
                          else{
                              tipo=cReliq.getCellType();
-                             if(tipo==0){
-                             cRitRel.setCellValue(cReliq.getNumericCellValue());
-                             cRitRel.setCellStyle(estiloDatos1);
-                             RefI = new CellReference(cRit.getRowIndex(), cRit.getColumnIndex());
-                             RefF = new CellReference(cRitRel.getRowIndex(), cRitRel.getColumnIndex());
-                             cRitIT.setCellFormula(RefF.formatAsString()+"-"+RefI.formatAsString());
-                             if(j<indcolTot){
-                                 a=j;
-                                 estiloDatosA.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-                                 estiloDatosA.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
-                                 cRitIT.setCellStyle(estiloDatosA);
-                                 formula.evaluateAllFormulaCells(wbrit);
-                                 rowcuadro.createCell(a).setCellValue(cRitIT.getNumericCellValue());
-                                 rowcuadro.getCell(a).setCellStyle(estiloDatosA);
-                             }
-                             else{
-                             cRitIT.setCellStyle(estiloDatos1);
-                             }
-                             }
-                             else if(tipo==1){
-                             cRitRel.setCellValue(cReliq.toString());
-                             cRitRel.setCellStyle(estiloTituloFila);
-                             cRitIT.setCellValue(cReliq.toString());
-                             if(j<indcolTot){
-                                 a=j;
-                                  cRitIT.setCellStyle(estiloTituloFilaA);
-                                  rowcuadro.createCell(a).setCellValue(cRitIT.toString());
-                                  rowcuadro.getCell(a).setCellStyle(estiloTituloFilaA);
-                             }
-                             else{                          
-                               cRitIT.setCellStyle(estiloTituloFila);
-                             }
-                             }
-                             else if(tipo==2){                           
-                             RefI = new CellReference(14+filas, cRitRel.getColumnIndex());
-                             RefF = new CellReference(cRitRel.getRowIndex()-1, cRitRel.getColumnIndex());
-                             cRitRel.setCellFormula("sum("+RefI.formatAsString()+":"+RefF.formatAsString()+")");
-                             cRitRel.setCellStyle(estiloDatos4);
-
-                             RefI = new CellReference(cRit.getRowIndex(), cRit.getColumnIndex());
-                             RefF = new CellReference(cRitRel.getRowIndex(), cRitRel.getColumnIndex());
-                             cRitIT.setCellFormula(RefF.formatAsString()+"-"+RefI.formatAsString());
-                             if(j<indcolTot){
-                                 a=j;
-                                  cRitIT.setCellStyle(estiloDatos4A);
-                                   formula.evaluateAllFormulaCells(wbrit);
-                                  rowcuadro.createCell(a).setCellValue(cRitIT.getNumericCellValue());
-                                  rowcuadro.getCell(a).setCellStyle(estiloDatos4A);
-                             }
-                             else{
-                               cRitIT.setCellStyle(estiloDatos4);
-                             }
+                             if(null!=tipo)switch (tipo) {
+                                 case NUMERIC:
+                                     cRitRel.setCellValue(cReliq.getNumericCellValue());
+                                     cRitRel.setCellStyle(estiloDatos1);
+                                     RefI = new CellReference(cRit.getRowIndex(), cRit.getColumnIndex());
+                                     RefF = new CellReference(cRitRel.getRowIndex(), cRitRel.getColumnIndex());
+                                     cRitIT.setCellFormula(RefF.formatAsString()+"-"+RefI.formatAsString());
+                                     if(j<indcolTot){
+                                         a=j;
+                                         estiloDatosA.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+                                         estiloDatosA.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                         cRitIT.setCellStyle(estiloDatosA);
+                                         formula.evaluateAllFormulaCells(wbrit);
+                                         rowcuadro.createCell(a).setCellValue(cRitIT.getNumericCellValue());
+                                         rowcuadro.getCell(a).setCellStyle(estiloDatosA);
+                                     }
+                                     else{
+                                         cRitIT.setCellStyle(estiloDatos1);
+                                     }       break;
+                                 case STRING:
+                                     cRitRel.setCellValue(cReliq.toString());
+                                     cRitRel.setCellStyle(estiloTituloFila);
+                                     cRitIT.setCellValue(cReliq.toString());
+                                     if(j<indcolTot){
+                                         a=j;
+                                         cRitIT.setCellStyle(estiloTituloFilaA);
+                                         rowcuadro.createCell(a).setCellValue(cRitIT.toString());
+                                         rowcuadro.getCell(a).setCellStyle(estiloTituloFilaA);
+                                     }
+                                     else{
+                                         cRitIT.setCellStyle(estiloTituloFila);
+                                     }       break;
+                                 case FORMULA:
+                                     RefI = new CellReference(14+filas, cRitRel.getColumnIndex());
+                                     RefF = new CellReference(cRitRel.getRowIndex()-1, cRitRel.getColumnIndex());
+                                     cRitRel.setCellFormula("sum("+RefI.formatAsString()+":"+RefF.formatAsString()+")");
+                                     cRitRel.setCellStyle(estiloDatos4);
+                                     RefI = new CellReference(cRit.getRowIndex(), cRit.getColumnIndex());
+                                     RefF = new CellReference(cRitRel.getRowIndex(), cRitRel.getColumnIndex());
+                                     cRitIT.setCellFormula(RefF.formatAsString()+"-"+RefI.formatAsString());
+                                     if(j<indcolTot){
+                                         a=j;
+                                         cRitIT.setCellStyle(estiloDatos4A);
+                                         formula.evaluateAllFormulaCells(wbrit);
+                                         rowcuadro.createCell(a).setCellValue(cRitIT.getNumericCellValue());
+                                         rowcuadro.getCell(a).setCellStyle(estiloDatos4A);
+                                     }
+                                     else{
+                                         cRitIT.setCellStyle(estiloDatos4);
+                                     }       break;
+                                 default:
+                                     break;
                              }
                              hojarit.autoSizeColumn(j);
                              hojacuadro.autoSizeColumn(a);

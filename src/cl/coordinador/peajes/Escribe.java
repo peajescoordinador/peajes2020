@@ -71,40 +71,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -112,7 +112,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -228,40 +228,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -269,7 +269,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -282,9 +282,9 @@ public class Escribe {
             CellStyle estiloDatos1 = wb.createCellStyle();
             estiloDatos1.setDataFormat(formato.getFormat(formatoPos));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderBottom(BorderStyle.THIN);
             estiloDatos1.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos1.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderTop(BorderStyle.THIN);
             estiloDatos1.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             // Dimensiones del arreglo
@@ -416,40 +416,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -457,7 +457,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -574,40 +574,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -615,7 +615,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -758,40 +758,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -799,7 +799,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -922,40 +922,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -963,7 +963,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -1086,40 +1086,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -1127,7 +1127,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -1255,40 +1255,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -1296,7 +1296,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -1435,40 +1435,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -1476,7 +1476,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -1625,40 +1625,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -1666,7 +1666,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -1681,7 +1681,7 @@ public class Escribe {
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos.setFont(font);
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
             // Dimensiones del arreglo
             int dim1=Datos.length;
@@ -1805,40 +1805,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -1846,7 +1846,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -1975,40 +1975,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -2016,7 +2016,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -2031,7 +2031,7 @@ public class Escribe {
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos.setFont(font);
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
             // Dimensiones del arreglo
             int dim1=Datos.length;
@@ -2161,40 +2161,40 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -2202,7 +2202,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -2353,52 +2353,52 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             CellStyle estiloTitulo1 = wb.createCellStyle();
             estiloTitulo1.setFont(fontTitulo);
-            estiloTitulo1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderRight(BorderStyle.THIN);
             estiloTitulo1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderLeft(BorderStyle.THIN);
             estiloTitulo1.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderBottom(BorderStyle.THIN);
             estiloTitulo1.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderTop(BorderStyle.THIN);
             estiloTitulo1.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTitulo1.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -2406,7 +2406,7 @@ public class Escribe {
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -2422,7 +2422,7 @@ public class Escribe {
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -2431,7 +2431,7 @@ public class Escribe {
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato3 = wb.createDataFormat();
@@ -2440,7 +2440,7 @@ public class Escribe {
             String formatoPos3 = formatoCompleto3.nextToken();
             estiloDatos3.setDataFormat(formato3.getFormat(formatoPos3));
             estiloDatos3.setFont(font);
-            estiloDatos3.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos3.setBorderRight(BorderStyle.THIN);
             estiloDatos3.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
             // Dimensiones del arreglo
             int dim1=Datos3.length;//barras
@@ -2626,61 +2626,61 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             CellStyle estiloTitulo1 = wb.createCellStyle();
             estiloTitulo1.setFont(fontTitulo);
-            estiloTitulo1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderRight(BorderStyle.THIN);
             estiloTitulo1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderLeft(BorderStyle.THIN);
             estiloTitulo1.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderBottom(BorderStyle.THIN);
             estiloTitulo1.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderTop(BorderStyle.THIN);
             estiloTitulo1.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTitulo1.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -2689,7 +2689,7 @@ public class Escribe {
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -2698,7 +2698,7 @@ public class Escribe {
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 
@@ -2722,9 +2722,9 @@ public class Escribe {
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
             // Dimensiones del arreglo
             int dim1=Datos1.length;
@@ -3053,61 +3053,61 @@ public class Escribe {
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             CellStyle estiloTitulo1 = wb.createCellStyle();
             estiloTitulo1.setFont(fontTitulo);
-            estiloTitulo1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderRight(BorderStyle.THIN);
             estiloTitulo1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderLeft(BorderStyle.THIN);
             estiloTitulo1.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderBottom(BorderStyle.THIN);
             estiloTitulo1.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderTop(BorderStyle.THIN);
             estiloTitulo1.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTitulo1.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -3116,9 +3116,9 @@ public class Escribe {
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderTop(BorderStyle.THIN);
             estiloDatos1.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos1.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderBottom(BorderStyle.THIN);
             estiloDatos1.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -3127,7 +3127,7 @@ public class Escribe {
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 
@@ -3320,40 +3320,40 @@ static public void creaPagosRet_3d_long( String titulo, long Datos[][][],
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -3361,7 +3361,7 @@ static public void creaPagosRet_3d_long( String titulo, long Datos[][][],
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -3501,61 +3501,61 @@ static public void creaLiquidacionMesIny( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             CellStyle estiloTitulo1 = wb.createCellStyle();
             estiloTitulo1.setFont(fontTitulo);
-            estiloTitulo1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderRight(BorderStyle.THIN);
             estiloTitulo1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderLeft(BorderStyle.THIN);
             estiloTitulo1.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderBottom(BorderStyle.THIN);
             estiloTitulo1.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTitulo1.setBorderTop(BorderStyle.THIN);
             estiloTitulo1.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTitulo1.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTitulo1.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -3564,7 +3564,7 @@ static public void creaLiquidacionMesIny( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -3573,9 +3573,9 @@ static public void creaLiquidacionMesIny( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos2.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderLeft(BorderStyle.THIN);
             estiloDatos2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -3591,9 +3591,9 @@ static public void creaLiquidacionMesIny( int mes,
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato3 = wb.createDataFormat();
@@ -3859,60 +3859,60 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderLeft(BorderStyle.THIN);
             estiloTituloFila.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderLeft(BorderStyle.THIN);
             estiloTituloFilaSec.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -3921,7 +3921,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -3930,9 +3930,9 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos2.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderLeft(BorderStyle.THIN);
             estiloDatos2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -3955,11 +3955,11 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderRight(BorderStyle.THIN);
             estiloDatos4.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             // Dimensiones del arreglo
@@ -4193,49 +4193,49 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -4244,7 +4244,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -4253,7 +4253,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 
@@ -4269,7 +4269,7 @@ static public void creaLiquidacionMes( int mes,
             StringTokenizer formatoCompleto3 = new StringTokenizer("###0.000%", ";");
             String formatoPos3 = formatoCompleto3.nextToken();
             estiloDatos3.setDataFormat(formato3.getFormat(formatoPos3));
-            estiloDatos3.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos3.setBorderRight(BorderStyle.THIN);
             estiloDatos3.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
             estiloDatos3.setFont(font);
             // Dimensiones del arreglo
@@ -4375,56 +4375,56 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -4433,7 +4433,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -4442,7 +4442,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 
@@ -4572,56 +4572,56 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -4630,7 +4630,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -4639,7 +4639,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 
@@ -4782,56 +4782,56 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -4840,7 +4840,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -4849,7 +4849,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 
@@ -4992,49 +4992,49 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -5043,7 +5043,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -5052,7 +5052,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 
@@ -5068,7 +5068,7 @@ static public void creaLiquidacionMes( int mes,
             StringTokenizer formatoCompleto3 = new StringTokenizer("###0.##0%", ";");
             String formatoPos3 = formatoCompleto3.nextToken();
             estiloDatos3.setDataFormat(formato3.getFormat(formatoPos3));
-            estiloDatos3.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos3.setBorderRight(BorderStyle.THIN);
             estiloDatos3.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
             estiloDatos3.setFont(font);
 
@@ -5219,12 +5219,12 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
 
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
@@ -5237,39 +5237,39 @@ static public void creaLiquidacionMes( int mes,
 
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTitulo2);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.cloneStyleFrom(estiloTituloTer);
-            estiloTituloFila.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderLeft(BorderStyle.THIN);
             estiloTituloFila.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             CellStyle estiloTituloFilaA = wb.createCellStyle();
             estiloTituloFilaA.cloneStyleFrom(estiloTituloFila);
-            estiloTituloFilaA.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            estiloTituloFilaA.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+            estiloTituloFilaA.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+            estiloTituloFilaA.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             CellStyle estiloTituloFila2 = wb.createCellStyle();
             estiloTituloFila2.cloneStyleFrom(estiloTituloFila);
-            estiloTituloFila2.setVerticalAlignment(CellStyle.VERTICAL_JUSTIFY);
+            estiloTituloFila2.setVerticalAlignment(VerticalAlignment.JUSTIFY);
 
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(font);
-            estiloTituloFilaSec.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderLeft(BorderStyle.THIN);
             estiloTituloFilaSec.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             CellStyle estiloTituloFilaSecA = wb.createCellStyle();
             estiloTituloFilaSecA.cloneStyleFrom(estiloTituloFilaSec);
-            estiloTituloFilaSecA.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            estiloTituloFilaSecA.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+            estiloTituloFilaSecA.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+            estiloTituloFilaSecA.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             DataFormat formato = wb.createDataFormat();
             CellStyle estiloDatos1 = wb.createCellStyle();
@@ -5277,7 +5277,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             CellStyle estiloDatos2 = wb.createCellStyle();
@@ -5285,9 +5285,9 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos2.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderLeft(BorderStyle.THIN);
             estiloDatos2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             CellStyle estiloDatos = wb.createCellStyle();
@@ -5298,15 +5298,15 @@ static public void creaLiquidacionMes( int mes,
 
             CellStyle estiloDatosA = wb.createCellStyle();
             estiloDatosA.cloneStyleFrom(estiloDatos);
-            estiloDatosA.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            estiloDatosA.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+            estiloDatosA.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+            estiloDatosA.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             CellStyle estiloDatos5 = wb.createCellStyle();
             StringTokenizer formatoCompleto5 = new StringTokenizer(formatoDatos, ";");
             String formatoPos5 = formatoCompleto5.nextToken();
             estiloDatos5.setDataFormat(formato.getFormat(formatoPos5));
             estiloDatos5.setFont(font);
-            estiloDatos5.setFillForegroundColor(estiloDatos5.THICK_VERT_BANDS);
+            estiloDatos5.setFillForegroundColor(FillPatternType.THICK_VERT_BANDS.getCode());
 
             CellStyle estiloDatos3 = wb.createCellStyle();
             StringTokenizer formatoCompleto3 = new StringTokenizer("###.##0%", ";");
@@ -5319,11 +5319,11 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderRight(BorderStyle.THIN);
             estiloDatos4.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             // Dimensiones del arreglo
@@ -5474,8 +5474,8 @@ static public void creaLiquidacionMes( int mes,
             }
             //
             // Escribe totales
-            estiloTituloFila.setFillForegroundColor(HSSFColor.AUTOMATIC.index);
-            estiloTituloFila.setFillPattern(XSSFCellStyle.NO_FILL);
+            estiloTituloFila.setFillForegroundColor(HSSFColor.HSSFColorPredefined.AUTOMATIC.getIndex());
+            estiloTituloFila.setFillPattern(FillPatternType.NO_FILL);
             rowFin = hoja.createRow(fila); fila++;
             for (int b=0;b<4;b++){
                 for (int j = 0; j < dim2; j++) {
@@ -5578,60 +5578,60 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderLeft(BorderStyle.THIN);
             estiloTituloFila.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderLeft(BorderStyle.THIN);
             estiloTituloFilaSec.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -5640,7 +5640,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -5649,9 +5649,9 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos2.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderLeft(BorderStyle.THIN);
             estiloDatos2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -5674,11 +5674,11 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderRight(BorderStyle.THIN);
             estiloDatos4.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             // Dimensiones del arreglo
@@ -5887,56 +5887,56 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -5945,7 +5945,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -5954,9 +5954,9 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos2.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderLeft(BorderStyle.THIN);
             estiloDatos2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -5979,11 +5979,11 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderRight(BorderStyle.THIN);
             estiloDatos4.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             // Dimensiones del arreglo
@@ -6142,56 +6142,56 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -6200,7 +6200,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -6209,9 +6209,9 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos2.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderLeft(BorderStyle.THIN);
             estiloDatos2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -6234,11 +6234,11 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderRight(BorderStyle.THIN);
             estiloDatos4.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             // Dimensiones del arreglo
@@ -6399,56 +6399,56 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -6457,9 +6457,9 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos1.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderLeft(BorderStyle.THIN);
             estiloDatos1.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -6468,9 +6468,9 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos2.setBorderLeft(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderLeft(BorderStyle.THIN);
             estiloDatos2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -6493,11 +6493,11 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos4 = formatoCompleto4.nextToken();
             estiloDatos4.setDataFormat(formato4.getFormat(formatoPos4));
             estiloDatos4.setFont(font);
-            estiloDatos4.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderRight(BorderStyle.THIN);
             estiloDatos4.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderBottom(BorderStyle.THIN);
             estiloDatos4.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos4.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos4.setBorderTop(BorderStyle.THIN);
             estiloDatos4.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             // Dimensiones del arreglo
@@ -6661,23 +6661,23 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
 
             Font fontTituloFilaSec = wb.createFont();
@@ -6685,7 +6685,7 @@ static public void creaLiquidacionMes( int mes,
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
             
 
@@ -6709,13 +6709,13 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos1.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderBottom(BorderStyle.THIN);
             estiloDatos1.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos1.setBorderTop(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderTop(BorderStyle.THIN);
             estiloDatos1.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloDatos1.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloDatos1.setAlignment(HorizontalAlignment.CENTER);
 
             DataFormat formato2 = wb.createDataFormat();
             CellStyle estiloDatos2 = wb.createCellStyle();
@@ -6723,7 +6723,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 
@@ -6870,30 +6870,30 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -7002,30 +7002,30 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -7148,7 +7148,7 @@ static public void creaLiquidacionMes( int mes,
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -7227,7 +7227,7 @@ static public void creaLiquidacionMes( int mes,
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -7316,40 +7316,40 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             Font fontTituloFilaSec = wb.createFont();
@@ -7357,7 +7357,7 @@ static public void creaLiquidacionMes( int mes,
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato = wb.createDataFormat();
@@ -7372,7 +7372,7 @@ static public void creaLiquidacionMes( int mes,
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos.setFont(font);
             estiloDatos2.setFont(font);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
             // Dimensiones del arreglo
             int dim1=Datos.length;
@@ -7502,56 +7502,56 @@ static public void creaLiquidacionMes( int mes,
             Font fontTitulo = wb.createFont();
             fontTitulo.setFontHeightInPoints((short)10);
             fontTitulo.setFontName("Century Gothic");
-            fontTitulo.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo.setBold(true);
             CellStyle estiloTitulo = wb.createCellStyle();
             estiloTitulo.setFont(fontTitulo);
 
             Font fontTitulo2= wb.createFont();
             fontTitulo2.setFontHeightInPoints((short)8);
             fontTitulo2.setFontName("Century Gothic");
-            fontTitulo2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTitulo2.setBold(true);
             CellStyle estiloTitulo2 = wb.createCellStyle();
             estiloTitulo2.setFont(fontTitulo2);
 
             Font fontTituloSec = wb.createFont();
             fontTituloSec.setFontHeightInPoints((short)8);
             fontTituloSec.setFontName("Century Gothic");
-            fontTituloSec.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloSec.setBold(true);
             CellStyle estiloTituloSec = wb.createCellStyle();
             estiloTituloSec.setFont(fontTituloSec);
 
             Font fontTituloTer = wb.createFont();
             fontTituloTer.setFontHeightInPoints((short)8);
             fontTituloTer.setFontName("Century Gothic");
-            fontTituloTer.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloTer.setBold(true);
             CellStyle estiloTituloTer = wb.createCellStyle();
             estiloTituloTer.setFont(fontTituloTer);
-            estiloTituloTer.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderBottom(BorderStyle.THIN);
             estiloTituloTer.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloTer.setBorderTop(BorderStyle.THIN);
             estiloTituloTer.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloTer.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloTer.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFila = wb.createFont();
             fontTituloFila.setFontHeightInPoints((short)8);
             fontTituloFila.setFontName("Century Gothic");
-            fontTituloFila.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            fontTituloFila.setBold(true);
             CellStyle estiloTituloFila = wb.createCellStyle();
             estiloTituloFila.setFont(fontTituloFila);
-            estiloTituloFila.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderRight(BorderStyle.THIN);
             estiloTituloFila.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderBottom(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderBottom(BorderStyle.THIN);
             estiloTituloFila.setBottomBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setBorderTop(CellStyle.BORDER_THIN);
+            estiloTituloFila.setBorderTop(BorderStyle.THIN);
             estiloTituloFila.setTopBorderColor(IndexedColors.PALE_BLUE.getIndex());
-            estiloTituloFila.setAlignment(CellStyle.ALIGN_CENTER);
+            estiloTituloFila.setAlignment(HorizontalAlignment.CENTER);
 
             Font fontTituloFilaSec = wb.createFont();
             fontTituloFilaSec.setFontHeightInPoints((short)8);
             fontTituloFilaSec.setFontName("Century Gothic");
             CellStyle estiloTituloFilaSec = wb.createCellStyle();
             estiloTituloFilaSec.setFont(fontTituloFilaSec);
-            estiloTituloFilaSec.setBorderRight(CellStyle.BORDER_THIN);
+            estiloTituloFilaSec.setBorderRight(BorderStyle.THIN);
             estiloTituloFilaSec.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato1 = wb.createDataFormat();
@@ -7560,7 +7560,7 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos1 = formatoCompleto1.nextToken();
             estiloDatos1.setDataFormat(formato1.getFormat(formatoPos1));
             estiloDatos1.setFont(font);
-            estiloDatos1.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos1.setBorderRight(BorderStyle.THIN);
             estiloDatos1.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
             DataFormat formato2 = wb.createDataFormat();
@@ -7569,8 +7569,8 @@ static public void creaLiquidacionMes( int mes,
             String formatoPos2 = formatoCompleto2.nextToken();
             estiloDatos2.setDataFormat(formato2.getFormat(formatoPos2));
             estiloDatos2.setFont(font);
-            estiloDatos2.setAlignment(CellStyle.ALIGN_CENTER);
-            estiloDatos2.setBorderRight(CellStyle.BORDER_THIN);
+            estiloDatos2.setAlignment(HorizontalAlignment.CENTER);
+            estiloDatos2.setBorderRight(BorderStyle.THIN);
             estiloDatos2.setRightBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
 

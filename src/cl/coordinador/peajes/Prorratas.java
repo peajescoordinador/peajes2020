@@ -58,6 +58,7 @@ public class Prorratas {
         String[] nombreMeses = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
         "Ago", "Sep", "Oct", "Nov", "Dic"};
         String[] EnergiaCU={"CUE2","CUE30","EUnit"};
+        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(0); //To avoid 'zip bomb' exceptions
 
         /**************
          * lee de Meses
