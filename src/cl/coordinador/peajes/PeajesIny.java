@@ -1037,25 +1037,32 @@ public class PeajesIny {
 
            }
 
-       public static boolean cargando(){
+    public static boolean cargando() {
         return cargandoInfo;
-       }
-       public static boolean calculando(){
-        return calcPagos;
-       }
-       public static boolean escribiendo(){
-        return calcPagos;
-       }
-        public static void Comenzar(final File DirIn, final File DirOut, final int AnoAEvaluar, final boolean LiquidacionReliquidacion){
-        final SwingWorker worker = new SwingWorker() {
-            @Override
-            public Object construct() {
-                    calculaPeajesIny(DirIn, DirOut, AnoAEvaluar,LiquidacionReliquidacion);
-                return true;
-            }
-        };
     }
 
+    public static boolean calculando() {
+        return calcPagos;
+    }
 
+    public static boolean escribiendo() {
+        return calcPagos;
+    }
+
+    public static void Comenzar(final File DirIn, final File DirOut, final int AnoAEvaluar, final boolean LiquidacionReliquidacion) {
+        javax.swing.SwingWorker worker = new javax.swing.SwingWorker() {
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                calculaPeajesIny(DirIn, DirOut, AnoAEvaluar, LiquidacionReliquidacion);
+                return null;
+            }
+
+        };
+        worker.execute();
+//        calculaPeajesIny(DirIn, DirOut, AnoAEvaluar, LiquidacionReliquidacion);
+    }
+
+    
 
 }

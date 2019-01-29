@@ -1233,20 +1233,21 @@ public class Prorratas {
     }
 
     public static void Comenzar(final File DirIn, final File DirOut, final int AnoAEvaluar, final int tipoCalculo, final int AnoBase,
-        final int NumHidro,final int NumEtapasAno,final int NumSlack,final int Offset, final boolean Cli){
-        final SwingWorker worker = new SwingWorker() {
+            final int NumHidro, final int NumEtapasAno, final int NumSlack, final int Offset, final boolean Cli) {
+        javax.swing.SwingWorker worker = new javax.swing.SwingWorker() {
+
             @Override
-            public Object construct() {
-                try{
-                    CalculaProrratas(DirIn,DirOut,AnoAEvaluar,tipoCalculo, AnoBase,NumHidro,NumEtapasAno,NumSlack,Offset,Cli);
-                }
-                catch(IOException e){
+            protected Object doInBackground() throws Exception {
+                try {
+                    CalculaProrratas(DirIn, DirOut, AnoAEvaluar, tipoCalculo, AnoBase, NumHidro, NumEtapasAno, NumSlack, Offset, Cli);
+                } catch (IOException e) {
                     System.out.println(e);
                 }
                 return true;
             }
         };
-        
+        worker.execute();
+
     }
 }
 
