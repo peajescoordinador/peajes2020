@@ -19,68 +19,67 @@ import java.text.DecimalFormat;
  */
 public class PeajesRet {
 
-    static String DirBaseSal;
-    static double[][][]  RetEmpSinAjuTxO;
-    static double[][] RetEmpSinAjuO;
-    static double[][][] AjusEmpCTxO;
-    static double[][] AjusAnualEmpCTxO;
-    static double[][] TotRetEmpO;
-    static double[][] TotItRetEmpO;
-    static double[] TotAnualRetEmpO;
-    static double[][][] TotRetEmpTxO;
-    static double[][][] TotRetItEmpTxO;
-    static double[][][] TotRetEmpTxRE2288O;
-    static double[][][] TotRetItEmpTxRE2288O;
-    static double[][] TotAnualRetEmpTxO;
-    static double[][] TotAnualRetEmpTxRE2288O;
-    static double[][] AjusEmpCO;
-    static double[] AjusAnualEmpCO;
-    static String[] nomEmpO;
-    static int numEmp;
-    static String[] nombreTx;
-    static String[] nomCli;
-    static String[] nomLinIT;
-    static double[][][] prorrMesC;
-    static double[][] prorrMesCTot;
-    static String[] nomLinTx;
-    static int[] zonaLin;
-    static int[] zonaLinTx;
-    static double[][][] PUO;
-    static String[] nomBarO;
-    static String[] nomCliO;
-    static double[][][] peajeClienTxNOExenO;
-    static String[] nombreCliNOExenO;
-    static String[] nombreClientesExenO;
-    static double[][][] peajeClienTxExenO;
-    static double[][][] AjusClienExenCenTxO ;
-    static String[] nomCenO ;
-    static double[] GenAnoxCenO;
-    static double[][] GenPromMesCenO;
-    static String[] nomEmpC;
-    static int numEmpC;
-    static String[] nomEmp;
-    static int numTx;
-    static int[] ne;
-    static int[] ne2288;
-    static String[] nomEmpCO;
-    static String[] nomSumiRM88O;
-    static double[][] TotAnualPjeRetEmpTxO;
-    static double[][] TotConRe2288AnualPjeRetEmpTxO;
-    static double[][] TotAnualPjeRetEmpTxRE2288O;
-    static double[] TotAnualPjeRetEmpO;
-    static double[] TotConRe2288AnualPjeRetEmpO;
-    static double[] TotAnualPjeRetEmpRE2288O;
-    static  double[][] pjeAnualClienTxExenO;
-    static double[] pjeAnualClienExenO;
-    static int numClienExentos;
-    static double[][][][] pjeEmpDxTx ;
-    static  String[] nomDx;
-    static String[] nomSumi;
-    static String[] nomSumiRM88;
-    static double[][][] facDx;
-    static double[][] proEfirme;
-    static double[][][] TotRetEmpTxRE2288OO;
-    static     double[][] TotRetEmpRE2288O;
+    private static String DirBaseSal;
+    static double[][][]  RetEmpSinAjuTxO; //TODO: Encapsulate
+    static double[][] RetEmpSinAjuO; //TODO: Encapsulate
+    private static double[][][] AjusEmpCTxO;
+    static double[][] AjusAnualEmpCTxO; //TODO: Encapsulate
+    static double[][] TotRetEmpO; //TODO: Encapsulate
+    static double[][] TotItRetEmpO; //TODO: Encapsulate
+    private static double[] TotAnualRetEmpO;
+    static double[][][] TotRetEmpTxO; //TODO: Encapsulate
+    static double[][][] TotRetItEmpTxO; //TODO: Encapsulate
+    private static double[][][] TotRetEmpTxRE2288O;
+    private static double[][] TotAnualRetEmpTxO;
+    private static double[][] TotAnualRetEmpTxRE2288O;
+    private static double[][] AjusEmpCO;
+    static double[] AjusAnualEmpCO; //TODO: Encapsulate
+    static String[] nomEmpO; //TODO: Encapsulate
+    static int numEmp; //TODO: Encapsulate
+    static String[] nombreTx; //TODO: Encapsulate
+    static String[] nomCli; //TODO: Encapsulate
+    static String[] nomLinIT; //TODO: Encapsulate
+    static double[][][] prorrMesC; //TODO: Encapsulate
+    private static double[][] prorrMesCTot;
+    static String[] nomLinTx; //TODO: Encapsulate
+    private static int[] zonaLin;
+    static int[] zonaLinTx; //TODO: Encapsulate
+    private static double[][][] PUO;
+    private static String[] nomBarO;
+    private static String[] nomCliO;
+    private static double[][][] peajeClienTxNOExenO;
+    private static String[] nombreCliNOExenO;
+    static String[] nombreClientesExenO; //TODO: Encapsulate
+    private static double[][][] peajeClienTxExenO;
+    private static double[][][] AjusClienExenCenTxO ;
+    private static String[] nomCenO ;
+    private static double[] GenAnoxCenO;
+    private static double[][] GenPromMesCenO;
+    private static String[] nomEmpC;
+    private static int numEmpC;
+    private static String[] nomEmp;
+    static int numTx; //TODO: Encapsulate
+    private static int[] ne;
+    private static int[] ne2288;
+    private static String[] nomEmpCO;
+    static String[] nomSumiRM88O; //TODO: Encapsulate
+    static double[][] TotAnualPjeRetEmpTxO; //TODO: Encapsulate
+    static double[][] TotConRe2288AnualPjeRetEmpTxO; //TODO: Encapsulate
+    static double[][] TotAnualPjeRetEmpTxRE2288O; //TODO: Encapsulate
+    static double[] TotAnualPjeRetEmpO; //TODO: Encapsulate
+    static double[] TotConRe2288AnualPjeRetEmpO; //TODO: Encapsulate
+    static double[] TotAnualPjeRetEmpRE2288O; //TODO: Encapsulate
+    static  double[][] pjeAnualClienTxExenO; //TODO: Encapsulate
+    static double[] pjeAnualClienExenO; //TODO: Encapsulate
+    static int numClienExentos; //TODO: Encapsulate
+    private static double[][][][] pjeEmpDxTx ;
+    private static  String[] nomDx;
+    private static String[] nomSumi;
+    private static String[] nomSumiRM88;
+    private static double[][][] facDx;
+    private static double[][] proEfirme;
+    static double[][][] TotRetEmpTxRE2288OO; //TODO: Encapsulate
+    static double[][] TotRetEmpRE2288O;
 
     public static void calculaPeajesRet(File DirEntrada, File DirSalida, int Ano,
             boolean LiquidacionReliquidacion) {
