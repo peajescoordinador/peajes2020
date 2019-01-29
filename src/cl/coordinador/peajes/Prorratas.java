@@ -9,24 +9,29 @@ package cl.coordinador.peajes;
  * @version 3.10 2008/Marzo
  * Modela y asigna p?rdidas a consumos
  */
-import java.io.*;
+import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
+import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
+import static cl.coordinador.peajes.PeajesConstant.SLASH;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.text.DecimalFormat;
 
 public class Prorratas {
 	
     private static int etapa;
-    private static final int numMeses=12;
     private static int numEtapas=0;
     private static String nombreSlack;
-    private static String slash=File.separator;
-    
-
-    static boolean cargandoInfo=false;
-    static boolean calculandoFlujos=false;
-    static boolean calculandoProrr=false;
-    static boolean guardandoDatos=false;
-    static boolean completo=false;
-
+    private static boolean cargandoInfo=false;
+    private static boolean calculandoFlujos=false;
+    private static boolean calculandoProrr=false;
+    private static boolean guardandoDatos=false;
+    private static boolean completo=false;
 
 
     public static void CalculaProrratas(File DirEntrada, File DirSalida, int Ano, int tipoCalc, int AnoIni,
@@ -36,10 +41,8 @@ public class Prorratas {
         final int offset=ValorOffset;//(AnoIni==2004?0:12);        
         String DirBaseEntrada=DirEntrada.toString();
         String DirBaseSalida=DirSalida.toString();
-        final String ArchivoDespachoGeneradores=
-                DirBaseEntrada + slash + "plpcen.csv";
-        final String ArchivoPerdidasLineas=
-                DirBaseEntrada + slash + "plplin.csv";
+        final String ArchivoDespachoGeneradores= DirBaseEntrada + SLASH + "plpcen.csv";
+        final String ArchivoPerdidasLineas = DirBaseEntrada + SLASH + "plplin.csv";
 	//indices de etapas relevantes para escritura de resultados
         final int etapaPeriodoIni=NumeroEtapasAno*(Ano-AnoIni)+offset;//(tipoCalc==0?offset:144*(Ano-AnoIni)+offset);
         final int etapaPeriodoFin=NumeroEtapasAno*(Ano-AnoIni+1)+offset;//(tipoCalc==0?offset+144:144*(Ano-AnoIni+1)+offset);
@@ -54,11 +57,11 @@ public class Prorratas {
         String unicodeMessage = "Importando Informacion y Parametros";
         PrintStream out = new PrintStream(System.out, true, "UTF-8");
         out.println(unicodeMessage);
-        String libroEntrada = DirBaseEntrada + slash + "Ent" + Ano + ".xlsx";
+        String libroEntrada = DirBaseEntrada + SLASH + "Ent" + Ano + ".xlsx";
         String[] nombreMeses = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
         "Ago", "Sep", "Oct", "Nov", "Dic"};
         String[] EnergiaCU={"CUE2","CUE30","EUnit"};
-        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(PeajesCDEC.MAX_COMPRESSION_RATIO);
+        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
 
         /**************
          * lee de Meses
@@ -287,8 +290,8 @@ public class Prorratas {
          */
 
         float[][] Temporal1 = new float[2500][numEtapas];
-        float[][] Temporal2 = new float[2500][numMeses];
-        float[][][] Temporal3 = new float[2500][3][numMeses];
+        float[][] Temporal2 = new float[2500][NUMERO_MESES];
+        float[][][] Temporal3 = new float[2500][3][NUMERO_MESES];
         int numClaves;
 
         //System.out.println(ActClientes);
@@ -305,11 +308,11 @@ public class Prorratas {
         for(int i=0; i<numClaves;i++)            System.arraycopy(Temporal1[i], 0, ConsumosClaves[i], 0, numEtapas);      
         Temporal1 = null;
         
-        float[][] ConsClaveMes = new float[numClaves][numMeses];
-        for(int i=0; i<numClaves;i++) System.arraycopy(Temporal2[i], 0, ConsClaveMes[i], 0, numMeses);
+        float[][] ConsClaveMes = new float[numClaves][NUMERO_MESES];
+        for(int i=0; i<numClaves;i++) System.arraycopy(Temporal2[i], 0, ConsClaveMes[i], 0, NUMERO_MESES);
         Temporal2 = null;
         
-        float[][][] ECU= new float[numClaves][3][numMeses];
+        float[][][] ECU= new float[numClaves][3][NUMERO_MESES];
         for(int i=0; i<numClaves;i++) System.arraycopy(Temporal3[i], 0, ECU[i], 0, 3);
         Temporal3 = null;
 
@@ -354,12 +357,12 @@ public class Prorratas {
         //Escribe la energÍa consumida por Cliente 
         //* ==============================================
 
-        float[][] CMes = new float[numCli][numMeses];
-        float[][][] ECUCli = new float[numCli][3][numMeses];
+        float[][] CMes = new float[numCli][NUMERO_MESES];
+        float[][][] ECUCli = new float[numCli][3][NUMERO_MESES];
         float[] ConsCliAno = new float[numClaves];
 
         for(int j=0; j<numClaves; j++){
-            for(int m=0; m<numMeses; m++){
+            for(int m=0; m<NUMERO_MESES; m++){
             ECUCli[datosClaves[j][2]][0][m]+=ECU[j][0][m];
             ECUCli[datosClaves[j][2]][1][m]+=ECU[j][1][m];
             ECUCli[datosClaves[j][2]][2][m]+=ECU[j][2][m];
@@ -611,7 +614,7 @@ public class Prorratas {
         
         try
 	{
-            FileWriter writer = new FileWriter(DirBaseSalida + slash +"prorratas.csv");
+            FileWriter writer = new FileWriter(DirBaseSalida + SLASH +"prorratas.csv");
            
             
             writer.append("Etapa");
@@ -647,7 +650,7 @@ public class Prorratas {
         
        // try
         //{
-            FileWriter writer2 = new FileWriter(DirBaseSalida + slash +"consumos.csv");
+            FileWriter writer2 = new FileWriter(DirBaseSalida + SLASH +"consumos.csv");
             writer2.append("Hidrologia,Etapa");
             for(int b=0;b<numBarras;b++){
                 writer2.append(",");
@@ -875,10 +878,10 @@ public class Prorratas {
         int etapasPeriodo = etapaPeriodoFin-etapaPeriodoIni;
         float[][] FlujoMedio = new float[numLin][numEtapas];
         float ConsAnoEner = 0;
-        float[] ConsMesEner = new float[numMeses];
+        float[] ConsMesEner = new float[NUMERO_MESES];
         int mes=0;
         for(int e=0;e<etapasPeriodo;e++){
-            mes=(int)Math.floor((double)e/(etapasPeriodo/numMeses));
+            mes=(int)Math.floor((double)e/(etapasPeriodo/NUMERO_MESES));
             ConsAnoEner += ConsEta[e]*(float)duracionEta[e];
             ConsMesEner[mes] += ConsEta[e]*(float)duracionEta[e];
         }
@@ -896,7 +899,7 @@ public class Prorratas {
         
         try
 	{
-            FileWriter writer = new FileWriter(DirBaseSalida + slash +"flujos_hidrologia.csv");
+            FileWriter writer = new FileWriter(DirBaseSalida + SLASH +"flujos_hidrologia.csv");
             
             writer.append("Hidrologia,Etapa");
 	    
@@ -932,7 +935,7 @@ public class Prorratas {
         
          try
 	{
-            FileWriter writer = new FileWriter(DirBaseSalida + slash +"flujos_medios.csv");
+            FileWriter writer = new FileWriter(DirBaseSalida + SLASH +"flujos_medios.csv");
             
             writer.append("Etapa");
 	    
@@ -968,13 +971,13 @@ public class Prorratas {
 
         
         double[][] prorrAnoG=new double[numLin][numGen];
-        double[][][] prorrMesG=new double[numLin][numGen][numMeses];
+        double[][][] prorrMesG=new double[numLin][numGen][NUMERO_MESES];
         double[][] prorrAnoC=new double[numLin][numCli];
-        double[][][] prorrMesC=new double[numLin][numCli][numMeses];
+        double[][][] prorrMesC=new double[numLin][numCli][NUMERO_MESES];
         // Calcula para todas las lineas
         for(int l=0;l<numLin;l++){
             for(int e=0;e<etapasPeriodo;e++){
-                mes=(int)Math.floor((double)e/(NumeroEtapasAno/numMeses));
+                mes=(int)Math.floor((double)e/(NumeroEtapasAno/NUMERO_MESES));
                 for(int g=0;g<numGen;g++){
                     //System.out.println(prorrGx[l][g][e]);
                     prorrAnoG[l][g] += prorrGx[l][g][e] * ( ConsEta[e] * duracionEta[e] / ConsAnoEner );
@@ -993,33 +996,33 @@ public class Prorratas {
         // Filtra lineas troncales
         double[][] prorrAnoTroncG = new double[numLinTx][numGen];
         double[][] prorrAnoTroncC = new double[numLinTx][numCli];
-        double[][][] prorrMesTroncG=new double[numLinTx][numGen][numMeses];
-        double[][][] prorrMesTroncC=new double[numLinTx][numCli][numMeses];
-        double[][] ProrrVerMesLinG = new double[numLinTron][numMeses];
-        double[][] ProrrVerMesLinC = new double[numLinTron][numMeses];
+        double[][][] prorrMesTroncG=new double[numLinTx][numGen][NUMERO_MESES];
+        double[][][] prorrMesTroncC=new double[numLinTx][numCli][NUMERO_MESES];
+        double[][] ProrrVerMesLinG = new double[numLinTron][NUMERO_MESES];
+        double[][] ProrrVerMesLinC = new double[numLinTron][NUMERO_MESES];
         for(int l=0; l<numLinTron; l++){
             int l2= Calc.Buscar(LinTronProp[l],nomLinTx);
             //System.out.println(l+" "+LinTronProp[l]+" "+nomLinTx[l2]+" "+l2);
             for(int g=0; g<numGen; g++){
                 prorrAnoTroncG[l2][g] += prorrAnoG[indiceLintron[l]][g];
-                for(int m=0; m<numMeses; m++){
+                for(int m=0; m<NUMERO_MESES; m++){
                     prorrMesTroncG[l2][g][m] += prorrMesG[indiceLintron[l]][g][m];
                 ProrrVerMesLinG[l][m]+=prorrMesG[indiceLintron[l]][g][m];
                 }
             }
             for(int c=0; c<numCli; c++){
                 prorrAnoTroncC[l2][c] += prorrAnoC[indiceLintron[l]][c];
-                for(int m=0; m<numMeses; m++){
+                for(int m=0; m<NUMERO_MESES; m++){
                     prorrMesTroncC[l2][c][m] += prorrMesC[indiceLintron[l]][c][m];
                     ProrrVerMesLinC[l][m]+=prorrMesC[indiceLintron[l]][c][m];
                 }
             }
         }
         double[] sumPorrMesG = new double[numGen];
-        double[][] sumProrrMesLinG = new double[numLinTx][numMeses];
-        double[][] sumProrrMesLinC = new double[numLinTx][numMeses];
+        double[][] sumProrrMesLinG = new double[numLinTx][NUMERO_MESES];
+        double[][] sumProrrMesLinC = new double[numLinTx][NUMERO_MESES];
         for (int l=0; l<numLinTx; l++) {
-            for(int m=0; m<numMeses; m++) {
+            for(int m=0; m<NUMERO_MESES; m++) {
                 for (int g=0; g<numGen; g++) {
                     sumPorrMesG[g] += prorrMesTroncG[l][g][m];
                     sumProrrMesLinG[l][m] += prorrMesTroncG[l][g][m];
@@ -1029,21 +1032,21 @@ public class Prorratas {
             }
         }
         // prorratas por Linea
-        double[][] prorrataLinea = new double[numLinTx][numMeses];
-        double[][] prorrataLineaTron = new double[numLinTron][numMeses];
+        double[][] prorrataLinea = new double[numLinTx][NUMERO_MESES];
+        double[][] prorrataLineaTron = new double[numLinTron][NUMERO_MESES];
         for(int l=0; l<numLinTx; l++)
-            for(int m=0; m<numMeses; m++)
+            for(int m=0; m<NUMERO_MESES; m++)
                 prorrataLinea[l][m] =
                         sumProrrMesLinC[l][m] + sumProrrMesLinG[l][m];
         for(int l=0; l<numLinTron; l++)
-            for(int m=0; m<numMeses; m++)
+            for(int m=0; m<NUMERO_MESES; m++)
                 prorrataLineaTron[l][m] =
                         ProrrVerMesLinC[l][m] + ProrrVerMesLinG[l][m];
         // Factor de correccion
-        double[][] FactorG = new double[numLinTx][numMeses];
-        double[][] FactorC = new double[numLinTx][numMeses];
+        double[][] FactorG = new double[numLinTx][NUMERO_MESES];
+        double[][] FactorC = new double[numLinTx][NUMERO_MESES];
         for (int l=0; l<numLinTx; l++) {
-            for(int m=0; m<numMeses; m++) {
+            for(int m=0; m<NUMERO_MESES; m++) {
                 if (datosLinIT[l] == 0) {
                     double FdenG = sumProrrMesLinG[l][m];
                     if (Math.round(1000000000*FdenG) == 0)
@@ -1064,9 +1067,9 @@ public class Prorratas {
             }
         }
         // Procesa salida prorratas de generaci„n
-        double[][][] prorrMesLinG = new double[numLinTx][numCen][numMeses];
-        double[][] generacionMes = new double[numCen][numMeses];
-        for(int m=0; m<numMeses; m++) {
+        double[][][] prorrMesLinG = new double[numLinTx][numCen][NUMERO_MESES];
+        double[][] generacionMes = new double[numCen][NUMERO_MESES];
+        for(int m=0; m<NUMERO_MESES; m++) {
             for(int c=0; c<numCen; c++) {
                 generacionMes[c][m] = 0;
                 for(int l=0; l<numLinTx; l++) {
@@ -1077,7 +1080,7 @@ public class Prorratas {
         int l1=0;
         for (int l=0; l<numLinTx; l++) {
             //l1 = Calc.Buscar(nomLinTx[l].split("#")[0],nomLinTron);
-            for(int m=0; m<numMeses; m++) {
+            for(int m=0; m<NUMERO_MESES; m++) {
                 for (int g=0; g<numGen; g++) {
                     if (sumPorrMesG[g] != 0) {
                         if (paramGener[g][1] == -1)
@@ -1101,11 +1104,11 @@ public class Prorratas {
             }
         }
         // Procesa salida final de prorratas de consumo
-        double[][][] prorrMesLinC = new double[numLinTx][numCli][numMeses];
+        double[][][] prorrMesLinC = new double[numLinTx][numCli][NUMERO_MESES];
         for(int l=0; l<numLinTx; l++){
             //l1 = Calc.Buscar(nomLinTx[l].split("#")[0],nomLinTron);
             for(int c=0; c<numCli; c++){
-                for(int m=0; m<numMeses; m++){
+                for(int m=0; m<NUMERO_MESES; m++){
                 prorrMesLinC[l][c][m]
                         += prorrMesTroncC[l][c][m]*FactorC[l][m];
                 }
@@ -1134,7 +1137,7 @@ public class Prorratas {
          * Escritura de Resultados
          * =======================
          */
-        String libroSalidaXLS = DirBaseSalida + slash + "Prorrata" + Ano + ".xlsx";
+        String libroSalidaXLS = DirBaseSalida + SLASH + "Prorrata" + Ano + ".xlsx";
         Escribe.crearLibro(libroSalidaXLS);
         Escribe.creaH3F_3d_double(
                 "Prorratas de Generación", prorrMesLinG,

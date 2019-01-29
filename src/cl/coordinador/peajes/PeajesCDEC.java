@@ -10,14 +10,13 @@ package cl.coordinador.peajes;
  *
  * Created on 19-mar-2010, 13:40:42
  */
-
+import static cl.coordinador.peajes.PeajesConstant.SLASH;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JComponent.*;
 import javax.swing.Timer;
 import java.sql.Time;
 import java.util.HashMap;
@@ -29,7 +28,6 @@ import java.util.Properties;
  */
 public class PeajesCDEC extends javax.swing.JFrame {
     
-    public static final int MAX_COMPRESSION_RATIO = 0; //TODO: move to config file. Workaround: Value zero will prevent zip bomb exception in poi but it may become vulnerable to malicious data
     private File nombreDirEnt;
     private File nombreDirSal;
     private File nombreDirLiq;
@@ -42,7 +40,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
     private Time tiempo=new Time(0);
     private Timer timer;
     private Properties propiedades;
-    private static String slash=File.separator;
 
     /** Creates new form NewJFrame1 */
     public PeajesCDEC() {
@@ -1519,7 +1516,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             abrirDirectorioEntAccion();
         }
         String DirBaseEntrada=nombreDirEnt.toString();
-        String ArchivoConfiguracion=DirBaseEntrada + slash +  "config.properties";
+        String ArchivoConfiguracion=DirBaseEntrada + SLASH +  "config.properties";
         System.out.println("Cargando archivo desde " + ArchivoConfiguracion);
         Lee.leePropiedades(propiedades,ArchivoConfiguracion);
         //cuadroSeleccionHidro.setSelectedIndex((anoAEvaluar-1962)-40+1);
@@ -1568,7 +1565,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             abrirDirectorioEntAccion();
         }
         String DirBaseEntrada = nombreDirEnt.toString();
-        String ArchivoConfiguracion = DirBaseEntrada + slash +  "config.properties";
+        String ArchivoConfiguracion = DirBaseEntrada + SLASH +  "config.properties";
         System.out.println("Guardando archivo");
         
         LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("Cálculo de Liquidación")?true:false);

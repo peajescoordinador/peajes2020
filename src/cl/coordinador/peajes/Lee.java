@@ -1,32 +1,35 @@
 package cl.coordinador.peajes;
 
-
-import java.io.*;
-import org.apache.poi.xssf.usermodel.*;
-
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import java.util.StringTokenizer;
-import java.util.Date;
-import java.util.Properties;
-
-
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-
+import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.ss.util.CellReference;
+import java.util.Properties;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Name;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
  * @author aramos
  */
 public class Lee {
-    private static int numMeses=12;
 
     public static int leeClientes(String libroEntrada, String[] TextoTemporal1, String[] Exento) {
         int numClientes = 0;
@@ -140,9 +143,9 @@ public class Lee {
             aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
-            for (int i=0; i<crefs.length; i+=numMeses) {
+            for (int i=0; i<crefs.length; i+=NUMERO_MESES) {
                 Row r = s.getRow(crefs[i].getRow());
-                for (int j=0; j<numMeses; j++) {
+                for (int j=0; j<NUMERO_MESES; j++) {
                     c1 = r.getCell(crefs[i + j].getCol());
                     VATT[numLineasPeajes][j] = c1.getNumericCellValue();
                 }
@@ -169,7 +172,7 @@ public class Lee {
             String[] Tramo=new String[NT];
             String[] Prop=new String[NT];
             //String[] Comen=new String[NT];
-            double[][] VATT=new double[NT][numMeses];
+            double[][] VATT=new double[NT][NUMERO_MESES];
 
             int aux=17+12*(Ano-2005);
             //System.out.println(NT);
@@ -178,7 +181,7 @@ public class Lee {
             for (int i=0; i<NT; i++) {
                 Tramo[i]= s.getRow(i+1).getCell(1).toString();
                 Prop[i]=s.getRow(i+1).getCell(2).toString();
-                for(int k=0;k<numMeses;k++){
+                for(int k=0;k<NUMERO_MESES;k++){
                     VATT[i][k]=s.getRow(i+1).getCell(k+aux).getNumericCellValue();
                 }
             }
@@ -224,7 +227,7 @@ public class Lee {
              cellTx = row.createCell(2);
              cellTx.setCellValue(Prop[i]);
              cellTx.setCellStyle(estilo1);
-             for(int k=0;k<numMeses;k++){
+             for(int k=0;k<NUMERO_MESES;k++){
                  cellDat = row.createCell(k+3);
                  cellDat.setCellValue(VATT[i][k]/12);
                  cellDat.setCellStyle(estilo);
@@ -281,10 +284,10 @@ public class Lee {
             // Lectura de datos
             int UltimoDato=0;
             int FilaAno=5+(Ano-2004)*12;
-            double[] dolar=new double[numMeses];
+            double[] dolar=new double[NUMERO_MESES];
             boolean fin=false;
 
-            for (int i=0; i<numMeses; i++) {
+            for (int i=0; i<NUMERO_MESES; i++) {
 
                 if(fin==false){
                     cell=s.getRow(FilaAno+i).getCell(2);
@@ -327,7 +330,7 @@ public class Lee {
             estilo2.setLeftBorderColor(IndexedColors.PALE_BLUE.getIndex());
 
          // Datos
-            for(int i=0;i<numMeses;i++){
+            for(int i=0;i<NUMERO_MESES;i++){
              row = hoja.getRow(fila); fila++;
                  cellDat = row.createCell(2);
                  if(dolar[i]==0){
@@ -555,7 +558,7 @@ public class Lee {
                 intAux1[numLineasT] = Calc.Buscar(c2.toString().trim(), nombreLineas);
                 Cell cTx = r.getCell(crefsTx[0].getCol());
                 TextoTemporal2[numLineasT] = c1.toString().trim()+"#"+cTx.toString().trim();
-                for (int m=0; m<numMeses; m++) {
+                for (int m=0; m<NUMERO_MESES; m++) {
                     Cell cITE = r.getCell(crefsITE[m].getCol());
                     ITE[numLineasT][m] = (float) cITE.getNumericCellValue();
                     Cell cITP = r.getCell(crefsITP[m].getCol());
@@ -570,7 +573,7 @@ public class Lee {
                             TextoTmp = TextoTemporal2[k];
                             TextoTemporal2[k] = TextoTemporal2[k - 1];
                             TextoTemporal2[k - 1] = TextoTmp;
-                            for (int m=0; m<numMeses; m++) {
+                            for (int m=0; m<NUMERO_MESES; m++) {
                                 ITEAux = ITE[k][m];
                                 ITPAux = ITP[k][m];
                                 ITE[k][m] = ITE[k - 1][m];
@@ -726,7 +729,7 @@ public class Lee {
             int t = Calc.Buscar(txtTmp1[numLineasIT[0]], txtTmp);
             if (t == -1) {
                 txtTmp[numLineasT] =txtTmp1[numLineasIT[0]];
-                for (int m=0; m<numMeses; m++) {
+                for (int m=0; m<NUMERO_MESES; m++) {
                     Cell cITE = r.getCell(crefsITE[m].getCol());
                     ITE[numLineasT][m] =  cITE.getNumericCellValue();
                     Cell cITEG = r.getCell(crefsITEG[m].getCol());
@@ -774,8 +777,8 @@ public class Lee {
                 System.out.println("Se eliminaron o agregaron Centrales, pero no se han calculado las Prorratas considerando esta modificación");
             for (int i=0; i<numLineas; i++) {
                 for (int j=0; j<numCentrales; j++) {
-                    Row r = s.getRow(crefs[k*numMeses].getRow());
-                    for (int m=0; m<numMeses; m++) {
+                    Row r = s.getRow(crefs[k*NUMERO_MESES].getRow());
+                    for (int m=0; m<NUMERO_MESES; m++) {
                         Cell c1 = null;
                         c1 = r.getCell(crefs[m].getCol());
                         prorrataMesGx[i][j][m] = c1.getNumericCellValue();
@@ -809,8 +812,8 @@ public class Lee {
             System.out.println(numLineas+" "+numClientes);
             for (int i=0; i<numLineas; i++) {
                 for (int j=0; j<numClientes; j++) {
-                    Row r = s.getRow(crefs[k*numMeses].getRow());
-                    for (int m=0; m<numMeses; m++) {
+                    Row r = s.getRow(crefs[k*NUMERO_MESES].getRow());
+                    for (int m=0; m<NUMERO_MESES; m++) {
                         Cell c1 = null;
                         c1 = r.getCell(crefs[m].getCol());
                         //System.out.println("líneas "+i+" cliente "+j+ " mes "+m);
@@ -840,12 +843,12 @@ public class Lee {
             aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
-              for (int i=0; i<crefs.length; i=i+(numMeses))  {
+              for (int i=0; i<crefs.length; i=i+(NUMERO_MESES))  {
                 Row r = s.getRow(crefs[i].getRow());
                 Cell cdes = null;
-                for (int m=0; m<numMeses; m++) {
+                for (int m=0; m<NUMERO_MESES; m++) {
                 cdes = r.getCell(crefs[m].getCol());
-                GenMes[i/numMeses][m] = (double) cdes.getNumericCellValue();
+                GenMes[i/NUMERO_MESES][m] = (double) cdes.getNumericCellValue();
                  }
               }
 
@@ -878,22 +881,22 @@ public class Lee {
             aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
 
-              for (int i=0; i<crefs.length; i=i+(numMeses))  {
+              for (int i=0; i<crefs.length; i=i+(NUMERO_MESES))  {
                 Row r = s.getRow(crefs[i].getRow());
-                for (int m=0; m<numMeses; m++) {
+                for (int m=0; m<NUMERO_MESES; m++) {
                 Cell cdes = r.getCell(crefs[m].getCol());
                 CMes[numConsumos][m] =cdes.getNumericCellValue();
                  }
                 numConsumos++;
               }
 
-            for (int i=0; i<crefs1.length; i+=3*numMeses)  {
+            for (int i=0; i<crefs1.length; i+=3*NUMERO_MESES)  {
                 Row r1 = s.getRow(crefs1[i].getRow());
                 
-                for (int m=0; m<numMeses; m++) {
+                for (int m=0; m<NUMERO_MESES; m++) {
                     Cell c1 = r1.getCell(crefs1[i+m].getCol());
-                    Cell c2 = r1.getCell(crefs1[i+numMeses+m].getCol());
-                    Cell c3 = r1.getCell(crefs1[i+2*numMeses+m].getCol());
+                    Cell c2 = r1.getCell(crefs1[i+NUMERO_MESES+m].getCol());
+                    Cell c3 = r1.getCell(crefs1[i+2*NUMERO_MESES+m].getCol());
 
                     CU[cuenta][0][m] =  c1.getNumericCellValue();
                     CU[cuenta][1][m] =  c2.getNumericCellValue();
@@ -987,7 +990,7 @@ public class Lee {
             AreaReference arefInteres = new AreaReference(wb.getNameAt(wb.getNameIndex("interes")).getRefersToFormula(), wb.getSpreadsheetVersion());
             CellReference[] crefsInteres = arefInteres.getAllReferencedCells();
             Sheet sInteres = wb.getSheet(crefsInteres[0].getSheetName());
-            for (int m=0; m<numMeses; m++) {
+            for (int m=0; m<NUMERO_MESES; m++) {
                 // dolar
                 Row rDolar = sDolar.getRow(crefsDolar[m].getRow());
                 Cell cDolar = null;
@@ -1415,16 +1418,16 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             }
             
            
-            for(int i=0;i<crefs1.length;i+=3*(numMeses)){
+            for(int i=0;i<crefs1.length;i+=3*(NUMERO_MESES)){
             Row r1 = s.getRow(crefs1[i].getRow());
             
-            for (int m=0; m<numMeses; m++) {
+            for (int m=0; m<NUMERO_MESES; m++) {
                 Cell c1 = null;
                 Cell c2 = null;
                 Cell c3 = null;
                     c1 = r1.getCell(crefs1[i+m].getCol());
-                    c2 = r1.getCell(crefs1[i+numMeses+m].getCol());
-                    c3 = r1.getCell(crefs1[i+2*numMeses+m].getCol());
+                    c2 = r1.getCell(crefs1[i+NUMERO_MESES+m].getCol());
+                    c3 = r1.getCell(crefs1[i+2*NUMERO_MESES+m].getCol());
                     ECU[cuenta1][0][m] = (float) c1.getNumericCellValue();
                     ECU[cuenta1][1][m] = (float) c2.getNumericCellValue();
                     ECU[cuenta1][2][m] = (float) c3.getNumericCellValue();
@@ -1535,16 +1538,16 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             
                        
             
-            for(int i=0;i<crefs1.length;i+=3*(numMeses)){
+            for(int i=0;i<crefs1.length;i+=3*(NUMERO_MESES)){
             Row r1 = s.getRow(crefs1[i].getRow());
             
-            for (int m=0; m<numMeses; m++) {
+            for (int m=0; m<NUMERO_MESES; m++) {
                 Cell c1 = null;
                 Cell c2 = null;
                 Cell c3 = null;
                     c1 = r1.getCell(crefs1[i+m].getCol());
-                    c2 = r1.getCell(crefs1[i+numMeses+m].getCol());
-                    c3 = r1.getCell(crefs1[i+2*numMeses+m].getCol());
+                    c2 = r1.getCell(crefs1[i+NUMERO_MESES+m].getCol());
+                    c3 = r1.getCell(crefs1[i+2*NUMERO_MESES+m].getCol());
                     ECU[cuenta1][0][m] = (float) c1.getNumericCellValue();
                     ECU[cuenta1][1][m] = (float) c2.getNumericCellValue();
                     ECU[cuenta1][2][m] = (float) c3.getNumericCellValue();
@@ -1753,9 +1756,9 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             s = wb.getSheet(crefs[0].getSheetName());
-            for (int i=0; i<crefs.length; i+=numMeses) {
+            for (int i=0; i<crefs.length; i+=NUMERO_MESES) {
                 Row r = s.getRow(crefs[i].getRow());
-                for (int j=0; j<numMeses; j++) {
+                for (int j=0; j<NUMERO_MESES; j++) {
                     c1 = r.getCell(crefs[i + j].getCol());
                     Efirme[numEmpre][j] = c1.getNumericCellValue();
                 }
@@ -1801,7 +1804,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             }
             int sum=0;
             int tmp=0;
-            for(int i=0;i<numMeses;i++){
+            for(int i=0;i<NUMERO_MESES;i++){
                 tmp=i+1;
             nomRangoInd = wb.getNameIndex("ProrrDx"+tmp);
             nomRango = wb.getNameAt(nomRangoInd);
@@ -1875,9 +1878,9 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             // Lectura de datos
             //System.out.println(crefs1.length);
             for (int suministrador=0; suministrador<numSum; suministrador++) {
-                Row r = s.getRow(crefs1[suministrador*numMeses].getRow());
-                for (int mes=0; mes<numMeses; mes++) {
-                    c1 = r.getCell(crefs1[mes + suministrador*numMeses].getCol());
+                Row r = s.getRow(crefs1[suministrador*NUMERO_MESES].getRow());
+                for (int mes=0; mes<NUMERO_MESES; mes++) {
+                    c1 = r.getCell(crefs1[mes + suministrador*NUMERO_MESES].getCol());
                     //System.out.println(c1.getNumericCellValue());
                     Prorrata[mes][suministrador] = c1.getNumericCellValue();
                 }

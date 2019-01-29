@@ -1,84 +1,83 @@
 package cl.coordinador.peajes;
-
-
-import java.io.*;
-import java.text.DecimalFormat;
-//import javax.swing.SwingWorker;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
+import static cl.coordinador.peajes.PeajesConstant.MESES;
+import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
+import static cl.coordinador.peajes.PeajesConstant.SLASH;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+
 /**
  *
  * @author vtoro
  */
 public class PeajesIny {
 
-    private static String slash = File.separator;
-    private static final int numMeses = 12;
-    static double peajeEmpTxO[][][];
-    static double prorrMesGO[][][];
-    static double peajeLinGO[][][];
-    static double ItLinGO[][][];
-    static double peajeCenTxO[][][];
-    static double peajeCenO[][];
-    static double peajeEmpGO[][];
-    static float MGNCO[];
-    static double[] PotNetaO;
-    static double[][] GenPromMesCenO;
-    static double[][] facPagoO;
-    static double[][] peajeGenO ;
-    static double[][] ExcTotCenO;
-    static double[][] AjusMGNCTotO;
-    static double[][] PagoTotCenO;
-    static double[][][] ExcenCenO;
-    static double[][][] AjusMGNCTxO;
-    static double[][][] PagoTotCenTxO;
-    static double[][][] AjusMGNCEmpTxO;
-    static double[][][] PagoEmpTxO;
-    static double[][][] ItEmpTxO;
-    static double[][] PagoAnualEmpGTxO;
-    static double[][] PeajeAnualEmpGTxO;
-    static double[][] AjusMGNCEmpO;
-    static double[][] PagoEmpO;
-    static double[][] ItEmpO;
-    static double[] PagoAnualEmpGO;
-    static double[] PeajeAnualEmpGO;
-    static String[] nomGen;
-    static int numCen;
-    static String[] nombreTx;
-    static int numTx;
-    static String[] nomEmpGO;
-    static int numEmpG;
-    static String[] nomLinTx;
-    static int numLinTx;
-    static String[] nomGenO;
-    static String[] nomMGNCO;
-    static String[] nomMes = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
-            "Ago", "Sep", "Oct", "Nov", "Dic"};
-    static String libroSalidaGXLSMes;
-    static String DirBaseSal;
-    static double[][][] prorrMesG;
-    static  String[] nomLinIT;
-    static String[] nomLineasN;
-    static  int[] zonaLinIT;
-    static  int[] zonaLinPe;
-    static  int[] zonaLinTx;
-    static double[][][] prorrMesGenTx;
-    static double[][] prorrMesGenTxTot;
-    static double[][] peajeAnualMGNCTxO;
-    static double[] peajeAnualMGNCO;
-    static double[] PotNetaMGNCO;
-    static double[][] ExcenAnualMGNCTxO;
-    static double[] ExcenAnualMGNCO;
-    static double[] facPagoMGNCO;
-    static double[][]  AjusMGNCAnualEmpTxO;
-    static double[]  AjusMGNCAnualEmpO;
-    static double[][][] ExcenMGNCTxO;
-    static double[][] ExcenMGNCO;
-    static boolean cargandoInfo=false;
-    static boolean calcPagos=false;
-    static boolean EscribirPagos=false;
+    static double peajeEmpTxO[][][]; //TODO: Encapsulate
+    private static double prorrMesGO[][][];
+    private static double peajeLinGO[][][];
+    private static double ItLinGO[][][];
+    static double peajeCenTxO[][][]; //TODO: Encapsulate
+    private static double peajeCenO[][];
+    static double peajeEmpGO[][]; //TODO: Encapsulate
+    static float MGNCO[]; //TODO: Encapsulate
+    static double[] PotNetaO; //TODO: Encapsulate
+    static double[][] GenPromMesCenO; //TODO: Encapsulate
+    static double[][] facPagoO; //TODO: Encapsulate
+    static double[][] peajeGenO ; //TODO: Encapsulate
+    private static double[][] ExcTotCenO;
+    static double[][] AjusMGNCTotO; //TODO: Encapsulate
+    static double[][] PagoTotCenO; //TODO: Encapsulate
+    private static double[][][] ExcenCenO;
+    static double[][][] AjusMGNCTxO; //TODO: Encapsulate
+    static double[][][] PagoTotCenTxO; //TODO: Encapsulate
+    static double[][][] AjusMGNCEmpTxO; //TODO: Encapsulate
+    static double[][][] PagoEmpTxO; //TODO: Encapsulate
+    static double[][][] ItEmpTxO; //TODO: Encapsulate
+    static double[][] PagoAnualEmpGTxO; //TODO: Encapsulate
+    static double[][] PeajeAnualEmpGTxO; //TODO: Encapsulate
+    static double[][] AjusMGNCEmpO; //TODO: Encapsulate
+    static double[][] PagoEmpO; //TODO: Encapsulate
+    static double[][] ItEmpO; //TODO: Encapsulate
+    static double[] PagoAnualEmpGO; //TODO: Encapsulate
+    static double[] PeajeAnualEmpGO; //TODO: Encapsulate
+    static String[] nomGen; //TODO: Encapsulate
+    private static int numCen;
+    static String[] nombreTx; //TODO: Encapsulate
+    private static int numTx;
+    static String[] nomEmpGO; //TODO: Encapsulate
+    private static int numEmpG;
+    static String[] nomLinTx; //TODO: Encapsulate
+    private static int numLinTx;
+    static String[] nomGenO; //TODO: Encapsulate
+    static String[] nomMGNCO; //TODO: Encapsulate
+    private static String libroSalidaGXLSMes;
+    private static String DirBaseSal;
+    private static  String[] nomLinIT;
+    private static String[] nomLineasN;
+    private static  int[] zonaLinIT;
+    private static  int[] zonaLinPe;
+    static  int[] zonaLinTx; //TODO: Encapsulate
+    static double[][][] prorrMesGenTx; //TODO: Encapsulate
+    static double[][] prorrMesGenTxTot; //TODO: Encapsulate
+    static double[][] peajeAnualMGNCTxO; //TODO: Encapsulate
+    static double[] peajeAnualMGNCO; //TODO: Encapsulate
+    static double[] PotNetaMGNCO; //TODO: Encapsulate
+    static double[][] ExcenAnualMGNCTxO; //TODO: Encapsulate
+    static double[] ExcenAnualMGNCO; //TODO: Encapsulate
+    static double[] facPagoMGNCO; //TODO: Encapsulate
+    static double[][]  AjusMGNCAnualEmpTxO; //TODO: Encapsulate
+    static double[]  AjusMGNCAnualEmpO; //TODO: Encapsulate
+    static double[][][] ExcenMGNCTxO; //TODO: Encapsulate
+    static double[][] ExcenMGNCO; //TODO: Encapsulate
+    private static boolean cargandoInfo=false;
+    private static boolean calcPagos=false;
+    private static boolean EscribirPagos=false;
 
     public static void calculaPeajesIny(File DirEntrada, File DirSalida,
             int Ano, boolean LiquidacionReliquidacion) {
@@ -88,17 +87,17 @@ public class PeajesIny {
         DecimalFormat DosDecimales=new DecimalFormat("0.00");
         long tInicioLectura = System.currentTimeMillis();
         cargandoInfo=true;
-        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(PeajesCDEC.MAX_COMPRESSION_RATIO);
-        String libroEntrada = DirBaseSal + slash + "Peaje" + Ano + ".xlsx";
+        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
+        String libroEntrada = DirBaseSal + SLASH + "Peaje" + Ano + ".xlsx";
 
         /************
          * lee Peajes e IT
          ************/
-        double[][] longAux = new double[1000][numMeses];
-        double[][] longAuxIT = new double[1000][numMeses];
-        double[][] longAuxITR = new double[1000][numMeses];
-        double[][] longAuxVATT = new double[1000][numMeses];
-        double[][] longAuxITP = new double[1000][numMeses];
+        double[][] longAux = new double[1000][NUMERO_MESES];
+        double[][] longAuxIT = new double[1000][NUMERO_MESES];
+        double[][] longAuxITR = new double[1000][NUMERO_MESES];
+        double[][] longAuxVATT = new double[1000][NUMERO_MESES];
+        double[][] longAuxITP = new double[1000][NUMERO_MESES];
         String[] TxtTemp = new String[1000];
         String[] TxtTempIT = new String[1000];
         int numLinea = Lee.leePeajes(libroEntrada, TxtTemp, longAux);
@@ -132,12 +131,12 @@ public class PeajesIny {
         }
 
         // Libro Ent
-        libroEntrada = DirBaseEnt + slash + "Ent" + Ano + ".xlsx";
+        libroEntrada = DirBaseEnt + SLASH + "Ent" + Ano + ".xlsx";
 
         /**********
          * lee VATT
          **********/
-        double[][] Aux = new double[1500][numMeses];
+        double[][] Aux = new double[1500][NUMERO_MESES];
         String[] TxtTemp1 = new String[1500];
         String[] TxtTemp2 = new String[1500];
         int numLineasVATT = Lee.leeVATT(libroEntrada, TxtTemp1, TxtTemp2,
@@ -254,7 +253,7 @@ public class PeajesIny {
         TxtTemp1 = new String[2000];
         TxtTemp2 = new String[2000];
         int[] intAux1 = new int[600];
-        int[][] intAux2 = new int[600][numMeses];
+        int[][] intAux2 = new int[600][NUMERO_MESES];
         int numLinIT = Lee.leeLintron(libroEntrada, TxtTemp1,
                 nomLin,TxtTemp2, intAux1, intAux2);
         String TxtTemp4[]=new String[numLinIT];
@@ -327,17 +326,16 @@ public class PeajesIny {
          }
 
         // Libro Prorrata
-        String libroEntradaP = DirBaseSal + slash + "Prorrata" + Ano + ".xlsx";
+        String libroEntradaP = DirBaseSal + SLASH + "Prorrata" + Ano + ".xlsx";
 
         /*****************************
          * lee Prorratas de Generaci—n
          *****************************/
-        prorrMesG = new double[numLinIT][numCen][numMeses];
-        prorrMesGenTx = new double[numLinTx][numCen][numMeses];
-        prorrMesGenTxTot = new double[numLinTx][numMeses];
+        prorrMesGenTx = new double[numLinTx][numCen][NUMERO_MESES];
+        prorrMesGenTxTot = new double[numLinTx][NUMERO_MESES];
         Lee.leeProrratasGx(libroEntradaP, prorrMesGenTx);
         for (int l = 0 ; l < numLinTx; l++){
-            for (int m = 0 ; m < numMeses; m ++ ){
+            for (int m = 0 ; m < NUMERO_MESES; m ++ ){
                 for (int c = 0 ; c < numCen; c ++ ){
                 prorrMesGenTxTot [l][m]+=prorrMesGenTx[l][c][m];
                 }
@@ -348,24 +346,24 @@ public class PeajesIny {
         /***************************/
         /**Lee Inyeccion Centrales**/
         /***************************/
-        double[][] GenerMensual = new double[numCen][numMeses];
-        double[] GeneTotMesProm= new double[numMeses];
-        double[][] GenPromMesCen= new double[numCen][numMeses];
+        double[][] GenerMensual = new double[numCen][NUMERO_MESES];
+        double[] GeneTotMesProm= new double[NUMERO_MESES];
+        double[][] GenPromMesCen= new double[numCen][NUMERO_MESES];
         double[] GenAnoxCen= new double[numCen];
-        int [][] MesesAct=new int[numCen][numMeses];
+        int [][] MesesAct=new int[numCen][NUMERO_MESES];
         int [] numMesesAct=new int[numCen];
         Lee.leeGeneracionMes(libroEntradaP,GenerMensual);
 
         /*LEE MESES CENTRALES ACTIVO*/
         for (int i=0;i<numCen;i++){
-            for(int m=0; m<numMeses;m++){
+            for(int m=0; m<NUMERO_MESES;m++){
                 MesesAct[i][m]+=1;  //AGREGAR RUTINA Q LEE MANT CEN 
             }
         }
         
         
         for (int i=0;i<numCen;i++){
-            for(int m=0; m<numMeses;m++){
+            for(int m=0; m<NUMERO_MESES;m++){
             MesesAct[i][m]=0;
             if(GenerMensual[i][m]!=0){
                GenAnoxCen[i]+=GenerMensual[i][m];
@@ -373,7 +371,7 @@ public class PeajesIny {
                numMesesAct[i]+=1;
             }
             }
-            for(int m=0; m<numMeses;m++){
+            for(int m=0; m<NUMERO_MESES;m++){
             GenPromMesCen[i][m]=0;
             if(MesesAct[i][m]==1){
             GenPromMesCen[i][m]=GenAnoxCen[i]/numMesesAct[i];
@@ -392,15 +390,15 @@ public class PeajesIny {
         /******************************************
          * Calcula Pagos por Inyecci—n de Centrales
          ******************************************/
-        double[][][] peajeLinCen = new double[numLinTx][numCen][numMeses];
-        double[][][]  ItLinCen = new double[numLinTx][numCen][numMeses];
-        double[][][][] peajeGenTxZona = new double[numCen][numTx][3][numMeses];
-        double[][][] peajeGenTx = new double[numCen][numTx][numMeses];
-        double[][][] peajeGenTxExcen = new double[numCen][numTx][numMeses];
-        double[][][] ItGenTxExcen = new double[numCen][numTx][numMeses];
-        double[][][] ItGenTx = new double[numCen][numTx][numMeses];
-        double[][] peajeGen = new double[numCen][numMeses];
-        double[] pagoInyMesLin = new double[numMeses];
+        double[][][] peajeLinCen = new double[numLinTx][numCen][NUMERO_MESES];
+        double[][][]  ItLinCen = new double[numLinTx][numCen][NUMERO_MESES];
+        double[][][][] peajeGenTxZona = new double[numCen][numTx][3][NUMERO_MESES];
+        double[][][] peajeGenTx = new double[numCen][numTx][NUMERO_MESES];
+        double[][][] peajeGenTxExcen = new double[numCen][numTx][NUMERO_MESES];
+        double[][][] ItGenTxExcen = new double[numCen][numTx][NUMERO_MESES];
+        double[][][] ItGenTx = new double[numCen][numTx][NUMERO_MESES];
+        double[][] peajeGen = new double[numCen][NUMERO_MESES];
+        double[] pagoInyMesLin = new double[NUMERO_MESES];
         
         
         
@@ -410,7 +408,7 @@ public class PeajesIny {
             int l2 = Calc.Buscar(nomLineasN[l], nomLinTx);
             //System.out.println(nomLineasN[l]+" "+l2);
             for (int j = 0; j < numCen; j++) {
-                for (int m = 0; m < numMeses; m++) {
+                for (int m = 0; m < NUMERO_MESES; m++) {
                     if (!LiquidacionReliquidacion) { //si es reliquidacion, divide IT entre dentro de AIC y fuera de AIC y se asigna por separado
                         peajeLinCen[l][j][m] = prorrMesGenTxTot[l2][m] == 0 ? 0: VATTN[l][m] * prorrMesGenTx[l2][j][m] - ITP_N[l][m] * prorrMesGenTx[l2][j][m] - IT_N[l][m]*prorrMesGenTx[l2][j][m]/prorrMesGenTxTot[l2][m];
                         ItLinCen[l][j][m]    = prorrMesGenTxTot[l2][m] == 0 ? 0:                                       ITP_N[l][m] * prorrMesGenTx[l2][j][m] + IT_N[l][m]*prorrMesGenTx[l2][j][m]/prorrMesGenTxTot[l2][m]; 
@@ -450,19 +448,19 @@ public class PeajesIny {
          /******************************************
          * Calcula Excenci—n de Centrales
          ******************************************/
-        double[][] facPago=new double[numCen][numMeses];
-        double[] CapConjExcep=new double[numMeses];
-        double[][][] ExcenCenTx=new double[numCen][numTx][numMeses];
-        double[][][] ExcenCenItTx=new double[numCen][numTx][numMeses];
-        double[][] ExcTotCen=new double[numCen][numMeses];
-        double[][] ExcTotItCen=new double[numCen][numMeses];
+        double[][] facPago=new double[numCen][NUMERO_MESES];
+        double[] CapConjExcep=new double[NUMERO_MESES];
+        double[][][] ExcenCenTx=new double[numCen][numTx][NUMERO_MESES];
+        double[][][] ExcenCenItTx=new double[numCen][numTx][NUMERO_MESES];
+        double[][] ExcTotCen=new double[numCen][NUMERO_MESES];
+        double[][] ExcTotItCen=new double[numCen][NUMERO_MESES];
         double[] InyTotMGC=new double[numCen];
-        double[][] ExcTotTx=new double[numTx][numMeses];
-        double[][] ExcTotItTx=new double[numTx][numMeses];
-        double[][][] ExcenCenPeajLin = new double[numCen][numLinTx][numMeses]; 
-        double[][] ExcTotPeajLin = new double [numLinTx][numMeses];
+        double[][] ExcTotTx=new double[numTx][NUMERO_MESES];
+        double[][] ExcTotItTx=new double[numTx][NUMERO_MESES];
+        double[][][] ExcenCenPeajLin = new double[numCen][numLinTx][NUMERO_MESES]; 
+        double[][] ExcTotPeajLin = new double [numLinTx][NUMERO_MESES];
         for(int i=0;i<numCen;i++){
-            for(int m=0;m<numMeses;m++){
+            for(int m=0;m<NUMERO_MESES;m++){
                     //if(MGNC[i]==1){
                       //  if(PotNeta[i]<9){
                         //    facPago[i][m]=0;
@@ -480,10 +478,10 @@ public class PeajesIny {
                     CapConjExcep[m]+=PotNeta[i]*(facPago[i][m])/PotNetaTot;
             }
         }
-         double[] FCorrec=new double[numMeses];
+         double[] FCorrec=new double[NUMERO_MESES];
 
         for(int i=0;i<numCen;i++){
-            for(int m=0;m<numMeses;m++){
+            for(int m=0;m<NUMERO_MESES;m++){
                  //FCorrec[m]=Math.min(1,1/CapConjExcep[m]*0.05);
                  for(int t=0;t<numTx;t++){
                     //ExcenCenTx[i][t][m]=peajeGenTxExcen[i][t][m]*(1-facPago[i][m]);
@@ -501,7 +499,7 @@ public class PeajesIny {
         }
         
         for(int i=0;i<numCen;i++){
-            for(int m=0;m<numMeses;m++){
+            for(int m=0;m<NUMERO_MESES;m++){
                  FCorrec[m]=Math.min(1,1/CapConjExcep[m]*0.05);
                  for(int l=0;l<numLinTx;l++){
                     //ExcenCenItLin[numCen][numLinTx][numMeses]
@@ -517,14 +515,14 @@ public class PeajesIny {
          * Calcula Ajuste por MGNC de Centrales
          ******************************************/
         
-        double[][][] AjusMGNCTx=new double[numCen][numTx][numMeses];
-        double[][][] AjusItMGNCTx=new double[numCen][numTx][numMeses];
+        double[][][] AjusMGNCTx=new double[numCen][numTx][NUMERO_MESES];
+        double[][][] AjusItMGNCTx=new double[numCen][numTx][NUMERO_MESES];
         
-        double[][] AjusMGNCTot=new double[numCen][numMeses];
-        double[][][] AjusPeajMGNCLin = new double[numCen][numLinTx][numMeses];
+        double[][] AjusMGNCTot=new double[numCen][NUMERO_MESES];
+        double[][][] AjusPeajMGNCLin = new double[numCen][numLinTx][NUMERO_MESES];
         
         for(int i=0;i<numCen;i++){
-            for(int m=0;m<numMeses;m++){
+            for(int m=0;m<NUMERO_MESES;m++){
                 for(int t=0;t<numTx;t++){
                     //if(MGNC[i]==1){
                         AjusMGNCTx[i][t][m]=-ExcenCenTx[i][t][m];
@@ -542,7 +540,7 @@ public class PeajesIny {
         
         
         for(int i=0;i<numCen;i++){
-            for(int m=0;m<numMeses;m++){
+            for(int m=0;m<NUMERO_MESES;m++){
                 for(int l=0;l<numLinTx;l++){
                     //if(MGNC[i]==1){
                         AjusPeajMGNCLin[i][l][m]=-ExcenCenPeajLin[i][l][m];
@@ -559,15 +557,15 @@ public class PeajesIny {
          /******************************************
          * Separa Datos de Centrales MGNC
          ******************************************/
-        double[][][] peajeMGNCTx=new double[numMGNC][numTx][numMeses];
-        double[][] peajeMGNC=new double[numMGNC][numMeses];
+        double[][][] peajeMGNCTx=new double[numMGNC][numTx][NUMERO_MESES];
+        double[][] peajeMGNC=new double[numMGNC][NUMERO_MESES];
         double[][] peajeAnualMGNCTx=new double[numMGNC][numTx];
         double[] peajeAnualMGNC=new double[numMGNC];
         String nomMGNC[]=new String[numMGNC];
         double[] PotNetaMGNC = new double[numMGNC];
         int aux=0;
-        double[][][] ExcenMGNCTx=new double[numMGNC][numTx][numMeses];
-        double[][] ExcenMGNC=new double[numMGNC][numMeses];
+        double[][][] ExcenMGNCTx=new double[numMGNC][numTx][NUMERO_MESES];
+        double[][] ExcenMGNC=new double[numMGNC][NUMERO_MESES];
         double[][] ExcenAnualMGNCTx=new double[numMGNC][numTx];
         double[] ExcenAnualMGNC=new double[numMGNC];
         double[] facPagoMGNC=new double[numMGNC];
@@ -578,7 +576,7 @@ public class PeajesIny {
                  PotNetaMGNC[aux]=PotNeta[i];
                  nomMGNC[aux]=nomGen[i];
                  facPagoMGNC[aux]=facPago[i][11];//factor de Pago de Diciembre
-                 for(int m=0;m<numMeses;m++){
+                 for(int m=0;m<NUMERO_MESES;m++){
                      for(int t=0;t<numTx;t++){
                      peajeMGNCTx[aux][t][m]=peajeGenTx[i][t][m];
                      peajeMGNC[aux][m]+=peajeGenTx[i][t][m];
@@ -598,12 +596,12 @@ public class PeajesIny {
         /******************************************
          * Calcula Pago Total por central
          ******************************************/
-        double[][][] PagoTotCenTx=new double[numCen][numTx][numMeses];
-        double[][][] ItTotCenTx=new double[numCen][numTx][numMeses];
-        double[][] PagoTotCen=new double[numCen][numMeses];
-        double[][][] ProrrPeajEmpLin = new double[numEmpG][numLinTx][numMeses];
+        double[][][] PagoTotCenTx=new double[numCen][numTx][NUMERO_MESES];
+        double[][][] ItTotCenTx=new double[numCen][numTx][NUMERO_MESES];
+        double[][] PagoTotCen=new double[numCen][NUMERO_MESES];
+        double[][][] ProrrPeajEmpLin = new double[numEmpG][numLinTx][NUMERO_MESES];
         for(int i=0;i<numCen;i++){
-            for(int m=0;m<numMeses;m++){
+            for(int m=0;m<NUMERO_MESES;m++){
                 for(int t=0;t<numTx;t++){
                     PagoTotCenTx[i][t][m]=peajeGenTx[i][t][m]+ AjusMGNCTx[i][t][m];
                     ItTotCenTx[i][t][m]=ItGenTx[i][t][m]+ AjusItMGNCTx[i][t][m];
@@ -619,7 +617,7 @@ public class PeajesIny {
         for(int i=0;i<numCen;i++){
             String[] tmp = nomGen[i].split("#");
             int emp = Calc.Buscar(tmp[0], nomEmp);
-            for(int m=0;m<numMeses;m++){
+            for(int m=0;m<NUMERO_MESES;m++){
                 for( int l=0 ; l<numLinTx ; l++ ){
                 //ItTotCenLin[i][l][m]=ItLinCen[l][i][m]+ AjusItMGNCLin[i][l][m];
                     if  (PeajeN[l][m] == 0) {
@@ -635,7 +633,7 @@ public class PeajesIny {
         
         try
 	{
-            FileWriter writer = new FileWriter(DirBaseSal + slash +"prorratas_pago_iny.csv");
+            FileWriter writer = new FileWriter(DirBaseSal + SLASH +"prorratas_pago_iny.csv");
            
             
             writer.append("Central");
@@ -647,7 +645,7 @@ public class PeajesIny {
             writer.append("Prorrata");
             writer.append('\n');
             
-            for (int m=0; m<numMeses; m++) {
+            for (int m=0; m<NUMERO_MESES; m++) {
                 for (int i = 0 ; i < numEmpG; i++){
                     for (int t=0; t<numLinTx; t++) {
                         writer.append(nomEmp[i]);
@@ -675,23 +673,23 @@ public class PeajesIny {
         /******************************************
          * Calcula Pagos por empresa
          ******************************************/
-        double[][][] peajeEmpGTx = new double[numEmpG][numTx][numMeses];
-        double[][] peajeEmpG = new double[numEmpG][numMeses];
-        double[][][] AjusMGNCEmpTx=new double[numEmpG][numTx][numMeses];
-        double[][][] PagoEmpGTx=new double[numEmpG][numTx][numMeses];
-        double[][][] ItEmpGTx=new double[numEmpG][numTx][numMeses];
+        double[][][] peajeEmpGTx = new double[numEmpG][numTx][NUMERO_MESES];
+        double[][] peajeEmpG = new double[numEmpG][NUMERO_MESES];
+        double[][][] AjusMGNCEmpTx=new double[numEmpG][numTx][NUMERO_MESES];
+        double[][][] PagoEmpGTx=new double[numEmpG][numTx][NUMERO_MESES];
+        double[][][] ItEmpGTx=new double[numEmpG][numTx][NUMERO_MESES];
         double[][] PagoAnualEmpGTx=new double[numEmpG][numTx];
         double[][] PeajeAnualEmpGTx=new double[numEmpG][numTx];
-        double[][] AjusMGNCEmp=new double[numEmpG][numMeses];
-        double[][] PagoEmp=new double[numEmpG][numMeses];
-        double[][] ItEmp=new double[numEmpG][numMeses];
+        double[][] AjusMGNCEmp=new double[numEmpG][NUMERO_MESES];
+        double[][] PagoEmp=new double[numEmpG][NUMERO_MESES];
+        double[][] ItEmp=new double[numEmpG][NUMERO_MESES];
         double[] PagoAnualEmpG=new double[numEmpG];
         double[] PeajeAnualEmpG=new double[numEmpG];
-        double[] PagoInyMes=new double[numMeses];
+        double[] PagoInyMes=new double[NUMERO_MESES];
         for (int j = 0; j < numCen; j++) {
             String[] tmp = nomGen[j].split("#");
             int l = Calc.Buscar(tmp[0], nomEmp);
-            for (int m = 0; m < numMeses; m++) {
+            for (int m = 0; m < NUMERO_MESES; m++) {
                 AjusMGNCEmp[l][m]+=AjusMGNCTot[j][m];
                 for (int t = 0; t < numTx; t++) {
                     peajeEmpGTx[l][t][m] += peajeGenTx[j][t][m];
@@ -725,44 +723,44 @@ public class PeajesIny {
             nomMGNCO[i] = nomMGNC[nmgnc[i]];
         }
         // -------------------------------------------------------------------
-        prorrMesGO = new double[numLinTx][numCen][numMeses];
+        prorrMesGO = new double[numLinTx][numCen][NUMERO_MESES];
         for (int i = 0; i < numLinTx; i++) {
             for (int j = 0; j < numCen; j++) {
-                for (int k = 0; k < numMeses; k++) {
+                for (int k = 0; k < NUMERO_MESES; k++) {
                     prorrMesGO[i][j][k] = prorrMesGenTx[i][ng[j]][k];
                 }
             }
         }
         // -------------------------------------------------------------------
-        peajeLinGO = new double[numLinTx][numCen][numMeses];
+        peajeLinGO = new double[numLinTx][numCen][NUMERO_MESES];
         for (int i = 0; i < numLinTx; i++) {
             for (int j = 0; j < numCen; j++) {
-                for (int k = 0; k < numMeses; k++) {
+                for (int k = 0; k < NUMERO_MESES; k++) {
                     peajeLinGO[i][j][k] = peajeLinCen[i][ng[j]][k];
                 }
             }
         }
         // -------------------------------------------------------------------
-        ItLinGO = new double[numLinTx][numCen][numMeses];
+        ItLinGO = new double[numLinTx][numCen][NUMERO_MESES];
         for (int i = 0; i < numLinTx; i++) {
             for (int j = 0; j < numCen; j++) {
-                for (int k = 0; k < numMeses; k++) {
+                for (int k = 0; k < NUMERO_MESES; k++) {
                     ItLinGO[i][j][k] = ItLinCen[i][ng[j]][k];
                 }
             }
         }// -------------------------------------------------------------------
-        peajeCenTxO = new double[numCen][numTx][numMeses];
+        peajeCenTxO = new double[numCen][numTx][NUMERO_MESES];
         for (int i = 0; i < numCen; i++) {
             for (int j = 0; j < numTx; j++) {
-                for (int k = 0; k < numMeses; k++) {
+                for (int k = 0; k < NUMERO_MESES; k++) {
                     peajeCenTxO[i][j][k] = peajeGenTx[ng[i]][j][k];
                 }
             }
         }
         // -------------------------------------------------------------------
-        peajeCenO = new double[numCen][numMeses];
+        peajeCenO = new double[numCen][NUMERO_MESES];
         for (int i = 0; i < numCen; i++) {
-            for (int j = 0; j < numMeses; j++) {
+            for (int j = 0; j < NUMERO_MESES; j++) {
                 peajeCenO[i][j] = peajeGen[ng[i]][j];
             }
         }
@@ -774,27 +772,27 @@ public class PeajesIny {
             nomEmpGO[i] = nomEmp[ne[i]];
         }
         // -------------------------------------------------------------------
-        peajeEmpTxO = new double[numEmpG][numTx][numMeses];
+        peajeEmpTxO = new double[numEmpG][numTx][NUMERO_MESES];
         for (int i = 0; i < numEmpG; i++) {
             for (int j = 0; j < numTx; j++) {
-                for (int k = 0; k < numMeses; k++) {
+                for (int k = 0; k < NUMERO_MESES; k++) {
                     peajeEmpTxO[i][j][k] = peajeEmpGTx[ne[i]][j][k];
                 }
             }
         }
         // -------------------------------------------------------------------
-        peajeEmpGO = new double[numEmpG][numMeses];
+        peajeEmpGO = new double[numEmpG][NUMERO_MESES];
         for (int i = 0; i < numEmpG; i++) {
-            for (int j = 0; j < numMeses; j++) {
+            for (int j = 0; j < NUMERO_MESES; j++) {
                 peajeEmpGO[i][j] = peajeEmpG[ne[i]][j];
             }
         }
         // -------------------------------------------------------------------
-        ExcenMGNCTxO=new double[numMGNC][numTx][numMeses];
-        ExcenMGNCO=new double[numMGNC][numMeses];
+        ExcenMGNCTxO=new double[numMGNC][numTx][NUMERO_MESES];
+        ExcenMGNCO=new double[numMGNC][NUMERO_MESES];
         for (int i = 0; i < numMGNC; i++) {
             for (int j = 0; j < numTx; j++) {
-            for (int m = 0; m < numMeses; m++) {
+            for (int m = 0; m < NUMERO_MESES; m++) {
                ExcenMGNCTxO[i][j][m]=ExcenMGNCTx[nmgnc[i]][j][m];
                ExcenMGNCO[i][m]=ExcenMGNC[nmgnc[i]][m];
             }
@@ -803,22 +801,22 @@ public class PeajesIny {
         // -------------------------------------------------------------------
         MGNCO = new float[numCen];
         PotNetaO = new double[numCen];
-        GenPromMesCenO= new double[numCen][numMeses];
-        facPagoO=new double[numCen][numMeses];
-        peajeGenO = new double[numCen][numMeses];
-        ExcTotCenO=new double[numCen][numMeses];
-        AjusMGNCTotO=new double[numCen][numMeses];
-        PagoTotCenO=new double[numCen][numMeses];
-        ExcenCenO=new double[numCen][numTx][numMeses];
-        AjusMGNCTxO=new double[numCen][numTx][numMeses];
-        PagoTotCenTxO=new double[numCen][numTx][numMeses];
-        double[][][][] peajeGenTxZonaO = new double[numCen][numTx][3][numMeses];
+        GenPromMesCenO= new double[numCen][NUMERO_MESES];
+        facPagoO=new double[numCen][NUMERO_MESES];
+        peajeGenO = new double[numCen][NUMERO_MESES];
+        ExcTotCenO=new double[numCen][NUMERO_MESES];
+        AjusMGNCTotO=new double[numCen][NUMERO_MESES];
+        PagoTotCenO=new double[numCen][NUMERO_MESES];
+        ExcenCenO=new double[numCen][numTx][NUMERO_MESES];
+        AjusMGNCTxO=new double[numCen][numTx][NUMERO_MESES];
+        PagoTotCenTxO=new double[numCen][numTx][NUMERO_MESES];
+        double[][][][] peajeGenTxZonaO = new double[numCen][numTx][3][NUMERO_MESES];
 
 
         for (int i = 0; i < numCen; i++) {
             MGNCO[i]=MGNC[ng[i]];
             PotNetaO[i]=PotNeta[ng[i]];
-            for (int k = 0; k < numMeses; k++) {
+            for (int k = 0; k < NUMERO_MESES; k++) {
                 GenPromMesCenO[i][k]=GenPromMesCen[ng[i]][k];
                 facPagoO[i][k]=facPago[ng[i]][k];
                 peajeGenO[i][k]=peajeGen[ng[i]][k];
@@ -834,14 +832,14 @@ public class PeajesIny {
             }
         }
         // -------------------------------------------------------------------
-        AjusMGNCEmpTxO= new double[numEmpG][numTx][numMeses];
-        PagoEmpTxO=new double[numEmpG][numTx][numMeses];
-        ItEmpTxO=new double[numEmpG][numTx][numMeses];
+        AjusMGNCEmpTxO= new double[numEmpG][numTx][NUMERO_MESES];
+        PagoEmpTxO=new double[numEmpG][numTx][NUMERO_MESES];
+        ItEmpTxO=new double[numEmpG][numTx][NUMERO_MESES];
         PagoAnualEmpGTxO=new double[numEmpG][numTx];
         PeajeAnualEmpGTxO=new double[numEmpG][numTx];
-        AjusMGNCEmpO=new double[numEmpG][numMeses];
-        PagoEmpO=new double[numEmpG][numMeses];
-        ItEmpO=new double[numEmpG][numMeses];
+        AjusMGNCEmpO=new double[numEmpG][NUMERO_MESES];
+        PagoEmpO=new double[numEmpG][NUMERO_MESES];
+        ItEmpO=new double[numEmpG][NUMERO_MESES];
         PagoAnualEmpGO=new double[numEmpG];
         PeajeAnualEmpGO=new double[numEmpG];
         AjusMGNCAnualEmpTxO=new double[numEmpG][numTx];
@@ -850,7 +848,7 @@ public class PeajesIny {
         for (int i = 0; i < numEmpG; i++) {
             PagoAnualEmpGO[i]= PagoAnualEmpG[ne[i]];
              PeajeAnualEmpGO[i]= PeajeAnualEmpG[ne[i]];
-                for (int k = 0; k < numMeses; k++) {
+                for (int k = 0; k < NUMERO_MESES; k++) {
                      AjusMGNCEmpO[i][k] = AjusMGNCEmp[ne[i]][k];
                      PagoEmpO[i][k] = PagoEmp[ne[i]][k];
                      ItEmpO[i][k] = ItEmp[ne[i]][k];
@@ -866,8 +864,8 @@ public class PeajesIny {
             }
         }
 
-        double[][][] peajeMGNCTxO=new double[numMGNC][numTx][numMeses];
-        double[][] peajeMGNCO=new double[numMGNC][numMeses];
+        double[][][] peajeMGNCTxO=new double[numMGNC][numTx][NUMERO_MESES];
+        double[][] peajeMGNCO=new double[numMGNC][NUMERO_MESES];
         peajeAnualMGNCTxO=new double[numMGNC][numTx];
         peajeAnualMGNCO=new double[numMGNC];
         PotNetaMGNCO=new double[numMGNC];
@@ -877,7 +875,7 @@ public class PeajesIny {
         
 
         for(int i=0;i<numMGNC;i++){
-            for(int m=0;m<numMeses;m++){
+            for(int m=0;m<NUMERO_MESES;m++){
                 for(int t=0;t<numTx;t++){
                      peajeMGNCTxO[i][t][m]= peajeMGNCTx[nmgnc[i]][t][m];
                      peajeMGNCO[i][m]=peajeMGNC[nmgnc[i]][m];
@@ -900,8 +898,7 @@ public class PeajesIny {
          * Escritura de Resultados
          * =======================
          */
-       String libroSalidaGXLS = DirBaseSal + slash +
-                "PagoIny" + Ano + ".xlsx";
+        String libroSalidaGXLS = DirBaseSal + SLASH + "PagoIny" + Ano + ".xlsx";
         Escribe.crearLibro(libroSalidaGXLS);
         Escribe.creaH2F_3d_long(
                 "Pago de Peaje por Línea y Central [$]", peajeLinGO,
@@ -912,7 +909,7 @@ public class PeajesIny {
                 "Factor de Excención",MGNCO,
                 
                 
-                "Mes", nomMes,
+                "Mes", MESES,
                 libroSalidaGXLS, "PjeCenLin",
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
         /*Escribe.creaH2F_3d_long(
@@ -944,14 +941,14 @@ public class PeajesIny {
          * 
          */
 
-        for(int m=0;m<numMeses;m++){
+        for(int m=0;m<NUMERO_MESES;m++){
             Escribe.creaPIny(m,
                 "Pago Peaje por Empresa y Transmisor [$]",peajeEmpTxO,
                  AjusMGNCEmpTxO,PagoEmpTxO,
                  peajeEmpGO,AjusMGNCEmpO,PagoEmpO,
                 "Empresa",nomEmpGO,
                 "Transmisor", nombreTx,
-                libroSalidaGXLS, nomMes[m],
+                libroSalidaGXLS, MESES[m],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
 
             Escribe.creaDetallePIny(m,
@@ -965,19 +962,19 @@ public class PeajesIny {
                 //"PNeta", PotNetaO,
                 //"Inyecci—n Mensual", GenPromMesCenO,
                 //"Factor",facPagoO ,
-                libroSalidaGXLS, nomMes[m],
+                libroSalidaGXLS, MESES[m],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
         }
         Escribe.crea_verificaIny(
                   "Verifica Pagos de Inyecci—n",libroEntrada,
-                  "Mes",nomMes,
+                  "Mes",MESES,
                   "Calculo", PagoInyMes,
                   "Prorrata L’nea",pagoInyMesLin,
                   "Diferencia",
                   "verifica","#,###,##0;[Red]-#,###,##0;\"-\"");
         Escribe.crea_verificaCalcPeajes(
                   "Verifica c‡lculo de Peajes",libroEntrada,
-                  "Mes",nomMes,
+                  "Mes",MESES,
                   "Peajes", PeajeNMes,
                   "Pago Ret","Pago Iny","Diferencia",
                   "verifica","#,###,##0;[Red]-#,###,##0;\"-\"");
@@ -992,11 +989,11 @@ public class PeajesIny {
 
       public static void LiquiMesIny(String mes, int Ano) {
           int m=0;
-          for(int i=0;i<numMeses;i++){
-              if(mes.equals(nomMes[i]))
+          for(int i=0;i<NUMERO_MESES;i++){
+              if(mes.equals(MESES[i]))
                   m=i;
           }
-     libroSalidaGXLSMes= DirBaseSal + slash +"PagoIny" + nomMes[m] + ".xlsx";
+     libroSalidaGXLSMes= DirBaseSal + SLASH +"PagoIny" + MESES[m] + ".xlsx";
      Escribe.crearLibro(libroSalidaGXLSMes);
      Escribe.creaLiquidacionMesIny(m,
                 "Pago de Peajes de Inyecci—n",peajeCenTxO,
@@ -1012,18 +1009,18 @@ public class PeajesIny {
                 
                 "Factor",facPagoO ,
                 
-                libroSalidaGXLSMes, nomMes[m],Ano,"#,###,##0;[Red]-#,###,##0;\"-\"");
+                libroSalidaGXLSMes, MESES[m],Ano,"#,###,##0;[Red]-#,###,##0;\"-\"");
      Escribe.creaProrrataMes(m,
-                "Participaci—n de Inyecciones [%]",prorrMesGenTx,"Participaci—n "+nomMes[m],
+                "Participaci—n de Inyecciones [%]",prorrMesGenTx,"Participaci—n "+MESES[m],
                 "Cliente",nomGen,
                 "L’nea",  nomLinTx,
                 "AIC", zonaLinTx,
-                libroSalidaGXLSMes, "PartIny"+nomMes[m],
+                libroSalidaGXLSMes, "PartIny"+MESES[m],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
     Escribe.creaProrrataMes_long(m,
-                "Pagos por Inyecci—n "+nomMes[m]+" [$]",
+                "Pagos por Inyecci—n "+MESES[m]+" [$]",
                 peajeLinGO,
-                "Pago "+nomMes[m],
+                "Pago "+MESES[m],
                 "Central",
                 nomGenO,
                 "L’nea",

@@ -5,34 +5,41 @@ package cl.coordinador.peajes;
  * and open the template in the editor.
  */
 
+
+import static cl.coordinador.peajes.PeajesConstant.MESES;
+import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
+import static cl.coordinador.peajes.PeajesConstant.SLASH;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.util.StringTokenizer;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import static org.apache.poi.ss.usermodel.CellType.FORMULA;
+import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Name;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  *
  * @author vtoro
  */
-import java.io.*;
-import java.util.StringTokenizer;
-import org.apache.poi.xssf.usermodel.*;
-
-import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.hssf.util.HSSFColor;
-//import org.apache.poi.hssf.record.formula.Ptg;
-//import org.apache.poi.hssf.record.formula.eval.*;
-import org.apache.poi.xssf.usermodel.*;
-
-
-
-
 public class Reliquidacion {
-static String[] nomMes = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
-            "Ago", "Sep", "Oct", "Nov", "Dic"};
-    private static String slash = File.separator;
-        private static final int numMeses = 12;
+
 //craer un archivo que se llame reliquidacion con el resumen de los IT de facturaccion luego a este archivo se le ir?n agregadon hojas
 //leer el archivo liquidacion mes del directorio de la liquidaci‹n y copiar tablas y pegarlas en un nuevo archivo
 //leer el archivo liquidacion mes del directorio de la RELIQUIDACION y copiar tablas y pegarlas en EL MISMO ARCHIVO
@@ -41,23 +48,24 @@ static String[] nomMes = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
 
 public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReliquidacion, String mes, int Ano,String Fpago){
 
-    String libroLiquidacion= DirectorioLiquidacion + slash +"Liquidación" + mes + ".xlsx";
-    String libroReliquidacion = DirectorioReliquidacion + slash +"Liquidación" + mes + ".xlsx";
-    File ArchivoReli= new File(DirectorioReliquidacion + slash +"Liquidación" + mes + ".xlsx");
+    String libroLiquidacion= DirectorioLiquidacion + SLASH +"Liquidación" + mes + ".xlsx";
+    String libroReliquidacion = DirectorioReliquidacion + SLASH +"Liquidación" + mes + ".xlsx";
+    File ArchivoReli= new File(DirectorioReliquidacion + SLASH +"Liquidación" + mes + ".xlsx");
 
     int nummes=0;
 
-    for(int i=0;i<numMeses;i++){
-              if(mes.equals(nomMes[i])){
-                  nummes=i;
-                  i=i+1;
-                  if(i<10)
-                  mes="0"+i;
-              }
-          }
+    for (int i = 0; i < NUMERO_MESES; i++) {
+        if (mes.equals(MESES[i])) {
+            nummes = i;
+            i = i + 1;
+            if (i < 10) {
+                mes = "0" + i;
+            }
+        }
+    }
 
-    String libroRit = DirectorioReliquidacion + slash +"rit" + mes + ".xlsx";
-    mes=nomMes[nummes];
+    String libroRit = DirectorioReliquidacion + SLASH +"rit" + mes + ".xlsx";
+    mes=MESES[nummes];
 
         Cell cLiq = null;
         Cell cReliq = null;
@@ -282,7 +290,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                                          estiloDatosA.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
                                          estiloDatosA.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                                          cRitIT.setCellStyle(estiloDatosA);
-                                         formula.evaluateAllFormulaCells(wbrit);
+                                         XSSFFormulaEvaluator.evaluateAllFormulaCells(wbrit);
                                          rowcuadro.createCell(a).setCellValue(cRitIT.getNumericCellValue());
                                          rowcuadro.getCell(a).setCellStyle(estiloDatosA);
                                      }
@@ -313,7 +321,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                                      if(j<indcolTot){
                                          a=j;
                                          cRitIT.setCellStyle(estiloDatos4A);
-                                         formula.evaluateAllFormulaCells(wbrit);
+                                         XSSFFormulaEvaluator.evaluateAllFormulaCells(wbrit);
                                          rowcuadro.createCell(a).setCellValue(cRitIT.getNumericCellValue());
                                          rowcuadro.getCell(a).setCellStyle(estiloDatos4A);
                                      }

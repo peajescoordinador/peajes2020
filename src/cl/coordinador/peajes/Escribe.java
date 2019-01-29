@@ -4,17 +4,31 @@ package cl.coordinador.peajes;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import java.io.*;
+
+import static cl.coordinador.peajes.PeajesConstant.MESES;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.StringTokenizer;
-import org.apache.poi.xssf.usermodel.*;
-
-import org.apache.poi.hssf.util.*;
-//import org.apache.poi.hssf.util.
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import java.util.Properties;
-
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Name;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 /**
@@ -22,9 +36,6 @@ import java.util.Properties;
  * @author aramos
  */
 public class Escribe {
-    
-    static String[] nomMes = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
-            "Ago", "Sep", "Oct", "Nov", "Dic"};
 
     static public void crearLibro( String nomLibro ) {
         try {
@@ -3612,11 +3623,11 @@ static public void creaLiquidacionMesIny( int mes,
             row = hoja.createRow(fila); fila++;
             row = hoja.createRow(fila); fila++;
            cellTC = row.createCell(1);
-           cellTC.setCellValue(nomMes[mes]+" "+Ano);
+           cellTC.setCellValue(MESES[mes]+" "+Ano);
            cellTC.setCellStyle(estiloTitulo);
             row = hoja.createRow(fila); fila++;
             cellTC = row.createCell(1);
-           cellTC.setCellValue("(Valores en $ indexados a "+nomMes[mes]+" "+Ano+")");
+           cellTC.setCellValue("(Valores en $ indexados a "+ MESES[mes]+" "+Ano+")");
            cellTC.setCellStyle(estiloTitulo);
             row = hoja.createRow(fila); fila++;
             row = hoja.createRow(fila); fila++;
@@ -3971,11 +3982,11 @@ static public void creaLiquidacionMes( int mes,
             row = hoja.createRow(fila); fila++;
             row = hoja.createRow(fila); fila++;
             cellTC = row.createCell(1);
-            cellTC.setCellValue(nomMes[mes]+" "+Ano);
+            cellTC.setCellValue(MESES[mes]+" "+Ano);
             cellTC.setCellStyle(estiloTitulo);
             row = hoja.createRow(fila); fila++;
             cellTC = row.createCell(1);
-            cellTC.setCellValue("(Valores en $ indexados a "+nomMes[mes]+" "+Ano+")");
+            cellTC.setCellValue("(Valores en $ indexados a "+MESES[mes]+" "+Ano+")");
             cellTC.setCellStyle(estiloTitulo);
             row = hoja.createRow(fila); fila++;
             row = hoja.createRow(fila); fila++;
@@ -5335,7 +5346,7 @@ static public void creaLiquidacionMes( int mes,
             row = hoja.createRow(fila); fila++;
             row = hoja.createRow(fila); fila++;
             cellTC = row.createCell(1);
-            cellTC.setCellValue(nomMes[mes]+" "+Ano);
+            cellTC.setCellValue(MESES[mes]+" "+Ano);
             cellTC.setCellStyle(estiloTitulo);
             row = hoja.createRow(fila); fila++;
             cellTC = row.createCell(1);
