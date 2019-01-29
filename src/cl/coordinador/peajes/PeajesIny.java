@@ -88,7 +88,7 @@ public class PeajesIny {
         DecimalFormat DosDecimales=new DecimalFormat("0.00");
         long tInicioLectura = System.currentTimeMillis();
         cargandoInfo=true;
-
+        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(PeajesCDEC.MAX_COMPRESSION_RATIO);
         String libroEntrada = DirBaseSal + slash + "Peaje" + Ano + ".xlsx";
 
         /************

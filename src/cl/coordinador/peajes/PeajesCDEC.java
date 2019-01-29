@@ -28,6 +28,8 @@ import java.util.Properties;
  * @author aramos
  */
 public class PeajesCDEC extends javax.swing.JFrame {
+    
+    public static final int MAX_COMPRESSION_RATIO = 0; //TODO: move to config file. Workaround: Value zero will prevent zip bomb exception in poi but it may become vulnerable to malicious data
     private File nombreDirEnt;
     private File nombreDirSal;
     private File nombreDirLiq;

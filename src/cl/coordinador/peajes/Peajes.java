@@ -25,6 +25,7 @@ public class Peajes {
             "Ago", "Sep", "Oct", "Nov", "Dic"};
         String libroEntrada = DirBaseEnt + slash + "Ent" + Ano + ".xlsx";
         System.out.println(libroEntrada);
+        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(PeajesCDEC.MAX_COMPRESSION_RATIO);
         /**********
          * lee VATT
          **********/

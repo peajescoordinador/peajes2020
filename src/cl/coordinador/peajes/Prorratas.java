@@ -58,7 +58,7 @@ public class Prorratas {
         String[] nombreMeses = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
         "Ago", "Sep", "Oct", "Nov", "Dic"};
         String[] EnergiaCU={"CUE2","CUE30","EUnit"};
-        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(0.0); //Workaround: para evitar excepciones 'zip bomb'. Esto deja la puerta abierta a archivos inseguros y maliciosos
+        org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(PeajesCDEC.MAX_COMPRESSION_RATIO);
 
         /**************
          * lee de Meses
