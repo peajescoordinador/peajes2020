@@ -144,7 +144,7 @@ public class PeajesRet {
         String[] TxtTemp2 = new String[2500];
         int numLineasVATT = Lee.leeVATT(libroEntrada, TxtTemp1, TxtTemp2,
                 Aux);
-        String[] nomLinVATT = new String[numLineasVATT];
+//        String[] nomLinVATT = new String[numLineasVATT];
         String[] nomProp = new String[numLineasVATT];
         String[] TxtTemp3 = new String[numLineasVATT];
         for (int i = 0; i < numLineasVATT; i++) {
@@ -152,7 +152,7 @@ public class PeajesRet {
         }
         numTx = 0;
         for (int i = 0; i < numLineasVATT; i++) {
-            nomLinVATT[i] = TxtTemp1[i];
+//            nomLinVATT[i] = TxtTemp1[i];
             nomProp[i] = TxtTemp2[i];
             int t = Calc.Buscar(nomProp[i], TxtTemp3);
             if (t == -1) {
@@ -175,34 +175,28 @@ public class PeajesRet {
         *
         */
         nombreTx = new String[numTx];
-        for (int i = 0; i < numTx; i++) {
-            nombreTx[i] = TxtTemp3[i];
-        }
-       /*nomLinTx = new String[numLinTx];
+        System.arraycopy(TxtTemp3, 0, nombreTx, 0, numTx); /*nomLinTx = new String[numLinTx];
         for (int i = 0; i < numLinTx; i++) {
-            nomLinTx[i] = TxtTemp4[i];
-            
+        nomLinTx[i] = TxtTemp4[i];
         }
-       // Ordena
+        // Ordena
         int[] nt = Calc.OrdenarBurbujaStr(nomLinTx);
         String[] nomLinTxO = new String[numLinTx];
         for (int i = 0; i < numLinTx; i++) {
-            nomLinTxO[i] = nomLinTx[nt[i]];
-            //System.out.println(nomLinTxO[i]);
+        nomLinTxO[i] = nomLinTx[nt[i]];
+        //System.out.println(nomLinTxO[i]);
         }
-        *
-        */
+         *
+         */
 
         /**************
          * lee Clientes
          **************/
-        String[] TxtTemp0 = new String[600];
         String[] Exen = new String[2500];
-
         int numCli = Lee.leeClientes(libroEntrada, TxtTemp1, Exen);
         nomCli = new String[numCli];
         System.arraycopy(TxtTemp1, 0, nomCli, 0, numCli);
-        TxtTemp0 = new String[numCli];
+        String[] TxtTemp0 = new String[numCli];
         for (int i = 0; i < numCli; i++) {
             TxtTemp0[i] = "";
         }
@@ -222,7 +216,7 @@ public class PeajesRet {
 
         /***********Extrae Barra de Clientes**********************************/
 
-        String[] tmpo = new String[numCli];
+        String[] tmpo;
         String[] BPeajeC=new String[numCli];
 
         TxtTemp2 = new String[numCli];
@@ -240,9 +234,7 @@ public class PeajesRet {
             }
         }
         String[] nomBar = new String[numBarC];
-        for (int j = 0; j < numBarC; j++) {
-            nomBar[j] = TxtTemp2[j];
-        }
+        System.arraycopy(TxtTemp2, 0, nomBar, 0, numBarC);
 
 
         //Busca clientes exentos
@@ -253,7 +245,7 @@ public class PeajesRet {
         numClienExentos=0;
         int numClienNOExentos=0;
           for (int j=0; j<numCli; j++) {
-            double exento= Double.valueOf(Exen[j]).doubleValue();
+            double exento= Double.parseDouble(Exen[j]);
             CondiClienExe [j]=exento;
             if(CondiClienExe [j]==0){
             indiceClienExen[numClienExentos]=j;//contiene indice de clientes exentos
@@ -290,9 +282,7 @@ public class PeajesRet {
 
         }
         String[] nomBarNoEx = new String[numBarCNoEx];
-        for (int j = 0; j < numBarCNoEx; j++) {
-            nomBarNoEx[j] = TxtTemp2[j];
-        }
+        System.arraycopy(TxtTemp2, 0, nomBarNoEx, 0, numBarCNoEx);
 
         /***************
          * Lee Centrales
@@ -302,9 +292,7 @@ public class PeajesRet {
         float[] Temp2= new float[600];
         int numCen = Lee.leeCentrales(libroEntrada, TxtTemp1,Temp1,Temp2);
         String[] nomCen = new String[numCen];
-        for(int i=0; i < numCen; i++){
-            nomCen[i] = TxtTemp1[i];
-        }
+        System.arraycopy(TxtTemp1, 0, nomCen, 0, numCen);
         TxtTemp1 = new String[numCen];
         for (int i=0; i<numCen; i++) {
             TxtTemp1[i] = "";
@@ -319,12 +307,10 @@ public class PeajesRet {
             }
         }
         nomEmp = new String[numEmp];
-        for (int j=0; j<numEmp; j++) {
-            nomEmp[j] = TxtTemp1[j];
-        }
+        System.arraycopy(TxtTemp1, 0, nomEmp, 0, numEmp);
 
         /************
-         * lee L’neas
+         * lee Lineas
          *************/
         TxtTemp1 = new String[2000];
         int numLineas = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
@@ -338,7 +324,7 @@ public class PeajesRet {
         }
 
         /**********************
-         * lee L’neas Troncales
+         * lee Lineas Troncales
          **********************/
         TxtTemp1 = new String[2000];
         TxtTemp2 = new String[2000];
@@ -356,7 +342,6 @@ public class PeajesRet {
             nomProp[i]=TxtTemp2[i];
             TxtTemp4[i]="";
         }
-         TxtTemp3=new String[numLinIT];
          int[] TxtTemp5=new int[numLinIT];
 
         int numLinTx = 0;
@@ -369,13 +354,13 @@ public class PeajesRet {
                 numLinTx++;
             }
         }
-        nomLinTx = new String[numLinTx];//solo registros Ïnico L’nea#Transmisor de hoja lintron
-        String[] nomPropTx = new String[numLinTx];
+        nomLinTx = new String[numLinTx];//solo registros inico Linea-Transmisor de hoja lintron
+//        String[] nomPropTx = new String[numLinTx];
         zonaLinTx= new int[numLinTx];
 
         for (int i = 0; i < numLinTx; i++) {
             nomLinTx[i] = TxtTemp4[i];
-            nomPropTx[i]=TxtTemp2[i];
+//            nomPropTx[i]=TxtTemp2[i];
             zonaLinTx[i]=TxtTemp5[i];
         }
          /**************
@@ -401,18 +386,13 @@ public class PeajesRet {
         facDx= new double[numDx][numSumi][NUMERO_MESES];
         proEfirme= new double[sumRM88][NUMERO_MESES];
 
-        for(int i=0;i<numDx;i++){
-            nomDx[i]=TxtTe[i];
-        }
-        for(int i=0;i<numSumi;i++){
-            nomSumi[i]=TxtTe1[i];
-        }
+        System.arraycopy(TxtTe, 0, nomDx, 0, numDx);
+        System.arraycopy(TxtTe1, 0, nomSumi, 0, numSumi);
         System.arraycopy(TxtTe2, 0, nomSumiRM88, 0, sumRM88);
         
         for(int i=0;i<numDx;i++)
           for(int j=0;j<numSumi;j++)
-              for(int k=0;k<NUMERO_MESES;k++)
-                  facDx[i][j][k]=facDxaux[i][j][k];
+              System.arraycopy(facDxaux[i][j], 0, facDx[i][j], 0, NUMERO_MESES);
 
         
         for(int j=0;j<sumRM88;j++)
@@ -508,8 +488,8 @@ public class PeajesRet {
             int l2 = Calc.Buscar( nomLineasN[l], nomLinTx);//antes buscaba nomLinTxO con nomLinTx lineas de peajes ordenadas que era la salida de prorratas pero no estaba ordenada
             if(l2==-1){//ahora la variable nomLinTx son los registros unicos en orden de lintron (asi estaba salida de prorratas)
              System.out.println();
-             System.out.println("L’nea Trocal - "+nomLineasN[l]+" - en archivo Peaje"+Ano+".xls no se encuentra en la hoja 'lintron' del archivo Ent"+Ano+".xlsx");
-             System.out.println("Debe asegurarse que la L’neas en el archivo AVI_COMA.xls sean las mismas de la hoja 'lintron' y ejecutar el bot—n Peajes");
+             System.out.println("Línea Trocal - "+nomLineasN[l]+" - en archivo Peaje"+Ano+".xls no se encuentra en la hoja 'lintron' del archivo Ent"+Ano+".xlsx");
+             System.out.println("Debe asegurarse que las Líneas en el archivo AVI_COMA.xls sean las mismas de la hoja 'lintron' y ejecutar el botón Peajes");
             }
             else{
                 //System.out.println(l+" "+nomLineasN[l]+" "+l2+" "+PeajeN[l][1]+" "+nomLinTx[l2]+prorrMesC[l2][15][1]);
@@ -712,7 +692,7 @@ public class PeajesRet {
                         }
                  }
             }
-            else{//si no est‡ como empresa de generaci—n Busca si es una Distribuidora
+            else{//si no este como empresa de generacion Busca si es una Distribuidora
                 int l1 = Calc.Buscar(tmp[1], nomDx);
                  if(l1!=-1){
                     for(int i=0;i<numSumi;i++){
@@ -747,7 +727,7 @@ public class PeajesRet {
                     }   
                 }
                 if(l1==-1){//si no encuentra la empresa
-                    System.out.println("El Suministrador "+tmp[1]+" en 'clientes'"+" "+j+" no est‡ asignado como Distribuidora o como empresa de Generaci—n");
+                    System.out.println("El Suministrador "+tmp[1]+" en 'clientes'"+" "+j+" no esté asignado como Distribuidora o como empresa de Generación");
                 }
             }
         }
@@ -772,7 +752,7 @@ public class PeajesRet {
                         }
                  }
             }
-            else{//si no est‡ como empresa de generaci—n Busca si es una Distribuidora
+            else{//si no esté como empresa de generación Busca si es una Distribuidora
                 int l1 = Calc.Buscar(tmp[1], nomDx);
                  if(l1!=-1){
                     for(int i=0;i<numSumi;i++){
@@ -809,7 +789,7 @@ public class PeajesRet {
                     }   
                 }
                 if(l1==-1){//si no encuentra la empresa
-                    System.out.println("El Suministrador "+tmp[1]+" en 'clientes'"+" "+j+" no est‡ asignado como Distribuidora o como empresa de Generaci—n");
+                    System.out.println("El Suministrador "+tmp[1]+" en 'clientes'"+" "+j+" no esté asignado como Distribuidora o como empresa de Generación");
                 }
             }
         }
@@ -1008,21 +988,14 @@ public class PeajesRet {
         for (int i=0; i < numBarC; i++){
             nomBarO[i] = nomBar[nb[i]];
         }
-         // Ordena los archivos de salida para PU
-        int[] nbne = Calc.OrdenarBurbujaStr(nomBarNoEx);
-        String[] nomBarNoExO = new String[numBarCNoEx];
-        for (int i=0; i < numBarCNoEx; i++){
-            nomBarNoExO[i] = nomBar[nbne[i]];
-        }
+         // Ordena los archivos de salida para PU (deprecated)
 
 
         // -------------------------------------------------------------------
         double[][][] prorrMesCO = new double[numLinTx][numCli][NUMERO_MESES];
         for (int i = 0; i < numLinTx; i++) {
             for (int j = 0; j < numCli; j++) {
-                for (int k = 0; k < NUMERO_MESES; k++) {
-                    prorrMesCO[i][j][k] = prorrMesC[i][nc[j]][k];
-                }
+                System.arraycopy(prorrMesC[i][nc[j]], 0, prorrMesCO[i][j], 0, NUMERO_MESES);
             }
         }
         // -------------------------------------------------------------------
@@ -1040,17 +1013,13 @@ public class PeajesRet {
         peajeClienTxNOExenO = new double[numClienNOExentos][numTx][NUMERO_MESES];
         for (int i = 0; i < numClienNOExentos; i++) {
             for (int j = 0; j < numTx; j++) {
-                for (int k = 0; k < NUMERO_MESES; k++) {
-                    peajeClienTxNOExenO[i][j][k] = pjeCliTxNOExen[ncNOExen[i]][j][k];
-                }
+                System.arraycopy(pjeCliTxNOExen[ncNOExen[i]][j], 0, peajeClienTxNOExenO[i][j], 0, NUMERO_MESES);
             }
         }
         // -------------------------------------------------------------------
         double[][] peajeClienNOExenO = new double[numClienNOExentos][NUMERO_MESES];
         for (int i = 0; i < numClienNOExentos; i++) {
-            for (int j = 0; j < NUMERO_MESES; j++) {
-                peajeClienNOExenO[i][j] = pjeCliNOExen[ncNOExen[i]][j];
-            }
+            System.arraycopy(pjeCliNOExen[ncNOExen[i]], 0, peajeClienNOExenO[i], 0, NUMERO_MESES);
         }
         // -------------------------------------------------------------------
         nc = Calc.OrdenarBurbujaStr(nomEmpC);
@@ -1068,9 +1037,7 @@ public class PeajesRet {
         // ---------------------------------------------------------------------
         double[][] peajeEmpCO = new double[numEmpC][NUMERO_MESES];
         for (int i = 0; i < numEmpC; i++) {
-            for (int j = 0; j < NUMERO_MESES; j++) {
-                peajeEmpCO[i][j] = pjeEmpSinAju[nc[i]][j];
-            }
+            System.arraycopy(pjeEmpSinAju[nc[i]], 0, peajeEmpCO[i], 0, NUMERO_MESES);
         }
           // ---------------------------------------------------------------------
         peajeClienTxExenO = new double[numClienExentos][numTx][NUMERO_MESES];
@@ -1088,9 +1055,7 @@ public class PeajesRet {
           // -------------------------------------------------------------------
         double[][] peajeClienExenO = new double[numClienExentos][NUMERO_MESES];
         for (int i = 0; i < numClienExentos; i++) {
-            for (int j = 0; j < NUMERO_MESES; j++) {
-                peajeClienExenO[i][j] = peajeClienExen[ncExen[i]][j];
-            }
+            System.arraycopy(peajeClienExen[ncExen[i]], 0, peajeClienExenO[i], 0, NUMERO_MESES);
         }
           // ---------------------------------------------------------------------
        AjusClienExenCenTxO = new double[numCen][numTx][NUMERO_MESES];
@@ -1129,7 +1094,7 @@ public class PeajesRet {
         for (int i = 0; i < numEmp; i++) {
             for (int j = 0; j < numTx; j++) {
                 for (int k = 0; k < NUMERO_MESES; k++) {
-                    TotRetEmpTxO[i][j][k] = TotRetEmpTx[ne[i]][j][k];//Esto es lo que estar’a malo
+                    TotRetEmpTxO[i][j][k] = TotRetEmpTx[ne[i]][j][k];//Esto es lo que estaria malo
                      TotAnualRetEmpTxO[i][j]+=TotRetEmpTxO[i][j][k];
                 }
             }
@@ -1176,9 +1141,7 @@ public class PeajesRet {
        RetEmpSinAjuTxO = new double[numEmp][numTx][NUMERO_MESES];
         for (int i = 0; i < numEmp; i++) {
             for (int j = 0; j < numTx; j++) {
-                for (int k = 0; k < NUMERO_MESES; k++) {
-                     RetEmpSinAjuTxO[i][j][k] =  pjeEmpSinAjuTx[ne[i]][j][k];
-                }
+                System.arraycopy(pjeEmpSinAjuTx[ne[i]][j], 0, RetEmpSinAjuTxO[i][j], 0, NUMERO_MESES);
             }
         }
         // ---------------------------------------------------------------------
@@ -1198,9 +1161,7 @@ public class PeajesRet {
         // ---------------------------------------------------------------------
         RetEmpSinAjuO = new double[numEmp][NUMERO_MESES];
         for (int i = 0; i < numEmp; i++) {
-            for (int j = 0; j < NUMERO_MESES; j++) {
-                RetEmpSinAjuO[i][j] = pjeEmpSinAju[ne[i]][j];
-            }
+            System.arraycopy(pjeEmpSinAju[ne[i]], 0, RetEmpSinAjuO[i], 0, NUMERO_MESES);
         }
         // ---------------------------------------------------------------------
         double[][][] TotPjeRetEmpTxO = new double[numEmp][numTx][NUMERO_MESES];
@@ -1258,9 +1219,7 @@ public class PeajesRet {
         
         for (int i = 0; i < sumRM88; i++) {
             for (int j = 0; j < numTx; j++) {
-                for (int k = 0; k < NUMERO_MESES; k++) {
-                    TotRetEmpTxRE2288O[i][j][k]=TotRetEmpTxRE2288[ne2288[i]][j][k];
-                }
+                System.arraycopy(TotRetEmpTxRE2288[ne2288[i]][j], 0, TotRetEmpTxRE2288O[i][j], 0, NUMERO_MESES);
                 TotAnualPjeRetEmpGTxRE2288O[i][j]=TotAnualPjeRetEmpGTxRE2288[ne2288[i]][j];
             }
         }
@@ -1271,7 +1230,7 @@ public class PeajesRet {
         for (int i = 0; i < numEmp; i++) {
             for (int j = 0; j < numTx; j++) {
                 for (int k = 0; k < NUMERO_MESES; k++) {
-                    TotRetEmpTxO[i][j][k]= re2288toNomsumi[i] == -1? TotRetEmpTxO[i][j][k]:TotRetEmpTxO[i][j][k]+TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];//Esto es lo que estar’a malo
+                    TotRetEmpTxO[i][j][k]= re2288toNomsumi[i] == -1? TotRetEmpTxO[i][j][k]:TotRetEmpTxO[i][j][k]+TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];//Esto es lo que estaria malo
                     TotRetEmpO[i][k]+=re2288toNomsumi[i] == -1?0:TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];
                     TotRetEmpTxRE2288OO[i][j][k] += re2288toNomsumi[i] == -1?0:TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];
                     TotRetEmpRE2288O[i][k]+= re2288toNomsumi[i] == -1?0:TotRetEmpTxRE2288O[re2288toNomsumi[i]][j][k];
@@ -1292,9 +1251,7 @@ public class PeajesRet {
       PUO = new double[numBarC][numTx][NUMERO_MESES];
         for (int j=0; j < numBarC; j++)
         for (int t=0; t < numTx; t++)
-        for (int m=0; m < NUMERO_MESES; m++){
-           PUO[j][t][m]= PU[nb[j]][t][m];
-          }
+            System.arraycopy(PU[nb[j]][t], 0, PUO[j][t], 0, NUMERO_MESES);
         // --------------------------------------------------------------------
        double[][] ProrrCUO= new double[numBarC][2];
        double[][][] PagoCUO= new double[numBarC][numTx][2];
@@ -1457,7 +1414,7 @@ public class PeajesRet {
                   PagoCUAnual,ECUAnual,
                   "Mes",MESES,
                   "Calculo", TotMensualRetEmp,
-                  "Prorrata L’nea",SumMensualPjeLin,
+                  "Prorrata Línea",SumMensualPjeLin,
                   "Diferencia",
                   "verifica","#,###,##0;[Red]-#,###,##0;\"-\"");
           Escribe.crea_verificaCalcPeajes(
@@ -1507,7 +1464,7 @@ public class PeajesRet {
      Escribe.creaProrrataMes(m,
                 "Participación de Retiros [%]",prorrMesC,"Participación "+MESES[m],
                 "Cliente",nomCli,
-                "L’nea",  nomLinTx,
+                "Línea",  nomLinTx,
                 "AIC", zonaLinTx,
                 libroSalidaGXLSMes, "PartRet"+MESES[m],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");

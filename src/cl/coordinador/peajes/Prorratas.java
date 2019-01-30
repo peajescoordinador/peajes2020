@@ -70,8 +70,7 @@ public class Prorratas {
         int[] intAux1=new int[600];
         numSp = Lee.leeMeses(libroEntrada, intAux1, nombreMeses);
         int[] paramEtapa = new int[numEtapas];
-        for (int i=0; i<numEtapas; i++)
-            paramEtapa[i] = intAux1[i];
+        System.arraycopy(intAux1, 0, paramEtapa, 0, numEtapas);
 
         /*
          * Lectura de parametros de lineas
@@ -104,7 +103,7 @@ public class Prorratas {
         String[] nomLinTron = new String[numLinTron];
         int[] indiceLintron = new int[numLinTron];
         int[][] datosLintron = new int[numLinTron][3];
-        String[]zonaIT=new String[numLinTron];
+//        String[]zonaIT=new String[numLinTron];
         String[] nomProp=new String[numLinTron];
         String[] LinTronProp=new String[numLinTron];
          String TxtTemp4[]=new String[numLinTron];
@@ -125,9 +124,9 @@ public class Prorratas {
 
         int numLinTx = 0;
         for (int i = 0; i <numLinTron; i++) {
-             if(datosLintron[i][0]==1) zonaIT[i]="N";
-             if(datosLintron[i][0]==0) zonaIT[i]="A";
-             if(datosLintron[i][0]==-1) zonaIT[i]="S";
+//             if(datosLintron[i][0]==1) zonaIT[i]="N";
+//             if(datosLintron[i][0]==0) zonaIT[i]="A";
+//             if(datosLintron[i][0]==-1) zonaIT[i]="S";
             int l = Calc.Buscar(nomLinTron[i] + "#" + nomProp[i], TxtTemp4);
             if (l == -1) {
                 TxtTemp4[numLinTx] = nomLinTron[i] + "#" + nomProp[i];
@@ -146,12 +145,12 @@ public class Prorratas {
             }
         }
         String[] nomLinTx = new String[numLinTx];//solo registros ìnico LÍnea#Transmisor
-        String[] nomPropTx = new String[numLinTx];
+//        String[] nomPropTx = new String[numLinTx];
         String[] zona = new String[numLinTx];
         int[] datosLinIT = new int[numLinTx];
         for (int i = 0; i < numLinTx; i++) {
             nomLinTx[i] = TxtTemp4[i];
-            nomPropTx[i]=TxtTemp2[i];
+//            nomPropTx[i]=TxtTemp2[i];
             zona[i] = TxtTemp3[i];
             datosLinIT[i]=TxtTemp5[i];
         }
@@ -171,7 +170,7 @@ public class Prorratas {
             nomBar[i] = TxtTemp1[i];
             // 1 si la barra es troncal, 0 en caso contrario
             paramBarTroncal[i][0] = intAux3[i][0];
-            // 0 si la barra estˆ en el AIC, 1 si estˆ en el norte y -1 si estˆ en el sur
+            // 0 si la barra esta en el AIC, 1 si esta en el norte y -1 si esta en el sur
             paramBarTroncal[i][1] = intAux3[i][1];
             // 1 si la barra está en el SIC, -1 si está en el SING
             paramBarTroncal[i][2] = intAux3[i][2];
@@ -193,7 +192,7 @@ public class Prorratas {
         System.out.println("Barras: "+numBarras);
         for(int b=0; b < numBarras; b++){
             for(int e=0;e<numEtapas;e++){
-                barrasConsumo[b][e] = (Consumos[b][e]==0? false:true);
+                barrasConsumo[b][e] = (Consumos[b][e] != 0);
                 ConsEta[e] += Consumos[b][e];
             }
         }
@@ -244,27 +243,23 @@ public class Prorratas {
         int[][] paramGener = new int[numGen][3];
         String [] nomGen = new String[numGen];
         String [] nomGen_Sin_Fallas = new String[numGen_Sin_Fallas];
-        boolean[] barrasGeneracion = new boolean[numBarras];
-        for(int i=0; i < numBarras; i++){
-            barrasGeneracion[i] = false;
-        }
+//        boolean[] barrasGeneracion = new boolean[numBarras];
+//        for(int i=0; i < numBarras; i++){
+//            barrasGeneracion[i] = false;
+//        }
         for(int i=0; i < numGen; i++){
             nomGen[i] = TxtTemp1[i];
            // System.out.println("Peajes "+nomGen[i]);
             paramGener[i][1] = intAux3[i][1];
             paramGener[i][0] = intAux3[i][0];
-            barrasGeneracion[paramGener[i][0]] = true;
+//            barrasGeneracion[paramGener[i][0]] = true;
         }
-        for(int i=0; i < numGen_Sin_Fallas; i++){
-            nomGen_Sin_Fallas[i] = TxtTemp1_2[i];
-            
-            
-        }
+        System.arraycopy(TxtTemp1_2, 0, nomGen_Sin_Fallas, 0, numGen_Sin_Fallas);
             
             
             
         /*****************************************
-        Lectura de orientaci„n de barras troncales
+        Lectura de orientacion de barras troncales
         ******************************************/
         int[][] orientBarTroncal=new int[numBarras][numLin];
         for(int i=0; i < numBarras; i++){
@@ -294,14 +289,13 @@ public class Prorratas {
         float[][][] Temporal3 = new float[2500][3][NUMERO_MESES];
         int numClaves;
 
-        //System.out.println(ActClientes);
+        //TODO: Revisar statement
         if(ActClientes=false){
         numClaves=Lee.leeConsumos2(libroEntrada, Temporal1,Temporal2,numEtapas
                 ,paramEtapa,duracionEta,Temporal3);
-        }
-        else{
+        } else {
             numClaves=Lee.leeConsumos(libroEntrada, Temporal1,Temporal2,numEtapas
-                ,paramEtapa,duracionEta,Temporal3);//debe ademˆs escribir la hoja con los clientes
+                ,paramEtapa,duracionEta,Temporal3);//debe ademas escribir la hoja con los clientes
         }
 
         float[][] ConsumosClaves = new float[numClaves][numEtapas];
@@ -342,11 +336,11 @@ public class Prorratas {
         int clav = Lee.leeBarcli(libroEntrada, TxtTemp1,
                 TxtTemp2, intAux3, nomCli, nomBar);
         String[] nombreClaves = new String[numClaves];
-        String[] nombreClClientes = new String[numClaves];
+//        String[] nombreClClientes = new String[numClaves];
         int[][] datosClaves = new int[numClaves][4];
         for(int i=0; i < numClaves; i++) {
             nombreClaves[i]=TxtTemp1[i];
-            nombreClClientes[i]=TxtTemp2[i];
+//            nombreClClientes[i]=TxtTemp2[i];
             datosClaves[i][0]=intAux3[i][0];
             datosClaves[i][1]=intAux3[i][1];
             datosClaves[i][2]=intAux3[i][2];
@@ -372,7 +366,7 @@ public class Prorratas {
         }
 
         /*
-         * Lectura de Generacion (Despachos) y energ’a no suministrada
+         * Lectura de Generacion (Despachos) y energia no suministrada
          * ===========================================================
          */
         BufferedReader input = null;
@@ -489,7 +483,7 @@ public class Prorratas {
         String [] nombreLineasSistRed = new String[numLinSistRed];
         for(int i=0;i<numLinSistRed;i++){
             nombreLineasSistRed[i]=TxtTemp1[i];
-            //tensi„n lineas sistema reducido
+            //tension lineas sistema reducido
             paramLinSistRed[i]=(int)(Math.round(Aux[i][0]));
         }
 
@@ -715,17 +709,17 @@ public class Prorratas {
             // Calcula Flujo DC y asignacion de perdidas
             // -----------------------------------------
             float[] R=new float[numLin];                   // resistencias en p.u
-            float[] perdI2R=new float[numLin];             // perdidas de cada l’nea segÏn I*I*R
-            float[] perdidas=new float[numLin];            // perdidas de cada l’nea segun diferencia entre Gx y Demanda
-            float[] perdMayor110=new float[numLin];        // perdidas de cada l’nea segun diferencia entre Gx y Demanda
-            float[] perdMenor110=new float[numLin];        // perdidas de cada l’nea segun diferencia entre Gx y Demanda
+            float[] perdI2R=new float[numLin];             // perdidas de cada linea segun I*I*R
+            float[] perdidas=new float[numLin];            // perdidas de cada linea segun diferencia entre Gx y Demanda
+            float[] perdMayor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
+            float[] perdMenor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
             float[] perdRealesSistema=new float[numHid];   // perdidas del sistema
-            float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las l’neas de tensi—n > 110kV
-            float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las l’neas de tensi—n <= 110kV
+            float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las lineas de tension > 110kV
+            float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las lineas de tension <= 110kV
             float conSist;
             float[][] conAjustado=new float[numBarras][numHid];
             float[] genSist=new float[numHid];
-            float[] conMasPerd= new float[numBarras];      // consumos con asignacion de p?rdidas por iteraci—n [MW]
+            float[] conMasPerd= new float[numBarras];      // consumos con asignacion de p?rdidas por iteracion [MW]
             // Consumos con asignacion de p?rdidas por iteracion [MW]
             float[][] conMasPerdEta= new float[numBarras][numHid];
             for(int h=0;h<numHid;h++){
@@ -1066,7 +1060,7 @@ public class Prorratas {
                 }
             }
         }
-        // Procesa salida prorratas de generaci„n
+        // Procesa salida prorratas de generacion
         double[][][] prorrMesLinG = new double[numLinTx][numCen][NUMERO_MESES];
         double[][] generacionMes = new double[numCen][NUMERO_MESES];
         for(int m=0; m<NUMERO_MESES; m++) {
@@ -1154,7 +1148,7 @@ public class Prorratas {
                 "Mes", nombreMeses,
                 libroSalidaXLS,"ProrrCMes","0.000%;[Red]-0.000%;\"-\"");
         Escribe.creaH1F_2d_double(
-                "Prorratas por L’nea", prorrataLinea,
+                "Prorratas por Línea", prorrataLinea,
                 "Línea", nomLinTx,
                 "Mes", nombreMeses,
                 libroSalidaXLS, "ProrrLin","0.000%;[Red]-0.000%;\"-\"");
@@ -1171,7 +1165,7 @@ public class Prorratas {
         Escribe.creaH1F_2d_double(
                 "Detalle de prorratas de Generación", Calc.transponer(prorrAnoTroncG),
                 "Central", nomGen,
-                "L’nea", nomLinTx,
+                "Línea", nomLinTx,
                 libroSalidaXLS, "ProrrG","0.000%");
         Escribe.creaH1F_2d_double(
                 "Detalle de prorratas de Consumo", Calc.transponer(prorrAnoTroncC),

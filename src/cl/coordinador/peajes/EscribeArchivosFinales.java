@@ -51,7 +51,7 @@ public class EscribeArchivosFinales {
         String libroSalidaGXLSMes = DirBaseSal + SLASH + "Liquidación" + MESES[mesLiq] + ".xlsx";
 
         Escribe.crearLibro(libroSalidaGXLSMes);
-        //esta función es igual a creaLiquidacionMes, excepto por el formato de datos, unificar para tener una sola funci—n
+        //esta función es igual a creaLiquidacionMes, excepto por el formato de datos, unificar para tener una sola funcion
         Escribe.creaLiquidacion(mesLiq,
                 "Liquidación de Peajes del Sistema de Transmisión Troncal",
                 PeajesIny.PagoEmpTxO,
@@ -156,7 +156,7 @@ public class EscribeArchivosFinales {
                 "Participación de Inyecciones [%]", PeajesIny.prorrMesGenTx,
                 "Participación " + MESES[mesLiq],
                 "Cliente", PeajesIny.nomGen,
-                "L’nea", PeajesIny.nomLinTx,
+                "Línea", PeajesIny.nomLinTx,
                 "AIC", PeajesIny.zonaLinTx,
                 libroSalidaGXLSMes, "PartIny" + MESES[mesLiq],
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
@@ -215,7 +215,6 @@ public class EscribeArchivosFinales {
                 "Central", PeajesRet.nomSumiRM88O,
                 "Transmisor", PeajesIny.nombreTx,
                 libroSalidaGXLSAno, "PagoRE2288", Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
-
         Escribe.crea_1TablaTx_1C(
                 "Pagos de peajes de Retiro por Suministrador Incluyendo RE2288 (Valores en $)", PeajesRet.TotConRe2288AnualPjeRetEmpTxO,
                 PeajesRet.TotConRe2288AnualPjeRetEmpO,
