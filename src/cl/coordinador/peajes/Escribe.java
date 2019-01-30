@@ -178,7 +178,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < numCol+2; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < numFilas; i++) {
@@ -349,7 +349,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < numCol+2; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < numFilas; i++) {
@@ -523,7 +523,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < numCol+2; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < numFilas; i++) {
@@ -707,7 +707,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < numCol+2; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < numFilas; i++) {
@@ -871,7 +871,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < numCol+3; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < numFilas; i++) {
@@ -1035,7 +1035,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < numCol+3; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < numFilas; i++) {
@@ -1202,7 +1202,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3 + 3; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim1; i++) {
@@ -1377,7 +1377,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3 + 4; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim1; i++) {
@@ -1570,7 +1570,7 @@ public class Escribe {
             //for (int i = 1; i < dim3 + 3; i++)
             for (int i = 1; i < dim3 + 4; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim1; i++) {
@@ -1761,7 +1761,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3 + 4; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
 
             // Titulo Principal
@@ -1921,7 +1921,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3 + 3; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim1; i++) {
@@ -2111,7 +2111,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3 + 4; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
 
             // Titulo Principal
@@ -2296,7 +2296,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3 + 3; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim1; i++) {
@@ -2456,7 +2456,7 @@ public class Escribe {
             // Dimensiones del arreglo
             int dim1=Datos3.length;//barras
             int dim2=Datos3[0].length;//Tx
-            int dim3=Datos3[0][0].length;//N? de cargos
+            int dim3=Datos3[0][0].length;//N de cargos
             // Titulos Secundarios
             fila++;
             row = hoja.createRow(fila); fila++;
@@ -2566,7 +2566,7 @@ public class Escribe {
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3*3+4; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim1*dim2; i++) {
@@ -3439,7 +3439,7 @@ static public void creaPagosRet_3d_long( String titulo, long Datos[][][],
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3 + 3; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim1; i++) {
@@ -4138,7 +4138,7 @@ static public void creaLiquidacionMes( int mes,
             for (int i = 1; i < (dim2+3)*4; i++)
                 hoja.setColumnWidth(i, 5*700);
                 //hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             //for (int i = 0; i < dim2; i++) {
@@ -4335,7 +4335,7 @@ static public void creaLiquidacionMes( int mes,
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim2+3; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             // Titulo Principal
@@ -4525,7 +4525,7 @@ static public void creaLiquidacionMes( int mes,
             for (int i = 1; i < (dim2+3)*3; i++)
                 hoja.setColumnWidth(i, 5*700);
                 //hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
 
@@ -4730,7 +4730,7 @@ static public void creaLiquidacionMes( int mes,
             for (int i = 1; i < (dim2+3)*3; i++)
                 //hoja.setColumnWidth(i, 5*700);
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim2; i++) {
@@ -4930,7 +4930,7 @@ static public void creaLiquidacionMes( int mes,
             //hoja.setColumnWidth(1, 8*1000);
             for (int i = 1; i < (dim2+3)*3; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim2; i++) {
@@ -5151,7 +5151,7 @@ static public void creaLiquidacionMes( int mes,
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim2+3; i++)
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim2; i++) {
@@ -5518,7 +5518,7 @@ static public void creaLiquidacionMes( int mes,
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < (dim2+3)*4; i++)
                 hoja.setColumnWidth(i, 5*700);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             //fila = filaTmp;
             for (int i = 0; i < dim2; i++) {
@@ -5837,7 +5837,7 @@ static public void creaLiquidacionMes( int mes,
             for (int i = 1; i < (dim2+3)*3; i++)
                 //hoja.setColumnWidth(i, 5*700);
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim2; i++) {
@@ -6089,7 +6089,7 @@ static public void creaLiquidacionMes( int mes,
             for (int i = 1; i < (dim2+3)*3; i++)
                 hoja.setColumnWidth(i, 5*700);
                 //hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim2; i++) {
@@ -6344,7 +6344,7 @@ static public void creaLiquidacionMes( int mes,
             for (int i = 1; i < (dim2+3)*3; i++)
                 hoja.setColumnWidth(i, 5*700);
                 //hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim2; i++) {
@@ -6612,7 +6612,7 @@ static public void creaLiquidacionMes( int mes,
             for (int i = 2; i < (dim2+4); i++)
                 hoja.setColumnWidth(i, 5*700);
                 //hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             //estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             
@@ -7271,7 +7271,7 @@ static public void creaLiquidacionMes( int mes,
                 for (int j = 0; j < numCol; j++) {
                     row=hoja.getRow(4+i);//4+l
                     cell = row.getCell(j+inicio+3);
-                    if(Datos[i][j]==0){//daots[l] pero deber?a haber dicho datos[i]
+                    if(Datos[i][j]==0){//daots[l] pero deberia haber dicho datos[i]
                     cell.setCellValue("x");
                     }
                     else{
@@ -7454,7 +7454,7 @@ static public void creaLiquidacionMes( int mes,
             hoja.setColumnWidth(0, 2*256);
             for (int i = 1; i < dim3 + 4; i++)
                 hoja.autoSizeColumn((i));
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
 
             // Titulo Principal
@@ -7686,7 +7686,7 @@ static public void creaLiquidacionMes( int mes,
             for (int i = 1; i < (dim2+3)*3; i++)
                 //hoja.setColumnWidth(i, 5*700);
                 hoja.autoSizeColumn(i);
-            // Aplica estilo definitivo despu?s de ajuste de ancho de columnas
+            // Aplica estilo definitivo despues de ajuste de ancho de columnas
             estiloDatos.setDataFormat(formato.getFormat(formatoDatos));
             fila = filaTmp;
             for (int i = 0; i < dim2; i++) {

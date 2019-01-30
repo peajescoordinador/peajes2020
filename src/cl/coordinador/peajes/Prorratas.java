@@ -7,7 +7,7 @@ package cl.coordinador.peajes;
  *
  * CDEC-SIC. Direccion de Peajes
  * @version 3.10 2008/Marzo
- * Modela y asigna p?rdidas a consumos
+ * Modela y asigna perdidas a consumos
  */
 import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
@@ -144,7 +144,7 @@ public class Prorratas {
                 numLinTx++;
             }
         }
-        String[] nomLinTx = new String[numLinTx];//solo registros ìnico LÍnea#Transmisor
+        String[] nomLinTx = new String[numLinTx];//solo registros ìnico Linea-Transmisor
 //        String[] nomPropTx = new String[numLinTx];
         String[] zona = new String[numLinTx];
         int[] datosLinIT = new int[numLinTx];
@@ -205,7 +205,7 @@ public class Prorratas {
         Lee.leeEtapas(libroEntrada,duracionEta,numEtapas);
 
         /*
-         * Lectura de mantenimientos de lÍneas
+         * Lectura de mantenimientos de lineas
          * ===================================
          */
         // cambios en condicion operativa para cada linea en cada etapa.
@@ -348,7 +348,7 @@ public class Prorratas {
         }
 
         TxtTemp2 = null;
-        //Escribe la energÍa consumida por Cliente 
+        //Escribe la energia consumida por Cliente 
         //* ==============================================
 
         float[][] CMes = new float[numCli][NUMERO_MESES];
@@ -719,8 +719,8 @@ public class Prorratas {
             float conSist;
             float[][] conAjustado=new float[numBarras][numHid];
             float[] genSist=new float[numHid];
-            float[] conMasPerd= new float[numBarras];      // consumos con asignacion de p?rdidas por iteracion [MW]
-            // Consumos con asignacion de p?rdidas por iteracion [MW]
+            float[] conMasPerd= new float[numBarras];      // consumos con asignacion de perdidas por iteracion [MW]
+            // Consumos con asignacion de perdidas por iteracion [MW]
             float[][] conMasPerdEta= new float[numBarras][numHid];
             for(int h=0;h<numHid;h++){
                 genSist[h] = GxEtaHid[etapa][h];

@@ -40,7 +40,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class Reliquidacion {
 
-//craer un archivo que se llame reliquidacion con el resumen de los IT de facturaccion luego a este archivo se le ir?n agregadon hojas
+//craer un archivo que se llame reliquidacion con el resumen de los IT de facturaccion luego a este archivo se le iran agregadon hojas
 //leer el archivo liquidacion mes del directorio de la liquidaci‹n y copiar tablas y pegarlas en un nuevo archivo
 //leer el archivo liquidacion mes del directorio de la RELIQUIDACION y copiar tablas y pegarlas en EL MISMO ARCHIVO
 // pegar funciones suma y resta para creear cuadro de liquidaci‹n
