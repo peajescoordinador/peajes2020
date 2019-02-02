@@ -7,7 +7,7 @@ package cl.coordinador.peajes;
 
 /**
  *
- * @author www.flconsulting.cl
+ * @author Frank Leanez at www.flconsulting.cl
  */
 public class PeajesConstant {
 
@@ -53,5 +53,36 @@ public class PeajesConstant {
      * complex equations
      */
     public static final int MAX_COMPRESSION_RATIO = 0;
+    
+    /**
+     * Caracteres que definen el separador de la llave del archivo de
+     * propiedades de configuracion
+     */
+    protected static final String KEY_SEPARATOR = "::";
 
+    /**
+     * Tipo de datos para usar en el archivo de configuracion
+     */
+    public enum DataType {
+
+        /**
+         * Datos tipo String (para archivo de opciones)
+         */
+        STRING,
+
+        /**
+         * Datos tipo DOUBLE (para archivo de opciones)
+         */
+        DOUBLE,
+
+        /**
+         * Datos tipo INTEGER (para archivo de opciones)
+         */
+        INTEGER,
+
+        /**
+         * Datos tipo BOOLEAN (para archivo de opciones)
+         */
+        BOOLEAN;
+    }
 }

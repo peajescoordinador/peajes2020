@@ -15,6 +15,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -39,11 +40,14 @@ public class PeajesCDEC extends javax.swing.JFrame {
     private long tInicio;
     private Time tiempo=new Time(0);
     private Timer timer;
-    private Properties propiedades;
+    private Properties propiedades; //Configuraciones del caso TODO: rename
+    private static Properties config; //Configuraciones de la herramienta TODO: rename
+    private static final String ARCHIVO_CONFIG = "config.xml"; //Nombre archivo unico de configuracion de la herramienta
 
     /** Creates new form NewJFrame1 */
     public PeajesCDEC() {
         initComponents();
+        reLoadOptions();
         timer = new Timer(1000, new TimerListener());
     }
 
@@ -125,6 +129,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        menuOpciones = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -827,6 +832,14 @@ public class PeajesCDEC extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
+        menuOpciones.setText("Opciones");
+        menuOpciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcionesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuOpciones);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -1007,16 +1020,9 @@ public class PeajesCDEC extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_DirectorioLiquidacionActionPerformed
 
-    /**
-    * @param args the command line arguments
-    */
-/*    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PeajesCDEC().setVisible(true);
-            }
-        });
-    }*/
+    private void menuOpcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcionesActionPerformed
+        showOptionWindow();
+    }//GEN-LAST:event_menuOpcionesActionPerformed
 
     public static void main(String args[]) {
                
@@ -1169,7 +1175,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     new PeajesCDEC().setVisible(true);
-                }
+                    }
             });
         }   
     }    
@@ -1248,6 +1254,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JSplitPane jSplitPane4;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JMenuItem menuOpciones;
     private javax.swing.JProgressBar progreso;
     private javax.swing.JLabel textoCalculo;
     // End of variables declaration//GEN-END:variables
@@ -1605,7 +1612,162 @@ public class PeajesCDEC extends javax.swing.JFrame {
         Escribe.EscribePropiedades(propiedades,ArchivoConfiguracion);
 
     }
- 
+    
+    private void reLoadOptions() {
+        if (config == null) {
+            initOptionFile();
+        }
+        
+        //Seleccion de periodos:
+        String[] agnos;
+        String sMinEvalua = getOptionValue("Min Evalua", PeajesConstant.DataType.INTEGER);
+        String sMaxEvalua = getOptionValue("Max Evalua", PeajesConstant.DataType.INTEGER);
+        int nMinEvalua = Integer.parseInt(sMinEvalua);
+        int nMaxEvalua = Integer.parseInt(sMaxEvalua);
+        if (nMinEvalua >= nMaxEvalua) {
+            agnos = new String[1];
+            agnos[0] = sMinEvalua;
+        } else {
+            agnos = new String[nMaxEvalua - nMinEvalua + 1];
+            for (int h = nMinEvalua; h <= nMaxEvalua; h++) {
+                agnos[h - nMinEvalua] = String.valueOf(h);
+            }
+        }
+        cuadroAnoAEvaluar.setModel(new javax.swing.DefaultComboBoxModel(agnos));
+        
+        //Hidrologias:
+        String[] hydros;
+        String sMinHydro = getOptionValue("Min Hidrologias", PeajesConstant.DataType.INTEGER);
+        String sMaxHydro = getOptionValue("Max Hidrologias", PeajesConstant.DataType.INTEGER);
+        int nMinHydro = Integer.parseInt(sMinHydro);
+        int nMaxHydro = Integer.parseInt(sMaxHydro);
+        if (nMinHydro >= nMaxHydro) {
+            hydros = new String[1];
+            hydros[0] = sMinHydro;
+        } else {
+            hydros = new String[nMaxHydro - nMinHydro + 1];
+            for (int h = nMinHydro; h <= nMaxHydro; h++) {
+                hydros[h - nMinHydro] = String.valueOf(h);
+            }
+        }
+        cuadroSeleccionHidro.setModel(new javax.swing.DefaultComboBoxModel(hydros));
+        
+        //Actualiza clientes:
+        String sActClientes = getOptionValue("Actualiza Clientes", PeajesConstant.DataType.BOOLEAN);
+        ActClientes.setEnabled(Boolean.parseBoolean(sActClientes));
+        
+        //Reglas de calculo de peajes:
+        String sCuadroSeleccionTipoCalculo1 = getOptionValue("Reglas Reliquidacion", PeajesConstant.DataType.BOOLEAN);
+        if (Boolean.parseBoolean(sCuadroSeleccionTipoCalculo1)) {
+            cuadroSeleccionTipoCalculo1.setEnabled(true);
+        } else {
+            cuadroSeleccionTipoCalculo1.setSelectedItem(0);
+            cuadroSeleccionTipoCalculo1.setEnabled(false);
+        }
+        
+        this.validate();
+    }
+    
+    private void initOptionFile() {
+        try {
+            File f_user = getUserOptionFile();
+            Properties pDefault = new Properties();
+            java.io.InputStream in_default = getClass().getResourceAsStream("/cl/coordinador/peajes/resources/" + ARCHIVO_CONFIG); //resources deben cargarse desde un stream
+            assert (in_default != null) : "Cambiaron de ubicacion el archivo de configuracion o renombraron los packages?";
+            pDefault.loadFromXML(in_default);
+            if (!f_user.exists()) {
+                config = pDefault;
+            } else {
+                Properties pUser = loadOptionFile(f_user);
+                String versionUser = pUser.getProperty("Version");
+                if (versionUser == null) {
+                    config = pDefault;
+                } else {
+                    if (!versionUser.equalsIgnoreCase(pDefault.getProperty("Version"))) {
+                        config = pDefault;
+                    } else {
+                        config = pUser;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace(System.out); //TODO: better message to user
+        }
+    }
+    
+    private void showOptionWindow() {
+        if (config == null) {
+            initOptionFile();
+        }
+        PeajesConfigGUI guiOption = new PeajesConfigGUI(this, config);
+        guiOption.setLocationRelativeTo(this);
+        guiOption.setVisible(true);
+        reLoadOptions(); //Asume que espera que se cierre la ventana para continuar
+    }
+    
+    private static java.io.File getUserOptionFile () {
+//        String folderPath = System.getProperty("user.home") + File.separator + ".calculapeajes"; //TODO: May be implement for other OS
+        String folderPath = System.getenv("APPDATA") + File.separator + "coordinador";
+        String fileConfig = folderPath + File.separator + ARCHIVO_CONFIG;
+        File f_fileConfig = new File (fileConfig);
+        return f_fileConfig;
+    }
+    
+    /**
+     * Carga archivo de propiedades del Peajator
+     *
+     * @param f_propiedades archivo propiedades xml
+     * @return instancia properties
+     * @throws java.io.FileNotFoundException si el archivo no existe
+     * @throws java.io.IOException si hay problema de acceso al archivo
+     */
+    public static java.util.Properties loadOptionFile(java.io.File f_propiedades) throws java.io.FileNotFoundException, java.io.IOException {
+        java.io.FileInputStream in = new java.io.FileInputStream(f_propiedades);
+        java.util.Properties f_properties = new java.util.Properties();
+        f_properties.loadFromXML(in);
+        return f_properties;
+    }
+
+    /**
+     * Guarda a archivo (xml) del argumento las propiedades Peajator
+     *
+     * @param propiedades instancia properties
+     * @throws java.io.FileNotFoundException si el archivo no existe
+     * @throws java.io.IOException si hay problema de acceso al archivo
+     */
+    public static void saveOptionFile(java.util.Properties propiedades) throws java.io.FileNotFoundException, java.io.IOException {
+        config = propiedades;
+        java.io.File f_config = getUserOptionFile(); //Siempre grabamos a la caperta del user. Nunca al resource
+        java.io.FileOutputStream out = new java.io.FileOutputStream(f_config);
+        config.storeToXML(out, "---PEAJATOR CONFIG FILE---");
+        out.close();
+    }
+    
+    /**
+     * Devuelve el valor del parametro seleccionado
+     *
+     * @param key valor completo de la llave. no usar null
+     * @param type tipo de valor (opcional - usar null para busqueda simple)
+     * @return valor correspondiente a la llava o null si no se encuentra la
+     * llave
+     */
+    public static String getOptionValue(String key, PeajesConstant.DataType type) {
+        String value = config.getProperty(key);
+        if (value == null) {
+            if (type != null) {
+                value = config.getProperty(key + PeajesConstant.KEY_SEPARATOR + type.name());
+            }
+            if (value == null) {
+                for (String s : config.stringPropertyNames()) {
+                    if (s.toLowerCase().startsWith(key.toLowerCase())) {
+                        value = s;
+                        break;
+                    }
+                }
+            }
+        }
+        return value;
+    }
 
     class TimerListener implements ActionListener {
         int porcentaje=0;

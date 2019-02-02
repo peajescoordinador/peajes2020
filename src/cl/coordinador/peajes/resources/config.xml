@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>---PEAJATOR CONFIG FILE---</comment>
+<entry key="Version">1.0</entry>
+<entry key="Idioma::STRING::Espanol">Espanol</entry>
+<entry key="Min Hidrologias::INTEGER">40</entry>
+<entry key="Max Hidrologias::INTEGER">65</entry>
+<entry key="Reglas Reliquidacion::BOOLEAN">false</entry>
+<entry key="Calcula Reliquidacion::BOOLEAN">false</entry>
+<entry key="Actualiza Clientes::BOOLEAN">false</entry>
+<entry key="Min Evalua::INTEGER">2016</entry>
+<entry key="Max Evalua::INTEGER">2022</entry>
+</properties>
