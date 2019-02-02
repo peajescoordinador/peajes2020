@@ -1738,6 +1738,9 @@ public class PeajesCDEC extends javax.swing.JFrame {
     public static void saveOptionFile(java.util.Properties propiedades) throws java.io.FileNotFoundException, java.io.IOException {
         config = propiedades;
         java.io.File f_config = getUserOptionFile(); //Siempre grabamos a la caperta del user. Nunca al resource
+        if (!f_config.getParentFile().exists()) {
+            f_config.getParentFile().mkdir();
+        }
         java.io.FileOutputStream out = new java.io.FileOutputStream(f_config);
         config.storeToXML(out, "---PEAJATOR CONFIG FILE---");
         out.close();
