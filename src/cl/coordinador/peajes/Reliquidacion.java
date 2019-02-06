@@ -1,10 +1,19 @@
-package cl.coordinador.peajes;
-
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2019 Coordinador Electrico Nacional
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
+package cl.coordinador.peajes;
 
 import static cl.coordinador.peajes.PeajesConstant.MESES;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
@@ -35,16 +44,19 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
+ * Clase de reliquidacion:
+ * <li>craer un archivo que se llame reliquidacion con el resumen de los IT de
+ * facturaccion luego a este archivo se le iran agregadon hojas</li>
+ * <li>leer el archivo liquidacion mes del directorio de la liquidaci‹n y copiar
+ * tablas y pegarlas en un nuevo archivo</li>
+ * <li>leer el archivo liquidacion mes del directorio de la RELIQUIDACION y
+ * copiar tablas y pegarlas en EL MISMO ARCHIVO</li>
+ * <li>pegar funciones suma y resta para creear cuadro de liquidacion</li>
+ * <li>copiar el ultimo cuadro en una hoja de pagos</li>
  *
  * @author vtoro
  */
 public class Reliquidacion {
-
-//craer un archivo que se llame reliquidacion con el resumen de los IT de facturaccion luego a este archivo se le iran agregadon hojas
-//leer el archivo liquidacion mes del directorio de la liquidaci‹n y copiar tablas y pegarlas en un nuevo archivo
-//leer el archivo liquidacion mes del directorio de la RELIQUIDACION y copiar tablas y pegarlas en EL MISMO ARCHIVO
-// pegar funciones suma y resta para creear cuadro de liquidaci‹n
-//copiar el ultimo cuadro en una hoja de pagos
 
 public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReliquidacion, String mes, int Ano,String Fpago){
 

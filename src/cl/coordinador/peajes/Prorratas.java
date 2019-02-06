@@ -1,14 +1,20 @@
+/*
+ * Copyright 2019 Coordinador Electrico Nacional
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package cl.coordinador.peajes;
 
-/**
- * CalcPEF
- * @(#)Peajes.java
- *
- *
- * CDEC-SIC. Direccion de Peajes
- * @version 3.10 2008/Marzo
- * Modela y asigna perdidas a consumos
- */
 import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
 import static cl.coordinador.peajes.PeajesConstant.SLASH;
@@ -22,6 +28,11 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 
+/**
+ * Modela y asigna perdidas a consumos
+ *
+ * @author
+ */
 public class Prorratas {
 	
     private static int etapa;
@@ -33,7 +44,7 @@ public class Prorratas {
     private static boolean guardandoDatos=false;
     private static boolean completo=false;
 
-
+    
     public static void CalculaProrratas(File DirEntrada, File DirSalida, int Ano, int tipoCalc, int AnoIni,
             int NumeroHidrologias ,int NumeroEtapasAno, int NumeroSlack,int ValorOffset,boolean ActClientes) throws IOException, FileNotFoundException {
         
