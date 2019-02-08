@@ -734,7 +734,7 @@ public class Lee {
                 TextoTemporal[numLineasIT[0]] = c1.getStringCellValue();
                 intAux1[numLineasIT[0]] = Calc.Buscar(c2.toString().trim(), nombreLineas);
                 Cell cTx = r.getCell(crefsTx[0].getCol());
-                txtTmp1[numLineasIT[0]] = c1.getStringCellValue()+"#"+cTx.getStringCellValue();//Lênea#Transmisor
+                txtTmp1[numLineasIT[0]] = c1.getStringCellValue()+"#"+cTx.getStringCellValue();//Linea#Transmisor
 
             int t = Calc.Buscar(txtTmp1[numLineasIT[0]], txtTmp);
             if (t == -1) {
@@ -755,7 +755,7 @@ public class Lee {
             numLineasIT[0]++;
             }
             for(int i=0;i<numLineasT;i++){
-                LineasT[i]=txtTmp[i];// registros “nicos Lênea#Transmisor
+                LineasT[i]=txtTmp[i];// registros “nicos Linea#Transmisor
             //System.out.println(LineasT[i]+" "+ITE[i][0]);
             }
         }
@@ -1189,7 +1189,7 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
                             "no posee una central de peajes asociada en 'centrales'");
                 }
                 intAux3[numGeneradores][1] = aux;
-                intAux3[numGeneradores][0] = (int) c5.getNumericCellValue()-1; // barra de conexiãn
+                intAux3[numGeneradores][0] = (int) c5.getNumericCellValue()-1; // barra de conexion
                 if(intAux3[numGeneradores][0]==-1){
                     System.out.println("La barra del Generador: "+c4.toString().trim()+"#"+c3.toString().trim()+" se encuentra mal asignada");
                 }
@@ -1394,14 +1394,14 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
         return numClaves;
     }
 
-    public static int leeConsumos(String libroEntrada, float[][] ConsumosClaves,float[][] ConsClaveMes,
-            int numEtapas,int[] paramEtapa,int[] duracionEta, float[][][] ECU) {
+    public static int leeConsumos(String libroEntrada, float[][] ConsumosClaves, float[][] ConsClaveMes,
+            int numEtapas, int[] paramEtapa, int[] duracionEta, float[][][] ECU) {
         int numClaves = 0;
         int cuenta1 = 0;
         int cuenta2 = 0;
         try {
             //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
-            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));
+            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(libroEntrada));
             AreaReference aref;
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("consumos");
@@ -1417,55 +1417,209 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
 
-            for (int i=0; i<crefs.length; i+=numEtapas) {
+            for (int i = 0; i < crefs.length; i += numEtapas) {
                 Row r = s.getRow(crefs[i].getRow());
-                for (int j=0; j<numEtapas; j++) {
+                for (int j = 0; j < numEtapas; j++) {
                     Cell c = null;
-                    c = r.getCell(crefs[i+j].getCol());
-                    ConsumosClaves[numClaves][j] = (float)c.getNumericCellValue();
+                    c = r.getCell(crefs[i + j].getCol());
+                    ConsumosClaves[numClaves][j] = (float) c.getNumericCellValue();
                 }
                 numClaves++;
             }
-            
-           
-            for(int i=0;i<crefs1.length;i+=3*(NUMERO_MESES)){
-            Row r1 = s.getRow(crefs1[i].getRow());
-            
-            for (int m=0; m<NUMERO_MESES; m++) {
-                Cell c1 = null;
-                Cell c2 = null;
-                Cell c3 = null;
-                    c1 = r1.getCell(crefs1[i+m].getCol());
-                    c2 = r1.getCell(crefs1[i+NUMERO_MESES+m].getCol());
-                    c3 = r1.getCell(crefs1[i+2*NUMERO_MESES+m].getCol());
+
+            for (int i = 0; i < crefs1.length; i += 3 * (NUMERO_MESES)) {
+                Row r1 = s.getRow(crefs1[i].getRow());
+
+                for (int m = 0; m < NUMERO_MESES; m++) {
+                    Cell c1 = null;
+                    Cell c2 = null;
+                    Cell c3 = null;
+                    c1 = r1.getCell(crefs1[i + m].getCol());
+                    c2 = r1.getCell(crefs1[i + NUMERO_MESES + m].getCol());
+                    c3 = r1.getCell(crefs1[i + 2 * NUMERO_MESES + m].getCol());
                     ECU[cuenta1][0][m] = (float) c1.getNumericCellValue();
                     ECU[cuenta1][1][m] = (float) c2.getNumericCellValue();
                     ECU[cuenta1][2][m] = (float) c3.getNumericCellValue();
-            }
-                    cuenta1++;
-            }
-            //Calcula la energêa mensual por Clave
-           for (int j=0; j<numClaves; j++) {
-                for(int e=0;e<numEtapas;e++) {
-                        ConsClaveMes[j][paramEtapa[e]]
-                                += ConsumosClaves[j][e]*duracionEta[e];
                 }
-           }
-        }
-        catch (java.io.FileNotFoundException e) {
-                System.out.println( "No se se puede acceder al archivo " + e.getMessage());
-        }
-        catch (Exception e) {
-                e.printStackTrace();
+                cuenta1++;
+            }
+            //Calcula la energia mensual por Clave
+            for (int j = 0; j < numClaves; j++) {
+                for (int e = 0; e < numEtapas; e++) {
+                    ConsClaveMes[j][paramEtapa[e]]
+                            += ConsumosClaves[j][e] * duracionEta[e];
+                }
+            }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("No se se puede acceder al archivo " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return numClaves;
     }
- public static int leeCU(String libroEntrada, double[] ECU2,  double[] ECU30,int[] intAux3,String[] nombreBarras) {
+    
+    public static int leeConsumos2(String libroEntrada, float[][] ConsumosClaves, float[][] ConsClaveMes,
+            int numEtapas, int[] paramEtapa, int[] duracionEta, float[][][] ECU) {
+        int numClaves = 0;
+        int cuenta1 = 0;
+        int cuenta2 = 0;
+        String[] ClaveCli = new String[2500];
+        XSSFSheet hoja = null;
+
+        try {
+            //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
+            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(libroEntrada));
+            AreaReference aref;
+            CellReference[] crefs;
+            int nomRangoInd = wb.getNameIndex("consumos");
+            Name nomRango = wb.getNameAt(nomRangoInd);
+            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
+            crefs = aref.getAllReferencedCells();
+            Sheet s = wb.getSheet(crefs[0].getSheetName());
+
+            AreaReference aref1;
+            CellReference[] crefs1;
+            int nomRangoInd1 = wb.getNameIndex("CU");
+            Name nomRango1 = wb.getNameAt(nomRangoInd1);
+            aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
+            crefs1 = aref1.getAllReferencedCells();
+
+            for (int i = 0; i < crefs.length; i += numEtapas) {
+                Row r = s.getRow(crefs[i].getRow());
+                for (int j = 0; j < numEtapas; j++) {
+                    Cell c = null;
+                    c = r.getCell(crefs[i + j].getCol());
+                    ConsumosClaves[numClaves][j] = (float) c.getNumericCellValue();
+                }
+                numClaves++;
+            }
+
+            for (int i = 0; i < crefs1.length; i += 3 * (NUMERO_MESES)) {
+                Row r1 = s.getRow(crefs1[i].getRow());
+
+                for (int m = 0; m < NUMERO_MESES; m++) {
+                    Cell c1 = null;
+                    Cell c2 = null;
+                    Cell c3 = null;
+                    c1 = r1.getCell(crefs1[i + m].getCol());
+                    c2 = r1.getCell(crefs1[i + NUMERO_MESES + m].getCol());
+                    c3 = r1.getCell(crefs1[i + 2 * NUMERO_MESES + m].getCol());
+                    ECU[cuenta1][0][m] = (float) c1.getNumericCellValue();
+                    ECU[cuenta1][1][m] = (float) c2.getNumericCellValue();
+                    ECU[cuenta1][2][m] = (float) c3.getNumericCellValue();
+                }
+                cuenta1++;
+            }
+            //Calcula la energia mensual por Clave
+            for (int j = 0; j < numClaves; j++) {
+                for (int e = 0; e < numEtapas; e++) {
+                    ConsClaveMes[j][paramEtapa[e]]
+                            += ConsumosClaves[j][e] * duracionEta[e];
+                }
+            }
+            //Extrae los clientes asociados a los consumos
+            int nomRangoInd2 = wb.getNameIndex("barcli");
+            Name nomRango2 = wb.getNameAt(nomRangoInd2);
+            aref = new AreaReference(nomRango2.getRefersToFormula(), wb.getSpreadsheetVersion());
+            crefs = aref.getAllReferencedCells();
+
+            for (int i = 0; i < crefs.length; i += 5) {
+                Row r = s.getRow(crefs[i].getRow());
+                Cell c3 = null;
+                Cell c4 = null;
+                Cell c5 = null;
+                c3 = r.getCell(crefs[i + 2].getCol());
+                c4 = r.getCell(crefs[i + 3].getCol());
+                c5 = r.getCell(crefs[i + 4].getCol());
+                ClaveCli[cuenta2] = c3.toString().trim() + "#" + c4.toString().trim() + "#" + c5.toString().trim(); // Cliente
+                cuenta2++;
+            }
+            String[] TxtTemp0 = new String[numClaves];
+            for (int i = 0; i < numClaves; i++) {
+                TxtTemp0[i] = "";
+            }
+            int numCli = 0;
+            for (int j = 0; j < numClaves; j++) {
+                int l = Calc.Buscar(ClaveCli[j], TxtTemp0);
+                if (l == -1) {
+                    TxtTemp0[numCli] = ClaveCli[j];
+                    numCli++;
+                }
+            }
+            String[] nomCli = new String[numCli];
+            for (int j = 0; j < numCli; j++) {
+                nomCli[j] = TxtTemp0[j];
+            }
+
+            String[] nomCliO = new String[numCli];
+            int[] nc = Calc.OrdenarBurbujaStr(nomCli);
+            nomCliO = new String[numCli];
+            for (int i = 0; i < numCli; i++) {
+                nomCliO[i] = nomCli[nc[i]];
+            }
+
+            //Escribe los clientes en hoja clientes del archivo de entrada
+            hoja = wb.getSheet("clientes");
+            Cell cell = null;
+            Row row = null;
+            short fila = 5;
+
+            Font font = wb.createFont();
+            font.setFontHeightInPoints((short) 10);
+            font.setFontName("Century Gothic");
+            CellStyle estilo = wb.createCellStyle();
+            estilo.setFont(font);
+            CellStyle estilo1 = wb.createCellStyle();
+            estilo1.setFont(font);
+            estilo1.setAlignment(HorizontalAlignment.CENTER);
+
+            // Titulos Secundarios
+            for (int i = 0; i < numCli; i++) {
+                row = hoja.createRow(fila);
+                fila++;
+                cell = row.createCell(1);
+                cell.setCellValue(i + 1);
+                cell.setCellStyle(estilo1);
+                cell = row.createCell(2);
+
+                cell.setCellValue(nomCliO[i]);
+                cell.setCellStyle(estilo);
+                cell = row.createCell(3);
+                cell.setCellValue(-1);
+                cell.setCellStyle(estilo);
+
+            }
+            // Crea nombre de rango de salida
+            Name nombreCel = wb.getName("clientes");
+            if (nombreCel == null) {
+                nombreCel = wb.createName();
+            } else {
+                wb.removeName(nombreCel);
+            }
+            nombreCel.setNameName("clientes"); // Nombre del rango
+            CellReference cellRef = new CellReference(cell.getRowIndex(), cell.getColumnIndex());
+            String reference = "clientes" + "!C6:" + cellRef.formatAsString(); // area reference
+            nombreCel.setRefersToFormula(reference);
+
+            FileOutputStream archivoSalida = new FileOutputStream(libroEntrada);
+            wb.write(archivoSalida);
+            archivoSalida.close();
+            System.out.println("Acaba de extraer y escribir en la hoja 'clientes' los Clientes asociados a los consumos");
+            System.out.println("Recuerde indicar los clientes excentos antes de calcular los pagos");
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("No se se puede acceder al archivo " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return numClaves;
+    }
+    
+    public static int leeCU(String libroEntrada, double[] ECU2, double[] ECU30, int[] intAux3, String[] nombreBarras) {
         int numClaves = 0;
         int cuenta = 0;
         try {
             //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
-            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));
+            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(libroEntrada));
 
             AreaReference aref;
             CellReference[] crefs;
@@ -1482,188 +1636,28 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
             aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs1 = aref1.getAllReferencedCells();
 
-               for (int i=0; i<crefs1.length; i+=5) {
+            for (int i = 0; i < crefs1.length; i += 5) {
                 Row r1 = s.getRow(crefs1[i].getRow());
                 Cell c5 = null;
-                c5 = r1.getCell(crefs1[i+4].getCol());
-                intAux3[numClaves]=Calc.Buscar(c5.toString().trim(),nombreBarras); // Barras
+                c5 = r1.getCell(crefs1[i + 4].getCol());
+                intAux3[numClaves] = Calc.Buscar(c5.toString().trim(), nombreBarras); // Barras
 
                 Row r = s.getRow(crefs[cuenta].getRow());
                 Cell c1 = null;
                 Cell c2 = null;
-                    c1 = r.getCell(crefs[cuenta].getCol());
-                    c2 = r.getCell(crefs[cuenta+1].getCol());
-                    ECU2[numClaves] = c1.getNumericCellValue();
-                    ECU30[numClaves] = c2.getNumericCellValue();
-                cuenta=cuenta+2;
+                c1 = r.getCell(crefs[cuenta].getCol());
+                c2 = r.getCell(crefs[cuenta + 1].getCol());
+                ECU2[numClaves] = c1.getNumericCellValue();
+                ECU30[numClaves] = c2.getNumericCellValue();
+                cuenta = cuenta + 2;
 
                 numClaves++;
-               }
-
-        }
-        catch (java.io.FileNotFoundException e) {
-                System.out.println( "No se se puede acceder al archivo " + e.getMessage());
-        }
-        catch (Exception e) {
-                e.printStackTrace();
-        }
-        return numClaves;
-    }
-
-        public static int leeConsumos2(String libroEntrada, float[][] ConsumosClaves,float[][] ConsClaveMes,
-                          int numEtapas,int[] paramEtapa,int[] duracionEta, float[][][] ECU) {
-        int numClaves = 0;
-        int cuenta1 = 0;
-        int cuenta2 = 0;
-        String[] ClaveCli=new String[2500];
-        XSSFSheet hoja = null;
-
-        try {
-            //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
-            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));
-            AreaReference aref;
-            CellReference[] crefs;
-            int nomRangoInd = wb.getNameIndex("consumos");
-            Name nomRango = wb.getNameAt(nomRangoInd);
-            aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
-            crefs = aref.getAllReferencedCells();
-            Sheet s = wb.getSheet(crefs[0].getSheetName());
-
-            AreaReference aref1;
-            CellReference[] crefs1;
-            int nomRangoInd1 = wb.getNameIndex("CU");
-            Name nomRango1 = wb.getNameAt(nomRangoInd1);
-            aref1 = new AreaReference(nomRango1.getRefersToFormula(), wb.getSpreadsheetVersion());
-            crefs1 = aref1.getAllReferencedCells();
-
-            for (int i=0; i<crefs.length; i+=numEtapas) {
-                Row r = s.getRow(crefs[i].getRow());
-                for (int j=0; j<numEtapas; j++) {
-                    Cell c = null;
-                    c = r.getCell(crefs[i+j].getCol());
-                    ConsumosClaves[numClaves][j] = (float)c.getNumericCellValue();
-                }
-                numClaves++;
             }
-            
-                       
-            
-            for(int i=0;i<crefs1.length;i+=3*(NUMERO_MESES)){
-            Row r1 = s.getRow(crefs1[i].getRow());
-            
-            for (int m=0; m<NUMERO_MESES; m++) {
-                Cell c1 = null;
-                Cell c2 = null;
-                Cell c3 = null;
-                    c1 = r1.getCell(crefs1[i+m].getCol());
-                    c2 = r1.getCell(crefs1[i+NUMERO_MESES+m].getCol());
-                    c3 = r1.getCell(crefs1[i+2*NUMERO_MESES+m].getCol());
-                    ECU[cuenta1][0][m] = (float) c1.getNumericCellValue();
-                    ECU[cuenta1][1][m] = (float) c2.getNumericCellValue();
-                    ECU[cuenta1][2][m] = (float) c3.getNumericCellValue();
-            }
-                    cuenta1++;
-            }
-            //Calcula la energêa mensual por Clave
-           for (int j=0; j<numClaves; j++) {
-                for(int e=0;e<numEtapas;e++) {
-                        ConsClaveMes[j][paramEtapa[e]]
-                                += ConsumosClaves[j][e]*duracionEta[e];
-                }
-           }
-            //Extrae los clientes asociados a los conusmos
-            int nomRangoInd2 = wb.getNameIndex("barcli");
-            Name nomRango2= wb.getNameAt(nomRangoInd2);
-            aref = new AreaReference(nomRango2.getRefersToFormula(), wb.getSpreadsheetVersion());
-            crefs = aref.getAllReferencedCells();
 
-            for (int i=0; i<crefs.length; i+=5) {
-                Row r = s.getRow(crefs[i].getRow());
-                Cell c3 = null;
-                Cell c4 = null;
-                Cell c5 = null;
-                c3 = r.getCell(crefs[i+2].getCol());
-                c4 = r.getCell(crefs[i+3].getCol());
-                c5 = r.getCell(crefs[i+4].getCol());
-                ClaveCli[cuenta2]=c3.toString().trim()+"#"+c4.toString().trim()+"#"+c5.toString().trim(); // Cliente
-                cuenta2++;
-                }
-        String[] TxtTemp0 = new String[numClaves];
-        for (int i = 0; i < numClaves; i++) {
-            TxtTemp0[i] = "";
-        }
-        int numCli = 0;
-        for (int j = 0; j < numClaves; j++) {
-            int l = Calc.Buscar(ClaveCli[j], TxtTemp0);
-            if (l == -1) {
-                TxtTemp0[numCli] = ClaveCli[j];
-                numCli++;
-            }
-        }
-        String[] nomCli=new String[numCli];
-        for (int j = 0; j < numCli; j++) {
-            nomCli[j] = TxtTemp0[j];
-        }
-
-        String[] nomCliO=new String[numCli];
-        int[] nc = Calc.OrdenarBurbujaStr(nomCli);
-        nomCliO = new String[numCli];
-        for (int i = 0; i < numCli; i++) {
-            nomCliO[i] = nomCli[nc[i]];
-        }
-
-
-        //Escribe los clientes en hoja clientes del archivo de entrada
-         hoja = wb.getSheet("clientes");
-         Cell cell = null;
-         Row row=null;
-         short fila = 5;
-
-         Font font = wb.createFont();
-            font.setFontHeightInPoints((short)10);
-            font.setFontName("Century Gothic");
-            CellStyle estilo = wb.createCellStyle();
-            estilo.setFont(font);
-            CellStyle estilo1 = wb.createCellStyle();
-            estilo1.setFont(font);
-            estilo1.setAlignment(HorizontalAlignment.CENTER);
-
-
-         // Titulos Secundarios
-
-            for(int i=0;i<numCli;i++){
-             row = hoja.createRow(fila); fila++;
-                cell = row.createCell(1);
-            cell.setCellValue(i+1);
-            cell.setCellStyle(estilo1);
-            cell = row.createCell(2);
-
-            cell.setCellValue(nomCliO[i]);
-            cell.setCellStyle(estilo);
-            cell = row.createCell(3);
-            cell.setCellValue(-1);
-            cell.setCellStyle(estilo);
-
-            }
-            // Crea nombre de rango de salida
-            Name nombreCel = wb.createName();
-            wb.removeName("clientes");
-            nombreCel.setNameName("clientes"); // Nombre del rango
-            CellReference cellRef = new CellReference(cell.getRowIndex(), cell.getColumnIndex());
-            String reference = "clientes"+"!C6:"+cellRef.formatAsString(); // area reference
-            nombreCel.setRefersToFormula(reference);
-
-            FileOutputStream archivoSalida = new FileOutputStream( libroEntrada );
-            wb.write(archivoSalida);
-            archivoSalida.close();
-            System.out.println( "Acaba de extraer y escribir en la hoja 'clientes' los Clientes asociados a los consumos" );
-            System.out.println( "Recuerde indicar los clientes excentos antes de calcular los pagos" );
-        }
-        catch (java.io.FileNotFoundException e) {
-                System.out.println( "No se se puede acceder al archivo " + e.getMessage());
-        }
-        catch (Exception e) {
-                e.printStackTrace();
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("No se se puede acceder al archivo " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return numClaves;
     }
@@ -1685,7 +1679,7 @@ public static void leeOrient(String libroEntrada, int[][] orientBarTroncal, Stri
                 Cell c2 = r.getCell(crefs[i+1].getCol());
                 Cell c3 = r.getCell(crefs[i+2].getCol());
                 TextoTemporal1[numLineasSistRed] = c2.toString().trim(); // Nombre
-                Aux[numLineasSistRed][0] = (float) c3.getNumericCellValue(); // Tensiãn
+                Aux[numLineasSistRed][0] = (float) c3.getNumericCellValue(); // Tension
                 numLineasSistRed++;
             }
         }

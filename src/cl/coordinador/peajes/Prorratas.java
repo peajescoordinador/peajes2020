@@ -102,7 +102,7 @@ public class Prorratas {
         }
 
         /*
-         * lee LÍneas Troncales
+         * lee Lineas Troncales
          * ====================
          */
         intAux1=new int[2500];
@@ -619,26 +619,26 @@ public class Prorratas {
         
         try
 	{
-            FileWriter writer = new FileWriter(DirBaseSalida + SLASH +"prorratas.csv");
+            FileWriter writerProrratas = new FileWriter(DirBaseSalida + SLASH +"prorratas.csv");
            
             
-            writer.append("Etapa");
-            writer.append(',');
-            writer.append("Hidrologia");
-            writer.append(',');
-            writer.append("Línea");
-            writer.append(',');
-            writer.append("Central");
-            writer.append(',');
-            writer.append("Prorrata");
-            writer.append(',');
-            writer.append("Gx");
-            writer.append(',');
-            writer.append("GGDF");
-            writer.append('\n');
+            writerProrratas.append("Etapa");
+            writerProrratas.append(',');
+            writerProrratas.append("Hidrologia");
+            writerProrratas.append(',');
+            writerProrratas.append("Línea");
+            writerProrratas.append(',');
+            writerProrratas.append("Central");
+            writerProrratas.append(',');
+            writerProrratas.append("Prorrata");
+            writerProrratas.append(',');
+            writerProrratas.append("Gx");
+            writerProrratas.append(',');
+            writerProrratas.append("GGDF");
+            writerProrratas.append('\n');
             
-            writer.flush();
-            writer.close();
+            writerProrratas.flush();
+            writerProrratas.close();
         }
         
         catch(IOException e)
@@ -655,13 +655,13 @@ public class Prorratas {
         
        // try
         //{
-            FileWriter writer2 = new FileWriter(DirBaseSalida + SLASH +"consumos.csv");
-            writer2.append("Hidrologia,Etapa");
+            FileWriter writerConsumos = new FileWriter(DirBaseSalida + SLASH +"consumos.csv");
+            writerConsumos.append("Hidrologia,Etapa");
             for(int b=0;b<numBarras;b++){
-                writer2.append(",");
-                writer2.append(Float.toString(b));
+                writerConsumos.append(",");
+                writerConsumos.append(Float.toString(b));
             }
-            writer2.append("\n");
+            writerConsumos.append("\n");
        // }
         //catch(IOException e)
         
@@ -744,9 +744,9 @@ public class Prorratas {
                 
                 try
                         {
-                        writer2.append(Float.toString(h));
-                        writer2.append(",");
-                        writer2.append(Float.toString(etapa));
+                        writerConsumos.append(Float.toString(h));
+                        writerConsumos.append(",");
+                        writerConsumos.append(Float.toString(etapa));
                     
                     }
                     catch(IOException e)
@@ -772,8 +772,8 @@ public class Prorratas {
                     try
                         {
                     
-                        writer2.append(",");
-                        writer2.append(Float.toString(conAjustado[b][h]));
+                        writerConsumos.append(",");
+                        writerConsumos.append(Float.toString(conAjustado[b][h]));
                     }
                     catch(IOException e)
         
@@ -783,7 +783,7 @@ public class Prorratas {
                     
                 }
                 
-                writer2.append("\n");
+                writerConsumos.append("\n");
                 
                 
                 
@@ -857,8 +857,8 @@ public class Prorratas {
         }   
         
            
-            writer2.flush();
-            writer2.close();
+            writerConsumos.flush();
+            writerConsumos.close();
         
         /**********************************/
         /******** FIN ITERACIONES *********/
@@ -904,33 +904,33 @@ public class Prorratas {
         
         try
 	{
-            FileWriter writer = new FileWriter(DirBaseSalida + SLASH +"flujos_hidrologia.csv");
+            FileWriter writerFlujosHidrologia = new FileWriter(DirBaseSalida + SLASH +"flujos_hidrologia.csv");
             
-            writer.append("Hidrologia,Etapa");
+            writerFlujosHidrologia.append("Hidrologia,Etapa");
 	    
             
             for(int l=0;l<lineasFlujo.length;l++){
-                    writer.append(',');
-                    writer.append(nombreLineas[lineasFlujo[l]]);
+                    writerFlujosHidrologia.append(',');
+                    writerFlujosHidrologia.append(nombreLineas[lineasFlujo[l]]);
                                                         
                 }
-            writer.append('\n');   
+            writerFlujosHidrologia.append('\n');   
             
             for (int hh = 0 ; hh < numHid ; hh++) {  
                 for(int e=0;e<numEtapas;e++){
-                    writer.append(String.valueOf(hh));
-                    writer.append(',');
-                    writer.append(String.valueOf(e));
+                    writerFlujosHidrologia.append(String.valueOf(hh));
+                    writerFlujosHidrologia.append(',');
+                    writerFlujosHidrologia.append(String.valueOf(e));
                     for(int l=0;l<lineasFlujo.length;l++){
-                        writer.append(',');
-                        writer.append(Float.toString(Flujo[lineasFlujo[l]][e][hh]));
+                        writerFlujosHidrologia.append(',');
+                        writerFlujosHidrologia.append(Float.toString(Flujo[lineasFlujo[l]][e][hh]));
                                                           
                     }
-                    writer.append('\n');
+                    writerFlujosHidrologia.append('\n');
                 }
         }
-            writer.flush();
-            writer.close();
+            writerFlujosHidrologia.flush();
+            writerFlujosHidrologia.close();
         }
         
         catch(IOException e)
@@ -940,32 +940,32 @@ public class Prorratas {
         
          try
 	{
-            FileWriter writer = new FileWriter(DirBaseSalida + SLASH +"flujos_medios.csv");
+            FileWriter writerFlujosMedios = new FileWriter(DirBaseSalida + SLASH +"flujos_medios.csv");
             
-            writer.append("Etapa");
+            writerFlujosMedios.append("Etapa");
 	    
             
             for(int l=0;l<lineasFlujo.length;l++){
-                    writer.append(',');
-                    writer.append(nombreLineas[lineasFlujo[l]]);
+                    writerFlujosMedios.append(',');
+                    writerFlujosMedios.append(nombreLineas[lineasFlujo[l]]);
                                                         
                 }
-            writer.append('\n');   
+            writerFlujosMedios.append('\n');   
             
             
                 for(int e=0;e<numEtapas;e++){
 
-                    writer.append(String.valueOf(e));
+                    writerFlujosMedios.append(String.valueOf(e));
                     for(int l=0;l<lineasFlujo.length;l++){
-                        writer.append(',');
-                        writer.append(Float.toString(FlujoMedio[lineasFlujo[l]][e]));
+                        writerFlujosMedios.append(',');
+                        writerFlujosMedios.append(Float.toString(FlujoMedio[lineasFlujo[l]][e]));
                                                           
                     }
-                    writer.append('\n');
+                    writerFlujosMedios.append('\n');
                 }
         
-            writer.flush();
-            writer.close();
+            writerFlujosMedios.flush();
+            writerFlujosMedios.close();
         }
         
         catch(IOException e)

@@ -61,14 +61,13 @@ public class PeajesIny {
     static String[] nomGen; //TODO: Encapsulate
     private static int numCen;
     static String[] nombreTx; //TODO: Encapsulate
-    private static int numTx;
+    private static int numTx; //Numero de transmisores
     static String[] nomEmpGO; //TODO: Encapsulate
     private static int numEmpG;
     static String[] nomLinTx; //TODO: Encapsulate
     private static int numLinTx;
     static String[] nomGenO; //TODO: Encapsulate
     static String[] nomMGNCO; //TODO: Encapsulate
-    private static String libroSalidaGXLSMes;
     private static String DirBaseSal;
     private static  String[] nomLinIT;
     private static String[] nomLineasN;
@@ -984,7 +983,7 @@ public class PeajesIny {
               if(mes.equals(MESES[i]))
                   m=i;
           }
-     libroSalidaGXLSMes= DirBaseSal + SLASH +"PagoIny" + MESES[m] + ".xlsx";
+     String libroSalidaGXLSMes= DirBaseSal + SLASH +"PagoIny" + MESES[m] + ".xlsx";
      Escribe.crearLibro(libroSalidaGXLSMes);
      Escribe.creaLiquidacionMesIny(m,
                 "Pago de Peajes de Inyección",peajeCenTxO,
