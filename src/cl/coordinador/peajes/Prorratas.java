@@ -300,13 +300,12 @@ public class Prorratas {
         float[][][] Temporal3 = new float[2500][3][NUMERO_MESES];
         int numClaves;
 
-        //TODO: Revisar statement
-        if(ActClientes=false){
-        numClaves=Lee.leeConsumos2(libroEntrada, Temporal1,Temporal2,numEtapas
-                ,paramEtapa,duracionEta,Temporal3);
+        if (ActClientes) {
+            numClaves = Lee.leeConsumos2(libroEntrada, Temporal1, Temporal2, numEtapas,
+                     paramEtapa, duracionEta, Temporal3);
         } else {
-            numClaves=Lee.leeConsumos(libroEntrada, Temporal1,Temporal2,numEtapas
-                ,paramEtapa,duracionEta,Temporal3);//debe ademas escribir la hoja con los clientes
+            numClaves = Lee.leeConsumos(libroEntrada, Temporal1, Temporal2, numEtapas,
+                     paramEtapa, duracionEta, Temporal3);
         }
 
         float[][] ConsumosClaves = new float[numClaves][numEtapas];

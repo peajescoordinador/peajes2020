@@ -1344,7 +1344,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
         }
         int numHidro=Integer.parseInt((String) cuadroSeleccionHidro.getSelectedItem());
-        boolean clientes=ActClientes.getInheritsPopupMenu();
+        boolean clientes = (ActClientes.isEnabled() && ActClientes.isSelected());
         Prorratas.Comenzar(nombreDirEnt,nombreDirSal,anoAEvaluar,tipoCalcSeleccionado,
                 anoBase,numHidro,numEtapasAno,numSlack,offset,clientes);
         tInicio=System.currentTimeMillis();
