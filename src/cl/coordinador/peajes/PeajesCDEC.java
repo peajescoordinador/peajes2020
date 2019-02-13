@@ -45,7 +45,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
     private String mesAEvaluar;
     private long tInicio;
     private Time tiempo=new Time(0);
-    private Timer timer;
+//    private Timer timer;
     private Properties propiedades; //Configuraciones del caso TODO: rename
     private static Properties config; //Configuraciones de la herramienta TODO: rename
     private static final String ARCHIVO_CONFIG = "config.xml"; //Nombre archivo unico de configuracion de la herramienta
@@ -54,7 +54,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
     public PeajesCDEC() {
         initComponents();
         reLoadOptions();
-        timer = new Timer(1000, new TimerListener());
+//        timer = new Timer(1000, new TimerListener());
     }
 
     /** This method is called from within the constructor to
@@ -1332,7 +1332,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
 
     private void calcular() {
         botonCalcular.setEnabled(false);
-        timer.start();
+//        timer.start();
         int numEtapasAno = Integer.parseInt(cuadroSeleccionNEtapas.getText());
         int offset = Integer.parseInt(cuadroSeleccionOffset.getText());
         int numSlack = Integer.parseInt(cuadroSeleccionSlack.getText());
@@ -1347,6 +1347,11 @@ public class PeajesCDEC extends javax.swing.JFrame {
         boolean clientes = (ActClientes.isEnabled() && ActClientes.isSelected());
         Prorratas.Comenzar(nombreDirEnt,nombreDirSal,anoAEvaluar,tipoCalcSeleccionado,
                 anoBase,numHidro,numEtapasAno,numSlack,offset,clientes);
+//        try {
+//            Prorratas.CalculaProrratas(nombreDirEnt, nombreDirSal, anoAEvaluar, tipoCalcSeleccionado, anoBase, numHidro, numEtapasAno, numSlack, offset, clientes);
+//        } catch (IOException e) {
+//            e.printStackTrace(System.out);
+//        }
         tInicio=System.currentTimeMillis();
     }
 
@@ -1818,7 +1823,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             else if (Prorratas.terminado()==true) {
                 textoCalculo.setText("Terminado");
                 Toolkit.getDefaultToolkit().beep();
-                timer.stop();
+//                timer.stop();
                 botonCalcular.setEnabled(true);
                 progreso.setIndeterminate(false);
                 progreso.setValue(maximum);

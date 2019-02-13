@@ -16,6 +16,7 @@
 package cl.coordinador.peajes;
 
 import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
+import static cl.coordinador.peajes.PeajesConstant.MESES;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
 import static cl.coordinador.peajes.PeajesConstant.SLASH;
 import java.io.BufferedReader;
@@ -25,8 +26,16 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.text.DecimalFormat;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Modela y asigna perdidas a consumos
@@ -44,42 +53,45 @@ public class Prorratas {
     private static boolean guardandoDatos=false;
     private static boolean completo=false;
 
+    private static final boolean USE_FACTORY = false; //Temp switch for the thread factory
+    private static int numGen; //Numero de generadores en planilla centralesPLP (rango 'plpcnfce') de archivo Ent
+    private static int numLin; //Numero de lineas de transmision en archivo Ent
+    private static int numLinTron; //Numero de lineas de transmision troncal en archivo Ent
+    private static int numBarras; //Numero de barras en archivo Ent
+    private static int numHid; //Numero de hidrologias a considerar en calculo (definidas por usuario)
     
-    public static void CalculaProrratas(File DirEntrada, File DirSalida, int Ano, int tipoCalc, int AnoIni,
+    public static void CalculaProrratas(File DirEntrada, File DirSalida, int AnoAEvaluar, int tipoCalc, int AnoBase,
             int NumeroHidrologias ,int NumeroEtapasAno, int NumeroSlack,int ValorOffset,boolean ActClientes) throws IOException, FileNotFoundException {
         
-        final int numHid=NumeroHidrologias;//AnoIni-1962;
+        numHid=NumeroHidrologias;//AnoIni-1962;
         final int offset=ValorOffset;//(AnoIni==2004?0:12);        
         String DirBaseEntrada=DirEntrada.toString();
         String DirBaseSalida=DirSalida.toString();
         final String ArchivoDespachoGeneradores= DirBaseEntrada + SLASH + "plpcen.csv";
         final String ArchivoPerdidasLineas = DirBaseEntrada + SLASH + "plplin.csv";
 	//indices de etapas relevantes para escritura de resultados
-        final int etapaPeriodoIni=NumeroEtapasAno*(Ano-AnoIni)+offset;//(tipoCalc==0?offset:144*(Ano-AnoIni)+offset);
-        final int etapaPeriodoFin=NumeroEtapasAno*(Ano-AnoIni+1)+offset;//(tipoCalc==0?offset+144:144*(Ano-AnoIni+1)+offset);
+        final int etapaPeriodoIni=NumeroEtapasAno*(AnoAEvaluar-AnoBase)+offset;//(tipoCalc==0?offset:144*(Ano-AnoIni)+offset);
+        final int etapaPeriodoFin=NumeroEtapasAno*(AnoAEvaluar-AnoBase+1)+offset;//(tipoCalc==0?offset+144:144*(Ano-AnoIni+1)+offset);
         numEtapas=etapaPeriodoFin-etapaPeriodoIni;
-        int cuenta;
-        String [] TxtTemp1=new String[1000]; //almacenamiento temporal de texto
+        String [] TxtTemp1; //almacenamiento temporal de texto 1
+        String[] TxtTemp2; //almacenamiento temporal de texto 2
+        String[] TxtTemp3; //almacenamiento temporal de texto 3
+        int[] IntTemp; //almacenamiento temporal de enteros
         Matriz Ybarra;	// Ybarra (n x n)
         Matriz Xbarra;	// Fila y columna de Slack se insertan con ceros (n x n)
-        DecimalFormat DosDecimales=new DecimalFormat("0.00");
+        DecimalFormat dosDecimales=new DecimalFormat("0.00");
         long tInicioLectura = System.currentTimeMillis();
         cargandoInfo=true;
-        String unicodeMessage = "Importando Informacion y Parametros";
-        PrintStream out = new PrintStream(System.out, true, "UTF-8");
-        out.println(unicodeMessage);
-        String libroEntrada = DirBaseEntrada + SLASH + "Ent" + Ano + ".xlsx";
-        String[] nombreMeses = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul",
-        "Ago", "Sep", "Oct", "Nov", "Dic"};
+        String libroEntrada = DirBaseEntrada + SLASH + "Ent" + AnoAEvaluar + ".xlsx";
         String[] EnergiaCU={"CUE2","CUE30","EUnit"};
         org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
 
         /**************
          * lee de Meses
          **************/
-        int numSp;
+        System.out.println("Importando Informacion y Parametros");
         int[] intAux1=new int[600];
-        numSp = Lee.leeMeses(libroEntrada, intAux1, nombreMeses);
+        int numSp = Lee.leeMeses(libroEntrada, intAux1, MESES);
         int[] paramEtapa = new int[numEtapas];
         System.arraycopy(intAux1, 0, paramEtapa, 0, numEtapas);
 
@@ -89,7 +101,7 @@ public class Prorratas {
          */
         TxtTemp1=new String[2500];
         double[][] Aux=new double[2500][11];
-        int numLin = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
+        numLin = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
         float[][] paramLineas;
         System.out.println("Lineas: "+numLin);
         paramLineas = new float[numLin][10];
@@ -108,9 +120,8 @@ public class Prorratas {
         intAux1=new int[2500];
         int[][] intAux2 = new int[2500][3];
         TxtTemp1=new String[2500];
-        String[] TxtTemp2=new String[2500];
-        int numLinTron = Lee.leeLintron(libroEntrada, TxtTemp1,
-                nombreLineas,TxtTemp2, intAux1, intAux2);
+        TxtTemp2=new String[2500];
+        numLinTron = Lee.leeLintron(libroEntrada, TxtTemp1, nombreLineas,TxtTemp2, intAux1, intAux2);
         String[] nomLinTron = new String[numLinTron];
         int[] indiceLintron = new int[numLinTron];
         int[][] datosLintron = new int[numLinTron][3];
@@ -130,8 +141,8 @@ public class Prorratas {
         }
 
 
-        String[] TxtTemp3=new String[numLinTron];
-         int[] TxtTemp5=new int[numLinTron];
+        TxtTemp3=new String[numLinTron];
+        IntTemp=new int[numLinTron];
 
         int numLinTx = 0;
         for (int i = 0; i <numLinTron; i++) {
@@ -142,7 +153,7 @@ public class Prorratas {
             if (l == -1) {
                 TxtTemp4[numLinTx] = nomLinTron[i] + "#" + nomProp[i];
                 TxtTemp2[numLinTx]=nomProp[i];
-                TxtTemp5[numLinTx]=datosLintron[i][0];
+                IntTemp[numLinTx]=datosLintron[i][0];
                 if(datosLintron[i][0]==1){
                     TxtTemp3[numLinTx]="N";
                 }
@@ -155,7 +166,7 @@ public class Prorratas {
                 numLinTx++;
             }
         }
-        String[] nomLinTx = new String[numLinTx];//solo registros ìnico Linea-Transmisor
+        String[] nomLinTx = new String[numLinTx];//solo registros inicio Linea-Transmisor
 //        String[] nomPropTx = new String[numLinTx];
         String[] zona = new String[numLinTx];
         int[] datosLinIT = new int[numLinTx];
@@ -163,7 +174,7 @@ public class Prorratas {
             nomLinTx[i] = TxtTemp4[i];
 //            nomPropTx[i]=TxtTemp2[i];
             zona[i] = TxtTemp3[i];
-            datosLinIT[i]=TxtTemp5[i];
+            datosLinIT[i]=IntTemp[i];
         }
 
 
@@ -173,7 +184,7 @@ public class Prorratas {
          */
         TxtTemp1=new String[2500];
         int[][] intAux3=new int[2500][4];
-        int numBarras = Lee.leeDefbar(libroEntrada, TxtTemp1, intAux3);
+        numBarras = Lee.leeDefbar(libroEntrada, TxtTemp1, intAux3);
         String [] nomBar = new String[numBarras];
         int[][] paramBarTroncal = new int[numBarras][3];
         int numBarrasTroncales = 0;
@@ -197,7 +208,7 @@ public class Prorratas {
          */
         float[][] Consumos = new float[numBarras][numEtapas];
         Lee.leeConsumoxBarra(libroEntrada,Consumos,numBarras,numEtapas);
-        float[][] conNormalizado=new float[numBarras][numEtapas];
+        float[][] consumoNormalizado=new float[numBarras][numEtapas];
         boolean[][] barrasConsumo = new boolean[numBarras][numEtapas];
         float[] ConsEta = new float[numEtapas];
         System.out.println("Barras: "+numBarras);
@@ -209,7 +220,7 @@ public class Prorratas {
         }
         for(int e=0; e < numEtapas; e++){
             for(int b=0; b < numBarras; b++){
-            conNormalizado[b][e] = Consumos[b][e]/ConsEta[e];
+            consumoNormalizado[b][e] = Consumos[b][e]/ConsEta[e];
             }
         }
         int[] duracionEta = new int[numEtapas];
@@ -244,7 +255,7 @@ public class Prorratas {
         *******************************/
         TxtTemp1 = new String[1000];
         
-        int numGen = Lee.leePlpcnfe(libroEntrada,TxtTemp1,
+        numGen = Lee.leePlpcnfe(libroEntrada,TxtTemp1,
                 intAux3,nombreCentrales);
         
         int numGen_Sin_Fallas = Lee.leePlpcnfe(libroEntrada,TxtTemp1_2,nombreCentrales);
@@ -284,7 +295,7 @@ public class Prorratas {
         /**************************
         Lectura de Suministradores
         **************************/
-        TxtTemp1 = new String[100];
+//        TxtTemp1 = new String[100];
         //int numSum = Lee.leeSumin(libroEntrada, TxtTemp1);
         //String [] nomSum = new String[numSum];
         //for(int i=0; i < numSum; i++){
@@ -309,15 +320,21 @@ public class Prorratas {
         }
 
         float[][] ConsumosClaves = new float[numClaves][numEtapas];
-        for(int i=0; i<numClaves;i++)            System.arraycopy(Temporal1[i], 0, ConsumosClaves[i], 0, numEtapas);      
+        for (int i = 0; i < numClaves; i++) {
+            System.arraycopy(Temporal1[i], 0, ConsumosClaves[i], 0, numEtapas);
+        }
         Temporal1 = null;
         
         float[][] ConsClaveMes = new float[numClaves][NUMERO_MESES];
-        for(int i=0; i<numClaves;i++) System.arraycopy(Temporal2[i], 0, ConsClaveMes[i], 0, NUMERO_MESES);
+        for (int i = 0; i < numClaves; i++) {
+            System.arraycopy(Temporal2[i], 0, ConsClaveMes[i], 0, NUMERO_MESES);
+        }
         Temporal2 = null;
         
-        float[][][] ECU= new float[numClaves][3][NUMERO_MESES];
-        for(int i=0; i<numClaves;i++) System.arraycopy(Temporal3[i], 0, ECU[i], 0, 3);
+        float[][][] ECU = new float[numClaves][3][NUMERO_MESES];
+        for (int i = 0; i < numClaves; i++) {
+            System.arraycopy(Temporal3[i], 0, ECU[i], 0, 3);
+        }
         Temporal3 = null;
 
         /*for(int i=0; i<numClaves;i++){
@@ -379,11 +396,13 @@ public class Prorratas {
          * Lectura de Generacion (Despachos) y energia no suministrada
          * ===========================================================
          */
+        long time_dispatch = System.currentTimeMillis();
+        int cuenta = 0; //Contador de lineas
         BufferedReader input = null;
         File testReadFile = new File(ArchivoDespachoGeneradores);
         input = null;
-        float[][][] Gx = new float[numGen][numEtapas][numHid];
-        float[][]FallaEtaHid = new float[numEtapas][numHid];
+        float[][][] Gx = new float[numGen][numEtapas][numHid]; //Despacho PLP
+        float[][]FallaEtaHid = new float[numEtapas][numHid];   //Falla PLP
         try {
             //input = new BufferedReader( new FileReader(testReadFile) );
             input = new BufferedReader( new InputStreamReader(new
@@ -464,28 +483,28 @@ public class Prorratas {
                 }
                 cuenta++;
             }
-        }
-        catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        catch (IOException ex){
-            ex.printStackTrace();
-        }
-        finally {
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(System.out);
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+        } catch (NumberFormatException e) {
+            throw new IOException("No fue posible convertir valor en linea '" + cuenta + "' archivo plp '" + ArchivoDespachoGeneradores +"'", e);
+        } finally {
             try {
-                if (input!= null) {
+                if (input != null) {
                     input.close();
                 }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace(System.out);
             }
         }
+        System.out.println("Fin lectura archivo despacho PLP : " + ((System.currentTimeMillis() - time_dispatch)/1000) + "[seg]");
         
         /*
          * Lectura de datos de Lineas del sistema reducido
          * ===============================================
          */
+        long time_flow = System.currentTimeMillis();
         TxtTemp1=new String[600];
         float[][] Aux1 = new float[600][1];
         int numLinSistRed = Lee.leeLinPLP(libroEntrada, TxtTemp1, Aux1);
@@ -534,45 +553,45 @@ public class Prorratas {
                 }
                 cuenta++;
             }
-        }
-        catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        catch (IOException ex){
-            ex.printStackTrace();
-        }
-        finally {
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(System.out);
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+        } catch (NumberFormatException e) {
+            throw new IOException("No fue posible convertir valor en linea '" + cuenta + "' archivo plp '" + ArchivoPerdidasLineas +"'", e);
+        } finally {
             try {
-                if (input!= null) {
+                if (input != null) {
                     input.close();
                 }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace(System.out);
             }
         }
+        System.out.println("Fin lectura archivo flujos lineas PLP : " + ((System.currentTimeMillis() - time_flow)/1000) + "[seg]");
 
         /*
          * Escalamiento de la demanda
          * ==========================
          */
-        float[][][] conEscalado=new float[numBarras][numEtapas][numHid];
-        float[][]GxEtaHid = new float[numEtapas][numHid];
-        for(int h=0; h<numHid; h++){
-            for(int e=0; e<numEtapas; e++){
-                for(int g=0; g<numGen; g++){
-                    GxEtaHid[e][h]+=Gx[g][e][h];
-                    //System.out.println(GxEtaHid[e][h]);
-                }
-            }
-        }
-        for(int b=0;b<numBarras;b++){
-            for(int e=0;e<numEtapas;e++){
-                for(int h=0;h<numHid;h++){
-                    conEscalado[b][e][h]=(float)(conNormalizado[b][e]*GxEtaHid[e][h]);
-                }
-            }
-        }	    
+//        float[][]GxEtaHid = new float[numEtapas][numHid];
+//        for(int h=0; h<numHid; h++){
+//            for(int e=0; e<numEtapas; e++){
+//                for(int g=0; g<numGen; g++){
+//                    GxEtaHid[e][h]+=Gx[g][e][h];
+//                }
+//            }
+//        }
+        //DEPRECATED: Eliminado consumo escalado por etapas por no tener uso posterior:
+//        float[][][] consumoEscalado=new float[numBarras][numEtapas][numHid];
+//        for(int b=0;b<numBarras;b++){
+//            for(int e=0;e<numEtapas;e++){
+//                for(int h=0;h<numHid;h++){
+//                    consumoEscalado[b][e][h]=(float)(consumoNormalizado[b][e]*GxEtaHid[e][h]); //Inutil?
+//                }
+//            }
+//        }
+        
         long tFinalLectura = System.currentTimeMillis();
         cargandoInfo=false;
         calculandoFlujos=true;
@@ -582,31 +601,28 @@ public class Prorratas {
          * Chequeo de consistencia
          * =======================
          */
-        boolean[][] barrasActivas = new boolean[numBarras][numEtapas];
-        barrasActivas = Calc.ChequeoConsistencia(paramLineas, LinMan,
+        boolean[][] barrasActivas = Calc.ChequeoConsistencia(paramLineas, LinMan,
                 numBarras, numEtapas);
 
         /*
          * Iteraciones
          * ===========
          */
-        int BarraSlack = Calc.Buscar(nombreSlack,nomBar);
-        float[][] paramLinEta = new float[numLin][10];
+        int nBarraSlack = Calc.Buscar(nombreSlack,nomBar);
         //
         float[][][] Flujo = new float[numLin][numEtapas][numHid];
-        float[][] flujoDCEtapa = new float[numLin][numHid];
-        float[] flujoDCHid = new float[numLin];
+
         //
         float[][][] prorrGx = new float[numLin][numGen][numEtapas];
-        float[][] prorrEtaGx = new float[numLin][numGen];
+//        float[][] prorrEtaGx = new float[numLin][numGen];
         //
         float[][][] prorrCx = new float[numLin][numCli][numEtapas];
-        float[][] prorrEtaCons = new float[numLin][numCli];
+//        float[][] prorrEtaCons = new float[numLin][numCli];
         //
-        float[][] GGDFref = new float[numLin][numHid];
-        float[][][] GGDFEtapa = new float[numBarras][numLin][numHid];
-        float[][] GLDFref = new float[numLin][numHid];
-        float[][][] GLDFEtapa = new float[numBarras][numLin][numHid];
+//        float[][] GGDFref = new float[numLin][numHid];
+//        float[][][] GGDFEtapa = new float[numBarras][numLin][numHid];
+//        float[][] GLDFref = new float[numLin][numHid];
+//        float[][][] GLDFEtapa = new float[numBarras][numLin][numHid];
         //
         System.out.println("Calculando...");
         //
@@ -615,35 +631,35 @@ public class Prorratas {
         int[] centralesFlujo = Lee.leeCentralesFlujo(libroEntrada, nomGen,"centrales_flujo");
         int[] lineasFlujo = Lee.leeCentralesFlujo(libroEntrada, nombreLineas,"lineas_flujo");
         
+        //Escritura del header archivo prorratas.csv:
+        FileWriter writerProrratas = new FileWriter(DirBaseSalida + SLASH + "prorratas.csv");
+
+        writerProrratas.append("Etapa");
+        writerProrratas.append(',');
+        writerProrratas.append("Hidrologia");
+        writerProrratas.append(',');
+        writerProrratas.append("Línea");
+        writerProrratas.append(',');
+        writerProrratas.append("Central");
+        writerProrratas.append(',');
+        writerProrratas.append("Prorrata");
+        writerProrratas.append(',');
+        writerProrratas.append("Gx");
+        writerProrratas.append(',');
+        writerProrratas.append("GGDF");
+        writerProrratas.append('\n');
+
+        writerProrratas.flush();
+        writerProrratas.close();
         
-        try
-	{
-            FileWriter writerProrratas = new FileWriter(DirBaseSalida + SLASH +"prorratas.csv");
-           
-            
-            writerProrratas.append("Etapa");
-            writerProrratas.append(',');
-            writerProrratas.append("Hidrologia");
-            writerProrratas.append(',');
-            writerProrratas.append("Línea");
-            writerProrratas.append(',');
-            writerProrratas.append("Central");
-            writerProrratas.append(',');
-            writerProrratas.append("Prorrata");
-            writerProrratas.append(',');
-            writerProrratas.append("Gx");
-            writerProrratas.append(',');
-            writerProrratas.append("GGDF");
-            writerProrratas.append('\n');
-            
-            writerProrratas.flush();
-            writerProrratas.close();
+        //Escritura del header archivo consumos.csv:
+        FileWriter writerConsumos = new FileWriter(DirBaseSalida + SLASH + "consumos.csv");
+        writerConsumos.append("Hidrologia,Etapa");
+        for (int b = 0; b < numBarras; b++) {
+            writerConsumos.append(",");
+            writerConsumos.append(Float.toString(b));
         }
-        
-        catch(IOException e)
-	{
-	     e.printStackTrace();
-	} 
+        writerConsumos.append("\n");
         
         
         
@@ -651,374 +667,176 @@ public class Prorratas {
         /*INICIO ITERACIONES (PARALELIZAR EL SIGUIENTE FOR)*/
         /**********LAS ITERACIONES SON POR ETAPA************/
         /***************************************************/
-        
-       // try
-        //{
-            FileWriter writerConsumos = new FileWriter(DirBaseSalida + SLASH +"consumos.csv");
-            writerConsumos.append("Hidrologia,Etapa");
-            for(int b=0;b<numBarras;b++){
-                writerConsumos.append(",");
-                writerConsumos.append(Float.toString(b));
+        String sMaxThreads = PeajesCDEC.getOptionValue("Max Threads", PeajesConstant.DataType.INTEGER);
+        assert(sMaxThreads != null): "Como puede ser nulo esta importante llave? Cambiaste archivo config?";
+        int nMaxThreads = Integer.parseInt(sMaxThreads);
+
+        ExecutorService exeService;
+        if (USE_FACTORY) {
+            if (nMaxThreads > 1) {
+                exeService = Executors.newFixedThreadPool(nMaxThreads);
+            } else {
+                exeService = Executors.newSingleThreadExecutor();
             }
-            writerConsumos.append("\n");
-       // }
-        //catch(IOException e)
+        } else {
+            exeService = new ExtendedExecutor(nMaxThreads, 60); //TODO: Move time out to config
+        }
         
-        //{
-       //     e.printStackTrace();
-       // } 
-        
+        long initExecutorTime = System.currentTimeMillis();
         for(etapa=0;etapa<numEtapas;etapa++) {
-            System.out.println("etapa : "+etapa);
-            for(int l=0; l < numLin; l++) {
-                for(int i=0; i <= 5; i++)
+//            System.out.println("etapa : "+etapa);
+            float[][] paramLinEta = new float[numLin][10];
+            for (int l = 0; l < numLin; l++) {
+                for (int i = 0; i <= 5; i++) {
                     paramLinEta[l][i] = paramLineas[l][i];
-                if(LinMan[l][etapa] != (-1)){
+                }
+                if (LinMan[l][etapa] != (-1)) {
                     paramLinEta[l][5] = LinMan[l][etapa];	//Operativa
                 }
             }
-            for(int l=0; l < numLinTron; l++) {
+            for (int l = 0; l < numLinTron; l++) {
                 paramLinEta[indiceLintron[l]][6] = 1;
                 paramLinEta[indiceLintron[l]][7] = datosLintron[l][0];
                 paramLinEta[indiceLintron[l]][8] = datosLintron[l][1];
-                paramLinEta[indiceLintron[l]][9] = datosLintron[l][2];           
-                
-                
+                paramLinEta[indiceLintron[l]][9] = datosLintron[l][2];
             }
-            /*
-             * Calcula matriz de Admitancias y matriz de Impedancias
-             * =====================================================
-             */
-            int barrasEliminadas=0;
-            // Calcula Ybarra considerando todas las barras, activas e inactivas
-            Ybarra=new Matriz(Calc.CalculaYBarra(paramLinEta,numBarras,numLin));
-            // Elimina de Ybarra las filas y columnas correspondientes a barras inactivas y la slack,
-            // de manera de obtener una matriz invertible
-            for(int b=0;b<numBarras;b++){
-                if(barrasActivas[b][etapa]==false || b==BarraSlack){
-                    Ybarra=(Ybarra.EliminarFila(b-barrasEliminadas)).EliminarColumna(b-barrasEliminadas);
-                    barrasEliminadas++;
-                }
-            }
-            Xbarra=(Ybarra.InversionRapida()).uminus();
-            /* Se agregan las filas y columnas de las barras inactivas y la slack rellenas con ceros,
-             * de manera de mantener coeherencia en los indices de barras
-             */
-            for(int b=0;b<numBarras;b++){
-                if(barrasActivas[b][etapa]==false || b==BarraSlack){
-                    Xbarra=(Xbarra.InsertarCerosFila(b)).InsertarCerosColumna(b);
-                }
-            }
-
-            /* Calcula Factores de Desplazamiento A y
-               GLDF barra referencia y GLDF resto del sistema. */
-            float[][] GSDF = Calc.CalculaGSDF(Xbarra,paramLinEta,barrasActivas,etapa);
-            GLDFref=Calc.CalculaGLDFRef(GSDF,paramLinEta,paramGener,etapa,Gx);
-            GLDFEtapa=Calc.CalculaGLDF(GSDF,GLDFref,paramLinEta,etapa);
-
-            // Calcula Flujo DC y asignacion de perdidas
-            // -----------------------------------------
-            float[] R=new float[numLin];                   // resistencias en p.u
-            float[] perdI2R=new float[numLin];             // perdidas de cada linea segun I*I*R
-            float[] perdidas=new float[numLin];            // perdidas de cada linea segun diferencia entre Gx y Demanda
-            float[] perdMayor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
-            float[] perdMenor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
-            float[] perdRealesSistema=new float[numHid];   // perdidas del sistema
-            float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las lineas de tension > 110kV
-            float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las lineas de tension <= 110kV
-            float conSist;
-            float[][] conAjustado=new float[numBarras][numHid];
-            float[] genSist=new float[numHid];
-            float[] conMasPerd= new float[numBarras];      // consumos con asignacion de perdidas por iteracion [MW]
-            // Consumos con asignacion de perdidas por iteracion [MW]
-            float[][] conMasPerdEta= new float[numBarras][numHid];
-            for(int h=0;h<numHid;h++){
-                genSist[h] = GxEtaHid[etapa][h];
-                for(int b=0;b>numBarras;b++)
-                    conAjustado[b][h] = 0;
-            }
-            for(int l=0;l<numLin;l++)
-                R[l]=paramLinEta[l][3];                    // resistencia en p.u.
-            for(int h=0;h<numHid;h++){
-                
-                try
-                        {
-                        writerConsumos.append(Float.toString(h));
-                        writerConsumos.append(",");
-                        writerConsumos.append(Float.toString(etapa));
-                    
-                    }
-                    catch(IOException e)
-        
-                    {
-                        e.printStackTrace();
-                    } 
-                
-                
-                for(int l=0;l<numLin;l++){
-                    perdI2R[l]=0;
-                    perdidas[l]=0;
-                    flujoDCHid[l]=0;
-                }
-                perdRealesSistema[h]=0;
-                perdI2RSistMayor110[h]=0;
-                perdI2RSistMenor110[h]=0;
-                conSist=0;
-                for(int b=0;b<numBarras;b++)
-                    conSist += Consumos[b][etapa];
-                for(int b=0;b<numBarras;b++){
-                    conAjustado[b][h] += Consumos[b][etapa]*(conSist-FallaEtaHid[etapa][h])/conSist;
-                    try
-                        {
-                    
-                        writerConsumos.append(",");
-                        writerConsumos.append(Float.toString(conAjustado[b][h]));
-                    }
-                    catch(IOException e)
-        
-                    {
-                        e.printStackTrace();
-                    } 
-                    
-                }
-                
-                writerConsumos.append("\n");
-                
-                
-                
-                
             
-           
-       
-        
-        
-        
-                
-                
-                
-                perdRealesSistema[h] =
-                        genSist[h]-(conSist-FallaEtaHid[etapa][h]);
-                // Calculo de Flujo DC
-                flujoDCHid=Calc.FlujoDC_GLDF(GLDFEtapa,conAjustado,h,etapa);//flujos en MW
-                //System.out.println("Flujo DC "+flujoDCHid[586]);
-                for(int l=0;l<numLin;l++)
-                    flujoDCEtapa[l][h]=flujoDCHid[l];
-                // Calcula perdidas
-                for(int l=0;l<numLin;l++) {
-                    if (flujoDCHid[l]!=0) {
-                        float sBase = 100;
-                        perdI2R[l]=sBase*(R[l]*(flujoDCHid[l]/sBase)*(flujoDCHid[l]/sBase));	//perdidas en MW
-                        //System.out.println("Perdidas cuadraticas "+ perdI2R[l]);
-                    }
-                    if(paramLinEta[l][2]>110)
-                        perdI2RSistMayor110[h]+=perdI2R[l];
-                    else
-                        perdI2RSistMenor110[h]+=perdI2R[l];
-                }
-                // Perdidas Reales prorrateadas en las lineas de acuerdo al I2R de cada una
-                perdMayor110=Calc.ProrrPerdidas(perdidasPLPMayor110[etapa][h],perdI2R,paramLinEta,"Mayor_110",h);
-                perdMenor110=Calc.ProrrPerdidas((perdRealesSistema[h]-perdidasPLPMayor110[etapa][h]),
-                                                        perdI2R,paramLinEta,"Menor_Igual_110",h);
-                for(int l=0;l<numLin;l++)
-                    perdidas[l]=perdMayor110[l]+perdMenor110[l];
-                // Asigna perdidas a consumos
-                conMasPerd=Calc.AsignaPerdidas(flujoDCHid, GLDFEtapa,
-                        perdidas, paramLinEta, conAjustado, etapa, h);
-            }
-            for(int h=0; h<numHid; h++){
-                for(int l=0; l<numLin; l++)
-                    Flujo[l][etapa][h] = flujoDCEtapa[l][h];
-                for(int b=0; b<numBarras; b++)
-                    conMasPerdEta[b][h] = conMasPerd[b];
-            }
-            /*
-             * Calcula GGDF barra referencia y GGDF resto del sistema.
-             */
-            GGDFref=Calc.CalculaGGDFRef(GSDF,conMasPerdEta, paramLinEta);
-            GGDFEtapa=Calc.CalculaGGDF(GSDF,GGDFref,paramLinEta,etapa);
-            //System.out.println("GGDF "+ GGDFEtapa[31][603][1]);
-            /*
-             * Calcula prorratas promedio por etapa
-             */
-            prorrEtaGx=Calc.CalculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
-                    orientBarTroncal, etapa, centralesFlujo, lineasFlujo,DirBaseSalida,GSDF,GGDFref );
-            
-            prorrEtaCons=Calc.CalculaProrrCons(flujoDCEtapa, GLDFEtapa,
-                    ConsumosClaves, datosClaves, paramLinEta,
-                    paramBarTroncal, orientBarTroncal, etapa);
-            for(int l=0;l<numLin;l++) {
-                for(int g=0;g<numGen;g++)
-                    prorrGx[l][g][etapa] = prorrEtaGx[l][g];
-                for(int c=0;c<numClaves;c++) {
-                    prorrCx[l][datosClaves[c][2]][etapa] += prorrEtaCons[l][c];
-                }
-            }
-        }   
-        
-           
-            writerConsumos.flush();
-            writerConsumos.close();
+            exeService.submit(new ProrratasExe(etapa, paramLinEta, barrasActivas, nBarraSlack, paramGener, Gx, Consumos, FallaEtaHid, perdidasPLPMayor110, Flujo, paramBarTroncal, orientBarTroncal, centralesFlujo, lineasFlujo, DirBaseSalida, ConsumosClaves, datosClaves, prorrGx, numClaves, prorrCx));
+//            testMove(etapa, paramLinEta, barrasActivas, nBarraSlack, paramGener, Gx, Consumos, FallaEtaHid,  perdidasPLPMayor110, Flujo, paramBarTroncal, orientBarTroncal, centralesFlujo, lineasFlujo, DirBaseSalida, ConsumosClaves, datosClaves, prorrGx, numClaves, prorrCx);
+        }
+        long elapsed = System.currentTimeMillis() - initExecutorTime;
+        System.out.println("===========Submitted all tasks: Time: " + elapsed / 1000 + "[sec]===========");
+        exeService.shutdown();
+        try {
+            exeService.awaitTermination(1, TimeUnit.DAYS);
+        } catch (InterruptedException e) {
+            e.printStackTrace(System.out);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+        elapsed = System.currentTimeMillis() - initExecutorTime;
+        System.out.println("===========Finished Parallel Execution! Total time: " + elapsed / 1000 + "[sec]===========");
+
+        writerConsumos.flush();
+        writerConsumos.close();
+
+        long tfinIteraciones = System.currentTimeMillis();
+
+        calculandoFlujos = false;
+        calculandoProrr = true;
         
         /**********************************/
         /******** FIN ITERACIONES *********/
         /**********************************/
         
-        
-        
-        long tfinIteraciones = System.currentTimeMillis();
-        perdidasPLPMayor110 = null;
-        GGDFref = null;
-        GGDFEtapa = null;
-        GLDFref = null;
-        GLDFEtapa = null;
-
-        calculandoFlujos=false;
-        calculandoProrr=true;
-
-        /*
-         * Calcula prorratas promedio anuales y mensuales
-         * =================================================
-         */
-        int etapasPeriodo = etapaPeriodoFin-etapaPeriodoIni;
-        float[][] FlujoMedio = new float[numLin][numEtapas];
-        float ConsAnoEner = 0;
-        float[] ConsMesEner = new float[NUMERO_MESES];
-        int mes=0;
-        for(int e=0;e<etapasPeriodo;e++){
-            mes=(int)Math.floor((double)e/(etapasPeriodo/NUMERO_MESES));
-            ConsAnoEner += ConsEta[e]*(float)duracionEta[e];
-            ConsMesEner[mes] += ConsEta[e]*(float)duracionEta[e];
+        //Escribe flujos ajustados por hidrologia:
+        FileWriter writerFlujosHidrologia = new FileWriter(DirBaseSalida + SLASH + "flujos_hidrologia.csv");
+        //header:
+        writerFlujosHidrologia.append("Hidrologia,Etapa");
+        for (int l = 0; l < lineasFlujo.length; l++) {
+            writerFlujosHidrologia.append(',');
+            writerFlujosHidrologia.append(nombreLineas[lineasFlujo[l]]);
         }
-        for(int e=0;e<numEtapas;e++){
-            for(int l=0;l<numLin;l++){
-                for(int h=0;h<numHid;h++){
-                    FlujoMedio[l][e]+=Flujo[l][e][h]/numHid;
-                    
+        writerFlujosHidrologia.append('\n');
+        //valores:
+        for (int hh = 0; hh < numHid; hh++) {
+            for (int e = 0; e < numEtapas; e++) {
+                writerFlujosHidrologia.append(String.valueOf(hh));
+                writerFlujosHidrologia.append(',');
+                writerFlujosHidrologia.append(String.valueOf(e));
+                for (int l = 0; l < lineasFlujo.length; l++) {
+                    writerFlujosHidrologia.append(',');
+                    writerFlujosHidrologia.append(Float.toString(Flujo[lineasFlujo[l]][e][hh]));
+                }
+                writerFlujosHidrologia.append('\n');
+            }
+        }
+        writerFlujosHidrologia.flush();
+        writerFlujosHidrologia.close();
+        
+        //Escribe flujos medios (promedios de hidrologias):
+        FileWriter writerFlujosMedios = new FileWriter(DirBaseSalida + SLASH + "flujos_medios.csv");
+        float[][] FlujoMedio = new float[numLin][numEtapas];
+        for (int e = 0; e < numEtapas; e++) {
+            for (int l = 0; l < numLin; l++) {
+                for (int h = 0; h < numHid; h++) {
+                    FlujoMedio[l][e] += Flujo[l][e][h] / numHid;
                 }
             }
         }
-        
-        
-        
-        
-        try
-	{
-            FileWriter writerFlujosHidrologia = new FileWriter(DirBaseSalida + SLASH +"flujos_hidrologia.csv");
-            
-            writerFlujosHidrologia.append("Hidrologia,Etapa");
-	    
-            
-            for(int l=0;l<lineasFlujo.length;l++){
-                    writerFlujosHidrologia.append(',');
-                    writerFlujosHidrologia.append(nombreLineas[lineasFlujo[l]]);
-                                                        
-                }
-            writerFlujosHidrologia.append('\n');   
-            
-            for (int hh = 0 ; hh < numHid ; hh++) {  
-                for(int e=0;e<numEtapas;e++){
-                    writerFlujosHidrologia.append(String.valueOf(hh));
-                    writerFlujosHidrologia.append(',');
-                    writerFlujosHidrologia.append(String.valueOf(e));
-                    for(int l=0;l<lineasFlujo.length;l++){
-                        writerFlujosHidrologia.append(',');
-                        writerFlujosHidrologia.append(Float.toString(Flujo[lineasFlujo[l]][e][hh]));
-                                                          
-                    }
-                    writerFlujosHidrologia.append('\n');
-                }
+        //header:
+        writerFlujosMedios.append("Etapa");
+        for (int l = 0; l < lineasFlujo.length; l++) {
+            writerFlujosMedios.append(',');
+            writerFlujosMedios.append(nombreLineas[lineasFlujo[l]]);
         }
-            writerFlujosHidrologia.flush();
-            writerFlujosHidrologia.close();
-        }
-        
-        catch(IOException e)
-	{
-	     e.printStackTrace();
-	} 
-        
-         try
-	{
-            FileWriter writerFlujosMedios = new FileWriter(DirBaseSalida + SLASH +"flujos_medios.csv");
-            
-            writerFlujosMedios.append("Etapa");
-	    
-            
-            for(int l=0;l<lineasFlujo.length;l++){
-                    writerFlujosMedios.append(',');
-                    writerFlujosMedios.append(nombreLineas[lineasFlujo[l]]);
-                                                        
-                }
-            writerFlujosMedios.append('\n');   
-            
-            
-                for(int e=0;e<numEtapas;e++){
+        writerFlujosMedios.append('\n');
 
-                    writerFlujosMedios.append(String.valueOf(e));
-                    for(int l=0;l<lineasFlujo.length;l++){
-                        writerFlujosMedios.append(',');
-                        writerFlujosMedios.append(Float.toString(FlujoMedio[lineasFlujo[l]][e]));
-                                                          
-                    }
-                    writerFlujosMedios.append('\n');
-                }
+        //valores:
+        for (int e = 0; e < numEtapas; e++) {
+            writerFlujosMedios.append(String.valueOf(e));
+            for (int l = 0; l < lineasFlujo.length; l++) {
+                writerFlujosMedios.append(',');
+                writerFlujosMedios.append(Float.toString(FlujoMedio[lineasFlujo[l]][e]));
+            }
+            writerFlujosMedios.append('\n');
+        }
+        writerFlujosMedios.flush();
+        writerFlujosMedios.close();
         
-            writerFlujosMedios.flush();
-            writerFlujosMedios.close();
+        //Calcula consumo mensual y anual de Energia:
+        float ConsumoAnualEnergial = 0;
+        int etapasPeriodo = etapaPeriodoFin - etapaPeriodoIni;
+        float[] ConsumoMensualEnergia = new float[NUMERO_MESES];
+        int mes = 0;
+        for (int e = 0; e < etapasPeriodo; e++) {
+            mes = (int) Math.floor((double) e / (etapasPeriodo / NUMERO_MESES));
+            ConsumoAnualEnergial += ConsEta[e] * (float) duracionEta[e];
+            ConsumoMensualEnergia[mes] += ConsEta[e] * (float) duracionEta[e];
         }
         
-        catch(IOException e)
-	{
-	     e.printStackTrace();
-	} 
-        
-
-        
+        //Calcula prorratas mensuales y anuales para todas las lineas:
         double[][] prorrAnoG=new double[numLin][numGen];
         double[][][] prorrMesG=new double[numLin][numGen][NUMERO_MESES];
         double[][] prorrAnoC=new double[numLin][numCli];
         double[][][] prorrMesC=new double[numLin][numCli][NUMERO_MESES];
-        // Calcula para todas las lineas
         for(int l=0;l<numLin;l++){
             for(int e=0;e<etapasPeriodo;e++){
                 mes=(int)Math.floor((double)e/(NumeroEtapasAno/NUMERO_MESES));
                 for(int g=0;g<numGen;g++){
                     //System.out.println(prorrGx[l][g][e]);
-                    prorrAnoG[l][g] += prorrGx[l][g][e] * ( ConsEta[e] * duracionEta[e] / ConsAnoEner );
-                    prorrMesG[l][g][mes] += prorrGx[l][g][e]*( ConsEta[e] * duracionEta[e] / ConsMesEner[mes] );
+                    prorrAnoG[l][g] += prorrGx[l][g][e] * ( ConsEta[e] * duracionEta[e] / ConsumoAnualEnergial );
+                    prorrMesG[l][g][mes] += prorrGx[l][g][e]*( ConsEta[e] * duracionEta[e] / ConsumoMensualEnergia[mes] );
                 }
                 for(int c=0;c<numCli;c++){
-                    prorrAnoC[l][c]+=
-                            prorrCx[l][c][e]*(ConsEta[e]
-                            *duracionEta[e]/ConsAnoEner);
-                    prorrMesC[l][c][mes]+=
-                            prorrCx[l][c][e]*(ConsEta[e]
-                            *duracionEta[e]/ConsMesEner[mes]);
+                    prorrAnoC[l][c] += prorrCx[l][c][e] * (ConsEta[e] * duracionEta[e] / ConsumoAnualEnergial);
+                    prorrMesC[l][c][mes]+= prorrCx[l][c][e]*(ConsEta[e] *duracionEta[e]/ConsumoMensualEnergia[mes]);
                 }
             }
         }
-        // Filtra lineas troncales
+        
+        // Calcula prorratas mensuales y anuales para para las lineas troncales:
         double[][] prorrAnoTroncG = new double[numLinTx][numGen];
         double[][] prorrAnoTroncC = new double[numLinTx][numCli];
         double[][][] prorrMesTroncG=new double[numLinTx][numGen][NUMERO_MESES];
         double[][][] prorrMesTroncC=new double[numLinTx][numCli][NUMERO_MESES];
         double[][] ProrrVerMesLinG = new double[numLinTron][NUMERO_MESES];
         double[][] ProrrVerMesLinC = new double[numLinTron][NUMERO_MESES];
-        for(int l=0; l<numLinTron; l++){
-            int l2= Calc.Buscar(LinTronProp[l],nomLinTx);
+        for (int l = 0; l < numLinTron; l++) {
+            int l2 = Calc.Buscar(LinTronProp[l], nomLinTx);
             //System.out.println(l+" "+LinTronProp[l]+" "+nomLinTx[l2]+" "+l2);
-            for(int g=0; g<numGen; g++){
+            for (int g = 0; g < numGen; g++) {
                 prorrAnoTroncG[l2][g] += prorrAnoG[indiceLintron[l]][g];
-                for(int m=0; m<NUMERO_MESES; m++){
+                for (int m = 0; m < NUMERO_MESES; m++) {
                     prorrMesTroncG[l2][g][m] += prorrMesG[indiceLintron[l]][g][m];
-                ProrrVerMesLinG[l][m]+=prorrMesG[indiceLintron[l]][g][m];
+                    ProrrVerMesLinG[l][m] += prorrMesG[indiceLintron[l]][g][m];
                 }
             }
-            for(int c=0; c<numCli; c++){
+            for (int c = 0; c < numCli; c++) {
                 prorrAnoTroncC[l2][c] += prorrAnoC[indiceLintron[l]][c];
-                for(int m=0; m<NUMERO_MESES; m++){
+                for (int m = 0; m < NUMERO_MESES; m++) {
                     prorrMesTroncC[l2][c][m] += prorrMesC[indiceLintron[l]][c][m];
-                    ProrrVerMesLinC[l][m]+=prorrMesC[indiceLintron[l]][c][m];
+                    ProrrVerMesLinC[l][m] += prorrMesC[indiceLintron[l]][c][m];
                 }
             }
         }
@@ -1049,27 +867,30 @@ public class Prorratas {
         // Factor de correccion
         double[][] FactorG = new double[numLinTx][NUMERO_MESES];
         double[][] FactorC = new double[numLinTx][NUMERO_MESES];
-        for (int l=0; l<numLinTx; l++) {
-            for(int m=0; m<NUMERO_MESES; m++) {
+        for (int l = 0; l < numLinTx; l++) {
+            for (int m = 0; m < NUMERO_MESES; m++) {
                 if (datosLinIT[l] == 0) {
                     double FdenG = sumProrrMesLinG[l][m];
-                    if (Math.round(1000000000*FdenG) == 0)
+                    if (Math.round(1000000000 * FdenG) == 0) {
                         FdenG = 1.0;
-                    FactorG[l][m] = 0.8/FdenG;
+                    }
+                    FactorG[l][m] = 0.8 / FdenG;
                     double FdenC = sumProrrMesLinC[l][m];
-                    if (Math.round(1000000000*FdenC) == 0)
+                    if (Math.round(1000000000 * FdenC) == 0) {
                         FdenC = 1.0;
-                    FactorC[l][m] = 0.2/FdenC;
-                }
-                else {
+                    }
+                    FactorC[l][m] = 0.2 / FdenC;
+                } else {
                     double Fden = prorrataLinea[l][m];
-                    if (Math.round(1000000000*Fden) == 0)
+                    if (Math.round(1000000000 * Fden) == 0) {
                         Fden = 1.0;
-                    FactorG[l][m] = 1/Fden;
-                    FactorC[l][m] = 1/Fden;
+                    }
+                    FactorG[l][m] = 1 / Fden;
+                    FactorC[l][m] = 1 / Fden;
                 }
             }
         }
+        
         // Procesa salida prorratas de generacion
         double[][][] prorrMesLinG = new double[numLinTx][numCen][NUMERO_MESES];
         double[][] generacionMes = new double[numCen][NUMERO_MESES];
@@ -1081,9 +902,7 @@ public class Prorratas {
                 }
             }
         }
-        int l1=0;
         for (int l=0; l<numLinTx; l++) {
-            //l1 = Calc.Buscar(nomLinTx[l].split("#")[0],nomLinTron);
             for(int m=0; m<NUMERO_MESES; m++) {
                 for (int g=0; g<numGen; g++) {
                     if (sumPorrMesG[g] != 0) {
@@ -1107,18 +926,17 @@ public class Prorratas {
                 }
             }
         }
+        
         // Procesa salida final de prorratas de consumo
         double[][][] prorrMesLinC = new double[numLinTx][numCli][NUMERO_MESES];
-        for(int l=0; l<numLinTx; l++){
-            //l1 = Calc.Buscar(nomLinTx[l].split("#")[0],nomLinTron);
-            for(int c=0; c<numCli; c++){
-                for(int m=0; m<NUMERO_MESES; m++){
-                prorrMesLinC[l][c][m]
-                        += prorrMesTroncC[l][c][m]*FactorC[l][m];
+        for (int l = 0; l < numLinTx; l++) {
+            for (int c = 0; c < numCli; c++) {
+                for (int m = 0; m < NUMERO_MESES; m++) {
+                    prorrMesLinC[l][c][m]
+                            += prorrMesTroncC[l][c][m] * FactorC[l][m];
                 }
             }
-    }
-
+        }
         String[] nombreEtapas=new String[numEtapas];
         String[] nombreHid=new String[numHid];
         for(int a=0; a<1; a++) {
@@ -1141,36 +959,36 @@ public class Prorratas {
          * Escritura de Resultados
          * =======================
          */
-        String libroSalidaXLS = DirBaseSalida + SLASH + "Prorrata" + Ano + ".xlsx";
+        String libroSalidaXLS = DirBaseSalida + SLASH + "Prorrata" + AnoAEvaluar + ".xlsx";
         Escribe.crearLibro(libroSalidaXLS);
         Escribe.creaH3F_3d_double(
                 "Prorratas de Generación", prorrMesLinG,
                 "Línea", nomLinTx,
                 "Central", nombreCentrales,
                 "Zona",zona,
-                "Mes", nombreMeses,
+                "Mes", MESES,
                 libroSalidaXLS,"ProrrGMes","0.000%;[Red]-0.000%;\"-\"");
         Escribe.creaH3F_3d_double(
                 "Prorratas de Consumo", prorrMesLinC,
                 "Línea",nomLinTx,
                 "Cliente",nomCli,
                 "Zona",zona,
-                "Mes", nombreMeses,
+                "Mes", MESES,
                 libroSalidaXLS,"ProrrCMes","0.000%;[Red]-0.000%;\"-\"");
         Escribe.creaH1F_2d_double(
                 "Prorratas por Línea", prorrataLinea,
                 "Línea", nomLinTx,
-                "Mes", nombreMeses,
+                "Mes", MESES,
                 libroSalidaXLS, "ProrrLin","0.000%;[Red]-0.000%;\"-\"");
         Escribe.creaH1F_2d_double(
                 "Generación [GWh]", generacionMes,
                 "Central", nombreCentrales,
-                "Mes", nombreMeses,
+                "Mes", MESES,
                 libroSalidaXLS, "GMes","0.0;[Red]-0.0;\"-\"");
         Escribe.creaH1F_2d_float(
                 "Consumo [MWh]",ConsClaveMes,
                 "Cliente", nombreClaves,
-                "Mes", nombreMeses,
+                "Mes", MESES,
                 libroSalidaXLS, "CMes","0.0;[Red]-0.0;\"-\"");
         Escribe.creaH1F_2d_double(
                 "Detalle de prorratas de Generación", Calc.transponer(prorrAnoTroncG),
@@ -1185,7 +1003,7 @@ public class Prorratas {
         Escribe.creaH1FT_2d_float(
                 "Consumo [MWh]", CMes, ECUCli,
                 "Cliente", nomCli,
-                "Mes", nombreMeses,EnergiaCU,"CU",
+                "Mes", MESES, EnergiaCU,"CU",
                 libroSalidaXLS, "CMesCli","0.0;[Red]-0.0;\"-\"");
          Escribe.crea_verifProrrPeaj(prorrataLineaTron,
                  nomLinTron,
@@ -1195,13 +1013,174 @@ public class Prorratas {
 
         guardandoDatos=false;
         long tFinalEscritura = System.currentTimeMillis();
-        System.out.println("Tiempo Adquisición de datos     : "+DosDecimales.format((tFinalLectura-tInicioLectura)/1000.0)+" s");
-        System.out.println("Tiempo Calculos                 : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/1000.0)+" s");
-        System.out.println("Tiempo Iteraciones              : "+DosDecimales.format((tfinIteraciones-tInicioCalculo)/1000.0)+" s");
-        System.out.println("Tiempo Escritura de Resultados  : "+DosDecimales.format((tFinalEscritura-tInicioEscritura)/1000.0)+" s");
-        System.out.println("Tiempo total                    : "+DosDecimales.format((tFinalEscritura-tInicioLectura)/1000.0)+" s");
+        System.out.println("Tiempo Adquisición de datos     : "+dosDecimales.format((tFinalLectura-tInicioLectura)/1000.0)+" s");
+        System.out.println("Tiempo Calculos                 : "+dosDecimales.format((tFinalCalculo-tInicioCalculo)/1000.0)+" s");
+        System.out.println("Tiempo Iteraciones              : "+dosDecimales.format((tfinIteraciones-tInicioCalculo)/1000.0)+" s");
+        System.out.println("Tiempo Escritura de Resultados  : "+dosDecimales.format((tFinalEscritura-tInicioEscritura)/1000.0)+" s");
+        System.out.println("Tiempo total                    : "+dosDecimales.format((tFinalEscritura-tInicioLectura)/1000.0)+" s");
 
         completo=true;
+    }
+
+    public static void testMove(int etapa, float[][] paramLinEta, boolean[][] barrasActivas, int nBarraSlack, int[][] paramGener, float[][][] Gx, float[][] Consumos, float[][] FallaEtaHid, float[][] perdidasPLPMayor110, float[][][] Flujo, int[][] paramBarTroncal, int[][] orientBarTroncal, int[] centralesFlujo, int[] lineasFlujo, String DirBaseSalida, float[][] ConsumosClaves, int[][] datosClaves, float[][][] prorrGx, int numClaves, float[][][] prorrCx) throws IOException {
+        Matriz Ybarra;
+        Matriz Xbarra;
+        float[][] flujoDCEtapa = new float[numLin][numHid];
+        float[] flujoDCHid = new float[numLin];
+        float[][] GLDFref;
+        float[][][] GLDFEtapa;
+        float[][] GGDFref;
+        float[][][] GGDFEtapa;
+        float[][] prorrEtaGx;
+        float[][] prorrEtaCons;
+        
+        float[]GxEtaHid = new float[numHid];
+        for (int h = 0; h < numHid; h++) {
+            for (int g = 0; g < numGen; g++) {
+                GxEtaHid[h] += Gx[g][etapa][h];
+            }
+        }
+
+        /*
+        * Calcula matriz de Admitancias y matriz de Impedancias
+        * =====================================================
+        */
+        int barrasEliminadas=0;
+        // Calcula Ybarra considerando todas las barras, activas e inactivas
+        Ybarra=new Matriz(Calc.CalculaYBarra(paramLinEta,numBarras,numLin));
+        // Elimina de Ybarra las filas y columnas correspondientes a barras inactivas y la slack,
+        // de manera de obtener una matriz invertible
+        for(int b=0;b<numBarras;b++){
+            if(barrasActivas[b][etapa]==false || b==nBarraSlack){
+                Ybarra=(Ybarra.EliminarFila(b-barrasEliminadas)).EliminarColumna(b-barrasEliminadas);
+                barrasEliminadas++;
+            }
+        }
+        Xbarra=(Ybarra.InversionRapida()).uminus();
+        /* Se agregan las filas y columnas de las barras inactivas y la slack rellenas con ceros,
+        * de manera de mantener coeherencia en los indices de barras
+        */
+        for(int b=0;b<numBarras;b++){
+            if(barrasActivas[b][etapa]==false || b==nBarraSlack){
+                Xbarra=(Xbarra.InsertarCerosFila(b)).InsertarCerosColumna(b);
+            }
+        }
+        /* Calcula Factores de Desplazamiento A y
+        GLDF barra referencia y GLDF resto del sistema. */
+        float[][] GSDF = Calc.CalculaGSDF(Xbarra,paramLinEta,barrasActivas, etapa);
+        GLDFref=Calc.CalculaGLDFRef(GSDF,paramLinEta,paramGener,etapa,Gx);
+        GLDFEtapa=Calc.CalculaGLDF(GSDF,GLDFref,paramLinEta,etapa);
+        // Calcula Flujo DC y asignacion de perdidas
+        // -----------------------------------------
+        float[] R=new float[numLin];                   // resistencias en p.u
+        float[] perdI2R=new float[numLin];             // perdidas de cada linea segun I*I*R
+        float[] perdidas=new float[numLin];            // perdidas de cada linea segun diferencia entre Gx y Demanda
+        float[] perdMayor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
+        float[] perdMenor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
+        float[] perdRealesSistema=new float[numHid];   // perdidas del sistema
+        float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las lineas de tension > 110kV
+        float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las lineas de tension <= 110kV
+        float conSist;
+        float[][] conAjustado=new float[numBarras][numHid];
+        float[] genSist=new float[numHid];
+        float[] conMasPerd= new float[numBarras];      // consumos con asignacion de perdidas por iteracion [MW]
+        // Consumos con asignacion de perdidas por iteracion [MW]
+        float[][] conMasPerdEta= new float[numBarras][numHid];
+        for (int h = 0; h < numHid; h++) {
+            genSist[h] = GxEtaHid[h];
+            for (int b = 0; b > numBarras; b++) {
+                conAjustado[b][h] = 0;
+            }
+        }
+        for (int l = 0; l < numLin; l++) {
+            R[l] = paramLinEta[l][3];                    // resistencia en p.u.
+        }
+        
+//        FileWriter writerConsumos = new FileWriter(DirBaseSalida + SLASH + "consumos.csv");
+        for (int h = 0; h < numHid; h++) {
+            
+//            writerConsumos.append(Float.toString(h));
+//            writerConsumos.append(",");
+//            writerConsumos.append(Float.toString(etapa));
+            
+            for (int l = 0; l < numLin; l++) {
+                perdI2R[l] = 0;
+                perdidas[l] = 0;
+                flujoDCHid[l] = 0;
+            }
+            perdRealesSistema[h] = 0;
+            perdI2RSistMayor110[h] = 0;
+            perdI2RSistMenor110[h] = 0;
+            conSist = 0;
+            for (int b = 0; b < numBarras; b++) {
+                conSist += Consumos[b][etapa];
+            }
+            for (int b = 0; b < numBarras; b++) {
+                conAjustado[b][h] += Consumos[b][etapa] * (conSist - FallaEtaHid[etapa][h]) / conSist;
+//                writerConsumos.append(",");
+//                writerConsumos.append(Float.toString(conAjustado[b][h]));
+            }
+//            writerConsumos.append("\n");
+            
+            perdRealesSistema[h] = genSist[h] - (conSist - FallaEtaHid[etapa][h]);
+            // Calculo de Flujo DC
+            flujoDCHid = Calc.FlujoDC_GLDF(GLDFEtapa, conAjustado, h, etapa);//flujos en MW
+            //System.out.println("Flujo DC "+flujoDCHid[586]);
+            for (int l = 0; l < numLin; l++) {
+                flujoDCEtapa[l][h] = flujoDCHid[l];
+            }
+            // Calcula perdidas
+            for (int l = 0; l < numLin; l++) {
+                if (flujoDCHid[l] != 0) {
+                    float sBase = 100;
+                    perdI2R[l] = sBase * (R[l] * (flujoDCHid[l] / sBase) * (flujoDCHid[l] / sBase));	//perdidas en MW
+                    //System.out.println("Perdidas cuadraticas "+ perdI2R[l]);
+                }
+                if (paramLinEta[l][2] > 110) {
+                    perdI2RSistMayor110[h] += perdI2R[l];
+                } else {
+                    perdI2RSistMenor110[h] += perdI2R[l];
+                }
+            }
+            // Perdidas Reales prorrateadas en las lineas de acuerdo al I2R de cada una
+            perdMayor110 = Calc.ProrrPerdidas(perdidasPLPMayor110[etapa][h], perdI2R, paramLinEta, "Mayor_110", h);
+            perdMenor110 = Calc.ProrrPerdidas((perdRealesSistema[h] - perdidasPLPMayor110[etapa][h]), perdI2R, paramLinEta, "Menor_Igual_110", h);
+            for (int l = 0; l < numLin; l++) {
+                perdidas[l] = perdMayor110[l] + perdMenor110[l];
+            }
+            // Asigna perdidas a consumos
+            conMasPerd = Calc.AsignaPerdidas(flujoDCHid, GLDFEtapa, perdidas, paramLinEta, conAjustado, etapa, h);
+        }
+        for (int h = 0; h < numHid; h++) {
+            for (int l = 0; l < numLin; l++) {
+                Flujo[l][etapa][h] = flujoDCEtapa[l][h];
+            }
+            for (int b = 0; b < numBarras; b++) {
+                conMasPerdEta[b][h] = conMasPerd[b];
+            }
+        }
+        /*
+        * Calcula GGDF barra referencia y GGDF resto del sistema.
+        */
+        GGDFref=Calc.CalculaGGDFRef(GSDF,conMasPerdEta, paramLinEta);
+        GGDFEtapa=Calc.CalculaGGDF(GSDF,GGDFref,paramLinEta,etapa);
+        /*
+        * Calcula prorratas promedio por etapa
+        */
+        prorrEtaGx=Calc.CalculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
+                orientBarTroncal, etapa, centralesFlujo, lineasFlujo,GSDF,GGDFref );
+        prorrEtaCons=Calc.CalculaProrrCons(flujoDCEtapa, GLDFEtapa,
+                ConsumosClaves, datosClaves, paramLinEta,
+                paramBarTroncal, orientBarTroncal, etapa);
+        for (int l = 0; l < numLin; l++) {
+            for (int g = 0; g < numGen; g++) {
+                prorrGx[l][g][etapa] = prorrEtaGx[l][g];
+            }
+            for (int c = 0; c < numClaves; c++) {
+                prorrCx[l][datosClaves[c][2]][etapa] += prorrEtaCons[l][c];
+            }
+        }
+        System.out.println("Finalizado calculo etapa : "+ etapa);
     }
 
     public Prorratas() {
@@ -1246,6 +1225,8 @@ public class Prorratas {
                     CalculaProrratas(DirIn, DirOut, AnoAEvaluar, tipoCalculo, AnoBase, NumHidro, NumEtapasAno, NumSlack, Offset, Cli);
                 } catch (IOException e) {
                     System.out.println(e);
+                } catch (Exception e) {
+                    e.printStackTrace(System.out);
                 }
                 return true;
             }
@@ -1255,6 +1236,104 @@ public class Prorratas {
     }
 }
 
+class ProrratasExe implements Runnable {
+    private int etapa;
+    private float[][] paramLinEta;
+    private boolean[][] barrasActivas;
+    private int nBarraSlack;
+    private int[][] paramGener; 
+    private float[][][] Gx; 
+    private float[][] Consumos; 
+    private float[][] FallaEtaHid; 
+    private float[][] perdidasPLPMayor110;
+    private float[][][] Flujo; 
+    private int[][] paramBarTroncal; 
+    private int[][] orientBarTroncal; 
+    private int[] centralesFlujo; 
+    private int[] lineasFlujo;
+    private String DirBaseSalida;
+    private float[][] ConsumosClaves; 
+    private int[][] datosClaves; 
+    private float[][][] prorrGx; 
+    private int numClaves; 
+    private float[][][] prorrCx;
 
+    public ProrratasExe(int etapa, float[][] paramLinEta, boolean[][] barrasActivas, int nBarraSlack, int[][] paramGener, float[][][] Gx, float[][] Consumos, float[][] FallaEtaHid, float[][] perdidasPLPMayor110, float[][][] Flujo, int[][] paramBarTroncal, int[][] orientBarTroncal, int[] centralesFlujo, int[] lineasFlujo, String DirBaseSalida, float[][] ConsumosClaves, int[][] datosClaves, float[][][] prorrGx, int numClaves, float[][][] prorrCx) {
+        this.etapa = etapa;
+        this.paramLinEta = paramLinEta;
+        this.barrasActivas = barrasActivas;
+        this.nBarraSlack = nBarraSlack;
+        this.paramGener = paramGener;
+        this.Gx = Gx;
+        this.Consumos = Consumos;
+        this.FallaEtaHid = FallaEtaHid;
+        this.perdidasPLPMayor110 = perdidasPLPMayor110;
+        this.Flujo = Flujo;
+        this.paramBarTroncal = paramBarTroncal;
+        this.orientBarTroncal = orientBarTroncal;
+        this.centralesFlujo = centralesFlujo;
+        this.lineasFlujo = lineasFlujo;
+        this.DirBaseSalida = DirBaseSalida;
+        this.ConsumosClaves = ConsumosClaves;
+        this.datosClaves = datosClaves;
+        this.prorrGx = prorrGx;
+        this.numClaves = numClaves;
+        this.prorrCx = prorrCx;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Prorratas.testMove(etapa, paramLinEta, barrasActivas, nBarraSlack, paramGener, Gx, Consumos, FallaEtaHid, perdidasPLPMayor110, Flujo, paramBarTroncal, orientBarTroncal, centralesFlujo, lineasFlujo, DirBaseSalida, ConsumosClaves, datosClaves, prorrGx, numClaves, prorrCx);
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+    }
+    
+}
+
+class ExtendedExecutor extends ThreadPoolExecutor {
+
+    /**
+     * Creates a new fixed-sized thread pool executor with the defined number of
+     * threads and schedule time out
+     *
+     * @param maxThreads maximum number of threads
+     * @param maxTimeOut maximum time-out before cancelling pending threads (in
+     * minutes)
+     */
+    public ExtendedExecutor(int maxThreads, int maxTimeOut) {
+        super(maxThreads, // core threads
+                maxThreads, // max threads
+                maxTimeOut, // timeout
+                TimeUnit.MINUTES, // timeout units
+                new LinkedBlockingQueue<Runnable>() // work queue
+        );
+    }
+
+    @Override
+    protected void afterExecute(Runnable r, Throwable t) {
+        super.afterExecute(r, t);
+        if (t == null && r instanceof Future<?>) {
+            try {
+                Future<?> future = (Future<?>) r;
+                if (future.isDone()) {
+                    future.get();
+                }
+            } catch (CancellationException ce) {
+                t = ce;
+            } catch (ExecutionException ee) {
+                t = ee.getCause();
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        if (t != null) {
+            System.out.println(t);
+        }
+    }
+}
 
     

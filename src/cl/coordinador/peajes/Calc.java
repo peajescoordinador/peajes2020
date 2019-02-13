@@ -204,7 +204,15 @@ private static String slash=File.separator;
     //----------------------------------
     //Determina Prorratas de Generación
     //----------------------------------
+    static public float[][] CalculaProrrGx(float flujoDC[][], float D[][][], float Gx[][][], int datosGener[][],
+            float datosLineas[][], int paramBarTroncal[][], int orientBarTroncal[][],
+            int e, int[] gflux, int[] lineasFlujo, float A[][], float Dref[][]) {
+        return CalculaProrrGx(flujoDC, D, Gx, datosGener, datosLineas, paramBarTroncal, orientBarTroncal, e, gflux, lineasFlujo, null, A, Dref);
+    }
     
+    //----------------------------------
+    //Determina Prorratas de Generación. Escribe archivo debug prorratas.csv al directorio 'DirBaseSalida'
+    //----------------------------------
     static public float[][] CalculaProrrGx(float flujoDC[][], float D[][][], float Gx[][][],int datosGener[][],
     						float datosLineas[][],int paramBarTroncal[][],int orientBarTroncal[][],int e, int[] gflux,int[] lineasFlujo, String DirBaseSalida,float A[][], float Dref[][]){
     	int numHid=flujoDC[0].length;
@@ -265,10 +273,6 @@ private static String slash=File.separator;
                 }
             }
     	}
-
-        
-        
-        
         
     	for(int h=0;h<numHid;h++){
             for(int l=0;l<numLineas;l++){
@@ -282,49 +286,43 @@ private static String slash=File.separator;
             }
     	}
         
-        
-        try
-	{
-            FileWriter writer = new FileWriter(DirBaseSalida + slash +"prorratas.csv", true);
-           
-                        
-            
-            for(int h=0;h<numHid;h++){
-                for(int l=0;l<lineasFlujo.length;l++){
-                    for(int g=0;g<gflux.length;g++){
-                    //for(int g=0;g<numGeneradores;g++){
-                    
-                        writer.append(String.valueOf(e));
-                        writer.append(',');
-                        writer.append(String.valueOf(h));
-                        writer.append(',');
-                        writer.append(String.valueOf(lineasFlujo[l]));
-                        writer.append(',');
-                        writer.append(String.valueOf(gflux[g]));
-                        writer.append(',');
-                        writer.append(String.valueOf((genEquiv[gflux[g]][lineasFlujo[l]][h]) /(genEquivTotal[lineasFlujo[l]][h])));
-                        writer.append(',');
-                        writer.append(""+ (Gx[gflux[g]][e][h]));
-                        writer.append(',');
-                        writer.append(""+ (D[datosGener[gflux[g]][0]][lineasFlujo[l]][h]));
-                        writer.append(',');
-                        writer.append(""+ (A[datosGener[gflux[g]][0]][lineasFlujo[l]]));
-                        writer.append(',');
-                        writer.append(""+ (Dref[lineasFlujo[l]][h]));
-                        
-                        
-                                
-                                
-                        writer.append('\n');
+        if (DirBaseSalida != null) {
+            try {
+                FileWriter writer = new FileWriter(DirBaseSalida + slash + "prorratas.csv", true);
 
+                for (int h = 0; h < numHid; h++) {
+                    for (int l = 0; l < lineasFlujo.length; l++) {
+                        for (int g = 0; g < gflux.length; g++) {
+                            //for(int g=0;g<numGeneradores;g++){
+
+                            writer.append(String.valueOf(e));
+                            writer.append(',');
+                            writer.append(String.valueOf(h));
+                            writer.append(',');
+                            writer.append(String.valueOf(lineasFlujo[l]));
+                            writer.append(',');
+                            writer.append(String.valueOf(gflux[g]));
+                            writer.append(',');
+                            writer.append(String.valueOf((genEquiv[gflux[g]][lineasFlujo[l]][h]) / (genEquivTotal[lineasFlujo[l]][h])));
+                            writer.append(',');
+                            writer.append("" + (Gx[gflux[g]][e][h]));
+                            writer.append(',');
+                            writer.append("" + (D[datosGener[gflux[g]][0]][lineasFlujo[l]][h]));
+                            writer.append(',');
+                            writer.append("" + (A[datosGener[gflux[g]][0]][lineasFlujo[l]]));
+                            writer.append(',');
+                            writer.append("" + (Dref[lineasFlujo[l]][h]));
+
+                            writer.append('\n');
+
+                        }
                     }
+
                 }
-               
-            }
-            
-            for(int l=0;l<lineasFlujo.length;l++){
-                    for(int g=0;g<gflux.length;g++){
-                    //for(int g=0;g<numGeneradores;g++){
+
+                for (int l = 0; l < lineasFlujo.length; l++) {
+                    for (int g = 0; g < gflux.length; g++) {
+                        //for(int g=0;g<numGeneradores;g++){
                         writer.append(String.valueOf(e));
                         writer.append(',');
                         writer.append("med");
@@ -333,23 +331,19 @@ private static String slash=File.separator;
                         writer.append(',');
                         writer.append(String.valueOf(gflux[g]));
                         writer.append(',');
-                        writer.append(""+(Prorratas[lineasFlujo[l]][gflux[g]]));
+                        writer.append("" + (Prorratas[lineasFlujo[l]][gflux[g]]));
                         //System.out.println(Prorratas[l][gflux[g]]);
                         writer.append('\n');
 
                     }
                 }
-            
-            writer.flush();
-            writer.close();
+
+                writer.flush();
+                writer.close();
+            } catch (IOException f) {
+                f.printStackTrace(System.out);
+            }
         }
-        
-        catch(IOException f)
-	{
-	     f.printStackTrace();
-	} 
-        
-        
         
     	return Prorratas;
     }

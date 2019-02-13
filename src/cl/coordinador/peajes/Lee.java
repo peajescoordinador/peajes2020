@@ -19,6 +19,7 @@ import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
@@ -1156,9 +1157,30 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
         }
     }
 
-
-    public static int leePlpcnfe(String libroEntrada, String[] TextoTemporal1,
-            int[][] intAux3, String[] nombreCentrales) {
+    /**
+     * Llena el arreglo temporal con las centrales de plp en el archivo
+     * libroEntrada <b>excluyendo</> las centrales vacias. Es decir, aquellas
+     * centrales plp que no tienen un match en central peajes (vacio en columna
+     * Central Peajes)
+     * <br>Ademas, guarda informacion auxiliar de la barra a la que esta
+     * conectada la central y el indice del generador plp en el arreglo
+     * 'nombreCentrales'
+     * <br>RANGO EXCEL: plpcnfce
+     *
+     * @param libroEntrada ruta completa al archivo de entrada planilla Ent
+     * @param TextoTemporal1 arreglo temporal a llenar con nombres Centrales PLP
+     * @param infoAux arreglo bidimensional de informacion adicional donde la
+     * primera columna [][0] es el numero de la barra en plp y la segunda [][1]
+     * es el indice del generador en el arreglo nombreCentrales
+     * @param nombreCentrales arreglo con nombre de generadores peajes
+     * @return numero de centrales excluyendo las centrales "vacias" (es decir,
+     * aquellas que no tengan esten vacias en la columna 'Central Peajes' de la
+     * hoja 'centralesPLP'. Ademas, se detendra si no encuentra en arreglo
+     * 'nombreCentrales' cualquiera de las centrales en columna 'Central PLP' en
+     * el libroEntrada
+     */
+    public static int leePlpcnfe(String libroEntrada, String[] nombresGenPLP,
+            int[][] infoAux, String[] nombreCentrales) {
         int numGeneradores = 0;
         int aux;
         try {
@@ -1167,7 +1189,7 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
             Cell c4 = null;
             Cell c5 = null;
             //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
-            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));
+            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(libroEntrada));
             AreaReference aref;
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("plpcnfce");
@@ -1175,48 +1197,59 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
             aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
-            for (int i=0; i<crefs.length; i+=5) {
+            for (int i = 0; i < crefs.length; i += 5) {
                 Row r = s.getRow(crefs[i].getRow());
-                c2 = r.getCell(crefs[i+1].getCol());
-                c3 = r.getCell(crefs[i+2].getCol());
-                c4 = r.getCell(crefs[i+3].getCol());
-                c5 = r.getCell(crefs[i+4].getCol());
-                TextoTemporal1[numGeneradores]=c2.toString().trim(); // Nombre
-                if (c3.getStringCellValue().compareTo("")!=0) {
-                    aux = Calc.Buscar(c4.toString().trim()+"#"+c3.toString().trim(),nombreCentrales);
-                if(aux==-1) {
-                    System.out.println("El generador PLP "+c2.toString().trim()+" de "+c4.toString().trim()+" en 'centralesPLP' " +
-                            "no posee una central de peajes asociada en 'centrales'");
+                c2 = r.getCell(crefs[i + 1].getCol());
+                c3 = r.getCell(crefs[i + 2].getCol());
+                c4 = r.getCell(crefs[i + 3].getCol());
+                c5 = r.getCell(crefs[i + 4].getCol());
+                nombresGenPLP[numGeneradores] = c2.toString().trim(); // Nombre
+                if (c3.getStringCellValue().compareTo("") != 0) {
+                    aux = Calc.Buscar(c4.toString().trim() + "#" + c3.toString().trim(), nombreCentrales);
+                    if (aux == -1) {
+                        System.out.println("El generador PLP " + c2.toString().trim() + " de " + c4.toString().trim() + " en 'centralesPLP' "
+                                + "no posee una central de peajes asociada en 'centrales'");
+                    }
+                    infoAux[numGeneradores][1] = aux;
+                    infoAux[numGeneradores][0] = (int) c5.getNumericCellValue() - 1; // barra de conexion
+                    if (infoAux[numGeneradores][0] == -1) {
+                        System.out.println("La barra del Generador: " + c4.toString().trim() + "#" + c3.toString().trim() + " se encuentra mal asignada");
+                    }
+                    numGeneradores++;
                 }
-                intAux3[numGeneradores][1] = aux;
-                intAux3[numGeneradores][0] = (int) c5.getNumericCellValue()-1; // barra de conexion
-                if(intAux3[numGeneradores][0]==-1){
-                    System.out.println("La barra del Generador: "+c4.toString().trim()+"#"+c3.toString().trim()+" se encuentra mal asignada");
-                }
-                numGeneradores++;
             }
-            }
-        }
-        catch (java.io.FileNotFoundException e) {
-                System.out.println( "No se se puede acceder al archivo " + e.getMessage());
-        }
-        catch (Exception e) {
-                e.printStackTrace();
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("No se se puede acceder al archivo " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
         }
         return numGeneradores;
     }
 
+    /**
+     * Llena el arreglo temporal con las centrales de plp en el archivo
+     * libroEntrada <b>incluyendo</> las centrales vacias. Es decir, incluye
+     * todas las centrales plp
+     * <br>RANGO EXCEL: plpcnfce
+     *
+     * @param libroEntrada ruta completa al archivo de entrada planilla Ent
+     * @param TextoTemporal1 arreglo temporal a llenar con nombres Centrales PLP
+     * @param nombreCentrales arreglo con nombre de generadores peajes
+     * @return numero total de centrales plp
+     */
     public static int leePlpcnfe(String libroEntrada, String[] TextoTemporal1,
-             String[] nombreCentrales) {
+            String[] nombreCentrales) {
         int numGeneradores = 0;
         int aux;
         try {
             Cell c2 = null;
             Cell c3 = null;
             Cell c4 = null;
-            Cell c5 = null;
+//            Cell c5 = null;
             //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
-            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));
+            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(libroEntrada));
             AreaReference aref;
             CellReference[] crefs;
             int nomRangoInd = wb.getNameIndex("plpcnfce");
@@ -1224,30 +1257,28 @@ public static void leeLinman(String libroEntrada, int[][] LinMan, String[] nombr
             aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefs = aref.getAllReferencedCells();
             Sheet s = wb.getSheet(crefs[0].getSheetName());
-            for (int i=0; i<crefs.length; i+=5) {
+            for (int i = 0; i < crefs.length; i += 5) {
                 Row r = s.getRow(crefs[i].getRow());
-                c2 = r.getCell(crefs[i+1].getCol());
-                c3 = r.getCell(crefs[i+2].getCol());
-                c4 = r.getCell(crefs[i+3].getCol());
-                c5 = r.getCell(crefs[i+4].getCol());
-                TextoTemporal1[numGeneradores]=c2.toString().trim(); // Nombre
-                if (c3.getStringCellValue().compareTo("")!=0) {
-                    aux = Calc.Buscar(c4.toString().trim()+"#"+c3.toString().trim(),nombreCentrales);
-                if(aux==-1) {
-                    System.out.println("El generador PLP "+c2.toString().trim()+" de "+c4.toString().trim()+" en 'centralesPLP' " +
-                            "no posee una central de peajes asociada en 'centrales'");
+                c2 = r.getCell(crefs[i + 1].getCol());
+                c3 = r.getCell(crefs[i + 2].getCol());
+                c4 = r.getCell(crefs[i + 3].getCol());
+//                c5 = r.getCell(crefs[i + 4].getCol());
+                TextoTemporal1[numGeneradores] = c2.toString().trim(); // Nombre
+                if (c3.getStringCellValue().compareTo("") != 0) {
+                    aux = Calc.Buscar(c4.toString().trim() + "#" + c3.toString().trim(), nombreCentrales);
+                    if (aux == -1) {
+                        System.out.println("El generador PLP " + c2.toString().trim() + " de " + c4.toString().trim() + " en 'centralesPLP' "
+                                + "no posee una central de peajes asociada en 'centrales'");
+                    }
                 }
-                
-                
-            }
                 numGeneradores++;
             }
-        }
-        catch (java.io.FileNotFoundException e) {
-                System.out.println( "No se se puede acceder al archivo " + e.getMessage());
-        }
-        catch (Exception e) {
-                e.printStackTrace();
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("No se se puede acceder al archivo " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
         }
         return numGeneradores;
     }
