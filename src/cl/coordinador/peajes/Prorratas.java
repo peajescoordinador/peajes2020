@@ -60,6 +60,22 @@ public class Prorratas {
     private static int numBarras; //Numero de barras en archivo Ent
     private static int numHid; //Numero de hidrologias a considerar en calculo (definidas por usuario)
     
+    private static float [][][] Gx;
+    private static boolean[][] barrasActivas;
+    private static int[][] paramGener;
+    private static float[][] Consumos;
+    private static float[][] FallaEtaHid;
+    private static float[][] perdidasPLPMayor110;
+    private static float[][][] Flujo;
+    private static float[][][] prorrGx;
+    private static float[][][] prorrCx;
+    private static int[][] orientBarTroncal;
+    private static int[] centralesFlujo;
+    private static int[] lineasFlujo;
+    private static int[][] paramBarTroncal;
+    private static float[][] ConsumosClaves;
+    private static int[][] datosClaves;
+    
     public static void CalculaProrratas(File DirEntrada, File DirSalida, int AnoAEvaluar, int tipoCalc, int AnoBase,
             int NumeroHidrologias ,int NumeroEtapasAno, int NumeroSlack,int ValorOffset,boolean ActClientes) throws IOException, FileNotFoundException {
         
@@ -186,7 +202,7 @@ public class Prorratas {
         int[][] intAux3=new int[2500][4];
         numBarras = Lee.leeDefbar(libroEntrada, TxtTemp1, intAux3);
         String [] nomBar = new String[numBarras];
-        int[][] paramBarTroncal = new int[numBarras][3];
+        paramBarTroncal = new int[numBarras][3];
         int numBarrasTroncales = 0;
         for(int i=0;i<numBarras;i++){
             nomBar[i] = TxtTemp1[i];
@@ -206,7 +222,7 @@ public class Prorratas {
          * Lectura de consumos
          * ===================
          */
-        float[][] Consumos = new float[numBarras][numEtapas];
+        Consumos = new float[numBarras][numEtapas];
         Lee.leeConsumoxBarra(libroEntrada,Consumos,numBarras,numEtapas);
         float[][] consumoNormalizado=new float[numBarras][numEtapas];
         boolean[][] barrasConsumo = new boolean[numBarras][numEtapas];
@@ -262,7 +278,7 @@ public class Prorratas {
         
         
         System.out.println("Generadores: "+numGen);
-        int[][] paramGener = new int[numGen][3];
+        paramGener = new int[numGen][3];
         String [] nomGen = new String[numGen];
         String [] nomGen_Sin_Fallas = new String[numGen_Sin_Fallas];
 //        boolean[] barrasGeneracion = new boolean[numBarras];
@@ -283,7 +299,7 @@ public class Prorratas {
         /*****************************************
         Lectura de orientacion de barras troncales
         ******************************************/
-        int[][] orientBarTroncal=new int[numBarras][numLin];
+        orientBarTroncal=new int[numBarras][numLin];
         for(int i=0; i < numBarras; i++){
             for(int j=0; j < numLin; j++){
                 orientBarTroncal[i][j]=0;
@@ -319,7 +335,7 @@ public class Prorratas {
                      paramEtapa, duracionEta, Temporal3);
         }
 
-        float[][] ConsumosClaves = new float[numClaves][numEtapas];
+        ConsumosClaves = new float[numClaves][numEtapas];
         for (int i = 0; i < numClaves; i++) {
             System.arraycopy(Temporal1[i], 0, ConsumosClaves[i], 0, numEtapas);
         }
@@ -364,7 +380,7 @@ public class Prorratas {
                 TxtTemp2, intAux3, nomCli, nomBar);
         String[] nombreClaves = new String[numClaves];
 //        String[] nombreClClientes = new String[numClaves];
-        int[][] datosClaves = new int[numClaves][4];
+        datosClaves = new int[numClaves][4];
         for(int i=0; i < numClaves; i++) {
             nombreClaves[i]=TxtTemp1[i];
 //            nombreClClientes[i]=TxtTemp2[i];
@@ -401,8 +417,9 @@ public class Prorratas {
         BufferedReader input = null;
         File testReadFile = new File(ArchivoDespachoGeneradores);
         input = null;
-        float[][][] Gx = new float[numGen][numEtapas][numHid]; //Despacho PLP
-        float[][]FallaEtaHid = new float[numEtapas][numHid];   //Falla PLP
+        Gx = new float[numGen][numEtapas][numHid]; //Despacho PLP
+        FallaEtaHid = new float[numEtapas][numHid];   //Falla PLP
+        System.out.println("Inicio lectura archivo despacho PLP...");
         try {
             //input = new BufferedReader( new FileReader(testReadFile) );
             input = new BufferedReader( new InputStreamReader(new
@@ -461,7 +478,7 @@ public class Prorratas {
                             Pgen=Float.valueOf((line.substring(103,line.indexOf(",",103))).trim()); 
                             if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
                                 //System.out.println(indGen +" "+nomGen[indGen]);
-                                Gx[indGen][indEta-etapaPeriodoIni][indHid]=Pgen;
+                                Gx[indGen][indEta-etapaPeriodoIni][indHid]=Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro y lower than the values in plp file!
                                 //System.out.println(Gx[indGen][indEta-etapaPeriodoIni][indHid]);
                             }
                             
@@ -476,7 +493,7 @@ public class Prorratas {
                             //ENS=Float.valueOf((line.substring(151,158)).trim());
                             ENS=Float.valueOf((line.substring(103,line.indexOf(",",103))).trim());
                             if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
-                                FallaEtaHid[indEta-etapaPeriodoIni][indHid]+=ENS;
+                                FallaEtaHid[indEta-etapaPeriodoIni][indHid]+=ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro y lower than the values in plp file!
                             }
                         }
                     }
@@ -524,7 +541,8 @@ public class Prorratas {
          */
         testReadFile = new File(ArchivoPerdidasLineas);
         input = null;
-        float[][] perdidasPLPMayor110 = new float[numEtapas][numHid];
+        perdidasPLPMayor110 = new float[numEtapas][numHid];
+        System.out.println("Inicio lectura archivo flujos lineas PLP...");
         try {
             input = new BufferedReader( new InputStreamReader(new
                     FileInputStream(testReadFile), "Latin1"));
@@ -545,7 +563,7 @@ public class Prorratas {
                             Perd=Float.valueOf(line.substring(111,line.indexOf(",",111)).trim());
                             if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
                                 if(paramLinSistRed[indLin]>110){
-                                    perdidasPLPMayor110[indEta-etapaPeriodoIni][indHid]+=Perd;
+                                    perdidasPLPMayor110[indEta-etapaPeriodoIni][indHid]+=Perd; //TODO
                                 }
                             }
                         }
@@ -601,7 +619,7 @@ public class Prorratas {
          * Chequeo de consistencia
          * =======================
          */
-        boolean[][] barrasActivas = Calc.ChequeoConsistencia(paramLineas, LinMan,
+        barrasActivas = Calc.ChequeoConsistencia(paramLineas, LinMan,
                 numBarras, numEtapas);
 
         /*
@@ -610,13 +628,13 @@ public class Prorratas {
          */
         int nBarraSlack = Calc.Buscar(nombreSlack,nomBar);
         //
-        float[][][] Flujo = new float[numLin][numEtapas][numHid];
+        Flujo = new float[numLin][numEtapas][numHid];
 
         //
-        float[][][] prorrGx = new float[numLin][numGen][numEtapas];
+        prorrGx = new float[numLin][numGen][numEtapas];
 //        float[][] prorrEtaGx = new float[numLin][numGen];
         //
-        float[][][] prorrCx = new float[numLin][numCli][numEtapas];
+        prorrCx = new float[numLin][numCli][numEtapas];
 //        float[][] prorrEtaCons = new float[numLin][numCli];
         //
 //        float[][] GGDFref = new float[numLin][numHid];
@@ -628,8 +646,8 @@ public class Prorratas {
         //
         
         
-        int[] centralesFlujo = Lee.leeCentralesFlujo(libroEntrada, nomGen,"centrales_flujo");
-        int[] lineasFlujo = Lee.leeCentralesFlujo(libroEntrada, nombreLineas,"lineas_flujo");
+        centralesFlujo = Lee.leeCentralesFlujo(libroEntrada, nomGen,"centrales_flujo");
+        lineasFlujo = Lee.leeCentralesFlujo(libroEntrada, nombreLineas,"lineas_flujo");
         
         //Escritura del header archivo prorratas.csv:
         FileWriter writerProrratas = new FileWriter(DirBaseSalida + SLASH + "prorratas.csv");
@@ -701,7 +719,7 @@ public class Prorratas {
                 paramLinEta[indiceLintron[l]][9] = datosLintron[l][2];
             }
             
-            exeService.submit(new ProrratasExe(etapa, paramLinEta, barrasActivas, nBarraSlack, paramGener, Gx, Consumos, FallaEtaHid, perdidasPLPMayor110, Flujo, paramBarTroncal, orientBarTroncal, centralesFlujo, lineasFlujo, DirBaseSalida, ConsumosClaves, datosClaves, prorrGx, numClaves, prorrCx));
+            exeService.submit(new ProrratasExe(etapa, nBarraSlack, numGen, numLin, numLinTron, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta));
 //            testMove(etapa, paramLinEta, barrasActivas, nBarraSlack, paramGener, Gx, Consumos, FallaEtaHid,  perdidasPLPMayor110, Flujo, paramBarTroncal, orientBarTroncal, centralesFlujo, lineasFlujo, DirBaseSalida, ConsumosClaves, datosClaves, prorrGx, numClaves, prorrCx);
         }
         long elapsed = System.currentTimeMillis() - initExecutorTime;
@@ -1022,7 +1040,7 @@ public class Prorratas {
         completo=true;
     }
 
-    public static void testMove(int etapa, float[][] paramLinEta, boolean[][] barrasActivas, int nBarraSlack, int[][] paramGener, float[][][] Gx, float[][] Consumos, float[][] FallaEtaHid, float[][] perdidasPLPMayor110, float[][][] Flujo, int[][] paramBarTroncal, int[][] orientBarTroncal, int[] centralesFlujo, int[] lineasFlujo, String DirBaseSalida, float[][] ConsumosClaves, int[][] datosClaves, float[][][] prorrGx, int numClaves, float[][][] prorrCx) throws IOException {
+    public static void testMove(int etapa, int nBarraSlack, int numGen, int numLin, int numLinTron, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta) throws IOException {
         Matriz Ybarra;
         Matriz Xbarra;
         float[][] flujoDCEtapa = new float[numLin][numHid];
@@ -1238,53 +1256,33 @@ public class Prorratas {
 
 class ProrratasExe implements Runnable {
     private int etapa;
-    private float[][] paramLinEta;
-    private boolean[][] barrasActivas;
     private int nBarraSlack;
-    private int[][] paramGener; 
-    private float[][][] Gx; 
-    private float[][] Consumos; 
-    private float[][] FallaEtaHid; 
-    private float[][] perdidasPLPMayor110;
-    private float[][][] Flujo; 
-    private int[][] paramBarTroncal; 
-    private int[][] orientBarTroncal; 
-    private int[] centralesFlujo; 
-    private int[] lineasFlujo;
+    private int numGen;
+    private int numLin;
+    private int numLinTron;
+    private int numBarras;
+    private int numHid;
     private String DirBaseSalida;
-    private float[][] ConsumosClaves; 
-    private int[][] datosClaves; 
-    private float[][][] prorrGx; 
-    private int numClaves; 
-    private float[][][] prorrCx;
+    private int numClaves;
+    private float[][] paramLinEta;
 
-    public ProrratasExe(int etapa, float[][] paramLinEta, boolean[][] barrasActivas, int nBarraSlack, int[][] paramGener, float[][][] Gx, float[][] Consumos, float[][] FallaEtaHid, float[][] perdidasPLPMayor110, float[][][] Flujo, int[][] paramBarTroncal, int[][] orientBarTroncal, int[] centralesFlujo, int[] lineasFlujo, String DirBaseSalida, float[][] ConsumosClaves, int[][] datosClaves, float[][][] prorrGx, int numClaves, float[][][] prorrCx) {
+    public ProrratasExe(int etapa, int nBarraSlack, int numGen, int numLin, int numLinTron, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta) {
         this.etapa = etapa;
-        this.paramLinEta = paramLinEta;
-        this.barrasActivas = barrasActivas;
         this.nBarraSlack = nBarraSlack;
-        this.paramGener = paramGener;
-        this.Gx = Gx;
-        this.Consumos = Consumos;
-        this.FallaEtaHid = FallaEtaHid;
-        this.perdidasPLPMayor110 = perdidasPLPMayor110;
-        this.Flujo = Flujo;
-        this.paramBarTroncal = paramBarTroncal;
-        this.orientBarTroncal = orientBarTroncal;
-        this.centralesFlujo = centralesFlujo;
-        this.lineasFlujo = lineasFlujo;
+        this.numGen = numGen;
+        this.numLin = numLin;
+        this.numLinTron = numLinTron;
+        this.numBarras = numBarras;
+        this.numHid = numHid;
         this.DirBaseSalida = DirBaseSalida;
-        this.ConsumosClaves = ConsumosClaves;
-        this.datosClaves = datosClaves;
-        this.prorrGx = prorrGx;
         this.numClaves = numClaves;
-        this.prorrCx = prorrCx;
+        this.paramLinEta = paramLinEta;
     }
-
+    
     @Override
     public void run() {
         try {
-            Prorratas.testMove(etapa, paramLinEta, barrasActivas, nBarraSlack, paramGener, Gx, Consumos, FallaEtaHid, perdidasPLPMayor110, Flujo, paramBarTroncal, orientBarTroncal, centralesFlujo, lineasFlujo, DirBaseSalida, ConsumosClaves, datosClaves, prorrGx, numClaves, prorrCx);
+            Prorratas.testMove(etapa, nBarraSlack, numGen, numLin, numLinTron, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta);
         } catch (IOException e) {
             e.printStackTrace(System.out);
         } catch (Exception e) {
