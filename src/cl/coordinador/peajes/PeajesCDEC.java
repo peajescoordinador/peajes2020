@@ -139,6 +139,11 @@ public class PeajesCDEC extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         textoCalculo.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         textoCalculo.setForeground(java.awt.Color.blue);
@@ -1030,6 +1035,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
         showOptionWindow();
     }//GEN-LAST:event_menuOpcionesActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        salirPeajes();
+    }//GEN-LAST:event_formWindowClosing
+
     public static void main(String args[]) {
                
         HashMap<String, Integer> argsMap= new HashMap<String, Integer>();
@@ -1528,6 +1537,15 @@ public class PeajesCDEC extends javax.swing.JFrame {
         System.out.println("Reliquidación "+mesAEvaluar+" finalizada");
     }
  
+    private void salirPeajes() {
+        //Delete all registered temp files:
+        for (File f: lTempFiles){
+            f.delete();
+        }
+        this.dispose();
+        System.exit(0);    
+    }
+ 
     private void leePropiedades(){
         propiedades = new Properties();
         if (nombreDirEnt == null) {
@@ -1781,6 +1799,29 @@ public class PeajesCDEC extends javax.swing.JFrame {
             }
         }
         return value;
+    }
+    
+    private static final java.util.List<File> lTempFiles = new java.util.LinkedList<File>();
+
+    /**
+     * Crea un nuevo archivo temporal (contralado por la VM Java)
+     * <br>Se supone la VM limpia estos temporales (no creo que sirva)
+     *
+     * @param prefix prefijo opcional
+     * @param suffix sufijo opcional (incluir 'punto' para agregla extensiones).
+     * Eg. '.bin'
+     * @return instancia del archivo temporal creado
+     * @throws IOException si no se pudo crear el archivo temporal
+     */
+    public static File createTempFile(String prefix, String suffix) throws IOException {
+
+        File temp = File.createTempFile(prefix, suffix);
+        temp.deleteOnExit();
+        if (!(temp.delete())) {
+            throw new IOException("Could not delete temp file: " + temp.getAbsolutePath());
+        }
+        lTempFiles.add(temp);
+        return temp;
     }
 
     class TimerListener implements ActionListener {

@@ -26,8 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.text.DecimalFormat;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -1046,9 +1048,12 @@ public class Prorratas {
         float[][] flujoDCEtapa = new float[numLin][numHid];
         float[] flujoDCHid = new float[numLin];
         float[][] GLDFref;
-        float[][][] GLDFEtapa;
+//        float[][][] GLDFEtapa; //Movido a objeto
+        GGDF GLDFEtapa;
         float[][] GGDFref;
-        float[][][] GGDFEtapa;
+//        float[][][] GGDFEtapa; //Movido a objeto
+        GGDF GGDFEtapa;
+        
         float[][] prorrEtaGx;
         float[][] prorrEtaCons;
         
@@ -1087,7 +1092,8 @@ public class Prorratas {
         GLDF barra referencia y GLDF resto del sistema. */
         float[][] GSDF = Calc.CalculaGSDF(Xbarra,paramLinEta,barrasActivas, etapa);
         GLDFref=Calc.CalculaGLDFRef(GSDF,paramLinEta,paramGener,etapa,Gx);
-        GLDFEtapa=Calc.CalculaGLDF(GSDF,GLDFref,paramLinEta,etapa);
+//        GLDFEtapa=Calc.CalculaGLDF(GSDF,GLDFref,paramLinEta,etapa);
+        GLDFEtapa=Calc.calculaGLDF(GSDF,GLDFref,paramLinEta);
         // Calcula Flujo DC y asignacion de perdidas
         // -----------------------------------------
         float[] R=new float[numLin];                   // resistencias en p.u
@@ -1115,6 +1121,7 @@ public class Prorratas {
         }
         
 //        FileWriter writerConsumos = new FileWriter(DirBaseSalida + SLASH + "consumos.csv");
+        //<--Inicio ciclo hidro
         for (int h = 0; h < numHid; h++) {
             
 //            writerConsumos.append(Float.toString(h));
@@ -1142,7 +1149,8 @@ public class Prorratas {
             
             perdRealesSistema[h] = genSist[h] - (conSist - FallaEtaHid[etapa][h]);
             // Calculo de Flujo DC
-            flujoDCHid = Calc.FlujoDC_GLDF(GLDFEtapa, conAjustado, h, etapa);//flujos en MW
+//            flujoDCHid = Calc.FlujoDC_GLDF(GLDFEtapa, conAjustado, h, etapa);//flujos en MW
+            flujoDCHid = Calc.flujoDC_GLDF(GLDFEtapa, conAjustado, h);//flujos en MW
             //System.out.println("Flujo DC "+flujoDCHid[586]);
             for (int l = 0; l < numLin; l++) {
                 flujoDCEtapa[l][h] = flujoDCHid[l];
@@ -1167,8 +1175,11 @@ public class Prorratas {
                 perdidas[l] = perdMayor110[l] + perdMenor110[l];
             }
             // Asigna perdidas a consumos
-            conMasPerd = Calc.AsignaPerdidas(flujoDCHid, GLDFEtapa, perdidas, paramLinEta, conAjustado, etapa, h);
+//            conMasPerd = Calc.AsignaPerdidas(flujoDCHid, GLDFEtapa, perdidas, paramLinEta, conAjustado, etapa, h);
+            conMasPerd = Calc.asignaPerdidas(flujoDCHid, GLDFEtapa, perdidas, paramLinEta, conAjustado, h);
         }
+        //<--Fin ciclo hidro
+        
         for (int h = 0; h < numHid; h++) {
             for (int l = 0; l < numLin; l++) {
                 Flujo[l][etapa][h] = flujoDCEtapa[l][h];
@@ -1181,15 +1192,16 @@ public class Prorratas {
         * Calcula GGDF barra referencia y GGDF resto del sistema.
         */
         GGDFref=Calc.CalculaGGDFRef(GSDF,conMasPerdEta, paramLinEta);
-        GGDFEtapa=Calc.CalculaGGDF(GSDF,GGDFref,paramLinEta,etapa);
+//        GGDFEtapa=Calc.CalculaGGDF(GSDF,GGDFref,paramLinEta,etapa);
+        GGDFEtapa=Calc.calculaGGDF(GSDF,GGDFref,paramLinEta);
         /*
         * Calcula prorratas promedio por etapa
         */
-        prorrEtaGx=Calc.CalculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
+//        prorrEtaGx=Calc.CalculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
+//                orientBarTroncal, etapa, centralesFlujo, lineasFlujo,GSDF,GGDFref );
+        prorrEtaGx=Calc.calculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
                 orientBarTroncal, etapa, centralesFlujo, lineasFlujo,GSDF,GGDFref );
-        prorrEtaCons=Calc.CalculaProrrCons(flujoDCEtapa, GLDFEtapa,
-                ConsumosClaves, datosClaves, paramLinEta,
-                paramBarTroncal, orientBarTroncal, etapa);
+        prorrEtaCons=Calc.calculaProrrCons(flujoDCEtapa, GLDFEtapa, ConsumosClaves, datosClaves, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
         for (int l = 0; l < numLin; l++) {
             for (int g = 0; g < numGen; g++) {
                 prorrGx[l][g][etapa] = prorrEtaGx[l][g];
@@ -1200,7 +1212,7 @@ public class Prorratas {
         }
         System.out.println("Finalizado calculo etapa : "+ etapa);
     }
-
+    
     public Prorratas() {
     }
 	
@@ -1334,4 +1346,196 @@ class ExtendedExecutor extends ThreadPoolExecutor {
     }
 }
 
+/**
+ * Clase auxiliar para almacener los objetos GGDF en archivo temporal
+ * @author  Frank Leanez at www.flconsulting.cl
+ */
+class GGDF {
     
+    private final RandomAccessFile fp;
+    private final File f_bin;
+    private final int numBarras;
+    private final int numLineas;
+    private final int numHidro;
+
+    /**
+     * Crea un nuevo objeto GGDF (o GLDF) a partir del archivo binario de
+     * referencia
+     *
+     * @param f_bin archivo binario con datos de GGDF (o GLDF)
+     * @param numBarras numero total de barras
+     * @param numLineas numero total de lineas de transmision
+     * @param numHidro numero total de hidrologias
+     * @throws FileNotFoundException si hay problemas en acceder al archivo de
+     * datos
+     */
+    public GGDF(File f_bin, int numBarras, int numLineas, int numHidro) throws FileNotFoundException {
+        this.fp = new RandomAccessFile(f_bin, "r");
+        this.f_bin = f_bin;
+        this.numBarras = numBarras;
+        this.numLineas = numLineas;
+        this.numHidro = numHidro;
+    }
+    
+    /**
+     * WARNING: Evite en lo posible usar! Solo cuando se desee leer algun numero
+     * puntual
+     * <br>Obtiene los valores GGDF para todas las barras, linea e hidrologia
+     * definida
+     *
+     * @param barra numero (0-base) de hidrologia segun orden en que fueron
+     * ingresadas
+     * @param linea numero (0-base) de linea segun orden en que fueron
+     * ingresadas
+     * @param hidro numero (0-base) de hidro segun orden en que fueron
+     * ingresadas
+     * @return valor del GGDF
+     */
+    float get(int barra, int linea, int hidro) throws IOException {
+        long pos = position3D(hidro, linea, barra, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
+        fp.seek(pos);
+        return fp.readFloat();
+    }
+    
+    /**
+     * Obtiene los valores GGDF para todas las barras
+     *
+     * @param hidro numero (0-base) de hidrologia segun orden en que fueron
+     * ingresadas
+     * @param linea numero (0-base) de linea segun orden en que fueron
+     * ingresadas
+     * @return un arreglo de tamano getNumBarras() con todos (incluyento ceros)
+     * los valores guardados
+     */
+    float[] get(int hidro, int linea) throws IOException {
+        long pos = position3D(hidro, linea, 0, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
+        fp.seek(pos);
+        byte[] b = new byte[numBarras * 4];
+        int nRead = fp.read(b, 0, numBarras * 4);
+        return decode(b);
+    }
+    
+    /**
+     * Obtiene la matriz clasica valores GGDF para la hidrologia ingresada
+     * <br>La dimension del arreglo esta dado por getNumLineas() x
+     * getNumBarras()
+     * <br>El orden en que GGDF esta definido es la conversion a arreglo
+     * "desplazando hacia la derecha" la matriz rectangular D(n, l). Es decir:
+     * <br> GGDF[0, 1, 3, 4, 5 ... l x b] -> [D(0,0), D(0,1), D(0,2), ...
+     * D(0,n-1), D(1,0), D(1,1), ... D(1,n-1), ... D(2,0), D(2,1)...
+     *
+     * @param hidro numero (0-base) de hidrologia segun orden en que fueron
+     * ingresadas
+     * @return un arreglo de tamano getNumLineas() x getNumBarras() con todos
+     * (incluyento ceros) los valores guardados
+     */
+    float[] get(int hidro) throws IOException {
+        long pos = position3D(hidro, 0, 0, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
+        fp.seek(pos);
+        byte[] b = new byte[numLineas * numBarras * 4]; //sin buffer?
+        int nRead = fp.read(b, 0, numLineas * numBarras * 4);
+        return decode(b);
+    }
+    
+//    float[] get(int barra, int linea) {
+//        float[] lRet = new float[numHidro];
+//        try {
+//            long pos = position3D(barra, linea, 0, numBarras, numLineas, numHidro) * 4; //4 bytes (float)
+//            long endPos = position3D(barra, linea, numHidro - 1, numBarras, numLineas, numHidro) * 4; //4 bytes (float)
+//            fp.seek(pos);
+//            int h = 0;
+//            while (pos < endPos) {
+//                lRet[h] = fp.readFloat();
+//                h++;
+//            }
+//        } catch (IOException e) {
+//            lRet = new float[numHidro];
+//        }
+//        return lRet;
+//    }
+    
+    private static long position3D(int x, int y, int z, int maxX, int maxY, int maxZ) {
+        long pos = ((long) maxY * (long) maxZ) * (long) x + ((long) maxZ * (long) y) + (long) z;
+        long max = (long) maxX * (long) maxY * (long) maxZ;
+        return Math.min(pos, max);
+    }
+    
+    /**
+     * Point al archivo binario que almacena los datos
+     * @return archivo binario que almacena los datos
+     */
+    public File getF_bin() {
+        return f_bin;
+    }
+
+    /**
+     * Numero total de barras empleado para construir este GGDF
+     * @return Numero total de barras empleado para construir este GGDF
+     */
+    public int getNumBarras() {
+        return numBarras;
+    }
+
+    /**
+     * Numero total de lineas empleado para construir este GGDF
+     * @return Numero total de lineas empleado para construir este GGDF
+     */
+    public int getNumLineas() {
+        return numLineas;
+    }
+
+    /**
+     * Numero total de hidrologias empleado para construir este GGDF
+     * @return Numero total de hidrologias empleado para construir este GGDF
+     */
+    public int getNumHidro() {
+        return numHidro;
+    }
+    
+    /**
+     * Codificador Float array to Byte array 
+     * <br>Autor original: Alexander Markov
+     *
+     * @param floatArray input arrray
+     * @return output array
+     */
+    static byte[] encode(float floatArray[]) {
+        byte byteArray[] = new byte[floatArray.length * 4];
+
+        // wrap the byte array to the byte buffer 
+        ByteBuffer byteBuf = ByteBuffer.wrap(byteArray);
+
+        // create a view of the byte buffer as a float buffer 
+        FloatBuffer floatBuf = byteBuf.asFloatBuffer();
+
+        // now put the float array to the float buffer, 
+        // it is actually stored to the byte array 
+        floatBuf.put(floatArray);
+
+        return byteArray;
+    }
+
+    /**
+     * Decodificador Float array to Byte array 
+     * <br>Autor original: Alexander Markov
+     *
+     * @param byteArray input array
+     * @return output array
+     */
+    static float[] decode(byte byteArray[]) {
+        float floatArray[] = new float[byteArray.length / 4];
+
+        // wrap the source byte array to the byte buffer 
+        ByteBuffer byteBuf = ByteBuffer.wrap(byteArray);
+
+        // create a view of the byte buffer as a float buffer 
+        FloatBuffer floatBuf = byteBuf.asFloatBuffer();
+
+        // now get the data from the float buffer to the float array, 
+        // it is actually retrieved from the byte array 
+        floatBuf.get(floatArray);
+
+        return floatArray;
+    }
+    
+}
