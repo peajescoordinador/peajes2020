@@ -151,7 +151,7 @@ public class Calc {
     //----------------------------------
     //Determina GGDF resto del sistema
     //----------------------------------
-    
+    @Deprecated
     static public float[][][] CalculaGGDF(float A[][], float Dref[][], float datosLineas[][], int e){
     	int numBarras=A.length;
     	int numLineas=datosLineas.length;
@@ -180,56 +180,59 @@ public class Calc {
     	return D;
     }
     
-    static GGDF calculaGGDF(float A[][], float Dref[][], float datosLineas[][]) throws IOException{
+    static GGDF calculaGGDF(float A[][], float Dref[][], float datosLineas[][], boolean useDisk) throws IOException{
     	int numBarras=A.length;
     	int numLineas=datosLineas.length;
     	int numHid=Dref[0].length;
-    	long initTime = System.currentTimeMillis();
-//    	float[][][] D=new float[numBarras][numLineas][numHid];
-//    	for(int b=0;b<numBarras;b++){
-//            for(int l=0;l<numLineas;l++){
-//                for(int h=0;h<numHid;h++){
-//                    D[b][l][h]=0;
-//                }
-//            }
-//    	}
-        File f_bin = PeajesCDEC.createTempFile("~GGDF", ".bin");
-        DataOutputStream out = new DataOutputStream(new FileOutputStream(f_bin));
-        
-//    	for(int b=0;b<numBarras;b++){
-//            for(int l=0;l<numLineas;l++){
-//                for(int h=0;h<numHid;h++){
-//                    if((int)datosLineas[l][5]==1){
-//                        D[b][l][h]=(A[b][l]+Dref[l][h]);
-//                    }
-//                }
-//            }
-//    	}
-        ////OPTION BYTE ARRAY:
-        for (int h = 0; h < numHid; h++) {
-            int nCont = 0;
-            float[] f = new float[numLineas * numBarras];
-            for (int l = 0; l < numLineas; l++) {
-                for (int b = 0; b < numBarras; b++) {
-                    if ((int) datosLineas[l][5] == 1) {
-                        f[nCont] = (A[b][l] + Dref[l][h]);
+//    	long initTime = System.currentTimeMillis(); //<-Solo para debug
+        if (!useDisk) {
+            float[][][] D = new float[numBarras][numLineas][numHid];
+            for (int b = 0; b < numBarras; b++) {
+                for (int l = 0; l < numLineas; l++) {
+                    for (int h = 0; h < numHid; h++) {
+                        D[b][l][h] = 0;
                     }
-                    nCont++;
                 }
             }
-            byte[] bArray = GGDF.encode(f);
-            out.write(bArray, 0, bArray.length);
+            for (int b = 0; b < numBarras; b++) {
+                for (int l = 0; l < numLineas; l++) {
+                    for (int h = 0; h < numHid; h++) {
+                        if ((int) datosLineas[l][5] == 1) {
+                            D[b][l][h] = (A[b][l] + Dref[l][h]);
+                        }
+                    }
+                }
+            }
+            return new GGDF(D);
+        } else {
+            File f_bin = PeajesCDEC.createTempFile("~GGDF", ".bin");
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(f_bin));
+            ////OPTION BYTE ARRAY:
+            for (int h = 0; h < numHid; h++) {
+                int nCont = 0;
+                float[] f = new float[numLineas * numBarras];
+                for (int l = 0; l < numLineas; l++) {
+                    for (int b = 0; b < numBarras; b++) {
+                        if ((int) datosLineas[l][5] == 1) {
+                            f[nCont] = (A[b][l] + Dref[l][h]);
+                        }
+                        nCont++;
+                    }
+                }
+                byte[] bArray = GGDF.encode(f);
+                out.write(bArray, 0, bArray.length);
+            }
+            out.close();
+//            System.out.println("Finished writing bin file" + f_bin.getName() + " Time: " + ((System.currentTimeMillis() - initTime) / 1000) + "[sec]");
+            return new GGDF(f_bin, numBarras, numLineas, numHid);
         }
-        out.close();
-        System.out.println("Finished writing bin file" + f_bin.getName() + " Time: " + ((System.currentTimeMillis() - initTime) / 1000) + "[sec]");
-        
-    	return new GGDF(f_bin, numBarras, numLineas, numHid);
     }
       
     //----------------------------------
     //Determina Flujo de Potencia en función de GLDF, sin perdidas para una sola hidrologia
     //----------------------------------
     
+    @Deprecated
     static public float[] FlujoDC_GLDF(float E[][][], float Consumos[][], int h, int e) {
         int numLineas = E[0].length;
         int numBarras = E.length;
@@ -276,17 +279,9 @@ public class Calc {
     
         
     //----------------------------------
-    //Determina Prorratas de Generación
+    //Determina Prorratas de Generación. Escribe archivo debug prorratas.csv al directorio 'DirBaseSalida' (si no es null)
     //----------------------------------
-    static public float[][] CalculaProrrGx(float flujoDC[][], float D[][][], float Gx[][][], int datosGener[][],
-            float datosLineas[][], int paramBarTroncal[][], int orientBarTroncal[][],
-            int e, int[] gflux, int[] lineasFlujo, float A[][], float Dref[][]) {
-        return CalculaProrrGx(flujoDC, D, Gx, datosGener, datosLineas, paramBarTroncal, orientBarTroncal, e, gflux, lineasFlujo, null, A, Dref);
-    }
-
-    //----------------------------------
-    //Determina Prorratas de Generación. Escribe archivo debug prorratas.csv al directorio 'DirBaseSalida'
-    //----------------------------------
+    @Deprecated
     static public float[][] CalculaProrrGx(float flujoDC[][], float D[][][], float Gx[][][],int datosGener[][],
     						float datosLineas[][],int paramBarTroncal[][],int orientBarTroncal[][],int e, int[] gflux,int[] lineasFlujo, String DirBaseSalida,float A[][], float Dref[][]){
     	int numHid=flujoDC[0].length;
@@ -540,7 +535,7 @@ public class Calc {
     //----------------------------------
     //Determina GLDF resto del sistema
     //----------------------------------
-    
+    @Deprecated
     static public float[][][] CalculaGLDF(float A[][], float Eref[][], float datosLineas[][],int e){
     	int numBarras=A.length;
     	int numLineas=datosLineas.length;
@@ -570,53 +565,67 @@ public class Calc {
     	return E;
     }
     
-    static GGDF calculaGLDF(float A[][], float Eref[][], float datosLineas[][]) throws IOException {
+    /**
+     * Funcion de calculo y almacenamiento de los factores GLDF para todas las
+     * hidrologias
+     *
+     * @param A matrix GSDF
+     * @param Eref matriz GLDF de la barra de referencia para todas las
+     * hidrologias
+     * @param datosLineas arreglo con datos de linea (sexta columna define el
+     * tipo)
+     * @param useDisk use true para almacenar GLDF de etapa en disco. false para
+     * dejar en memoria (puede ser muy grande!)
+     * @return instance de los GGDF
+     * @throws IOException en case de usar disco y encontrar error escribiendo
+     * archivos temporales
+     */
+    static GGDF calculaGLDF(float A[][], float Eref[][], float datosLineas[][], boolean useDisk) throws IOException {
         int numBarras = A.length;
         int numLineas = datosLineas.length;
         int numHid = Eref[0].length;
-        long initTime = System.currentTimeMillis();
-//        float[][][] E = new float[numBarras][numLineas][numHid];
-//
-//        for (int b = 0; b < numBarras; b++) {
-//            for (int l = 0; l < numLineas; l++) {
-//                for (int h = 0; h < numHid; h++) {
-//                    E[b][l][h] = 0;
-//                }
-//            }
-//        }
-        File f_bin = PeajesCDEC.createTempFile("~GLDF", ".bin");
-        DataOutputStream out = new DataOutputStream(new FileOutputStream(f_bin));
-        
-        //OPTION VALUE-BY-VALUE:
-//        for (int b = 0; b < numBarras; b++) {
-//            for (int l = 0; l < numLineas; l++) {
-//                if ((int) datosLineas[l][5] == 1) {
-//                    for (int h = 0; h < numHid; h++) {
-//                        f[h] = -(A[b][l] + Eref[l][h]);
-//                        out.writeFloat(-(A[b][l] + Eref[l][h]));
-//                    }
-//                }
-//            }
-//        }
-
-        ////OPTION BYTE ARRAY:
-        for (int h = 0; h < numHid; h++) {
-            int nCont = 0;
-            float[] f = new float[numLineas * numBarras];
-            for (int l = 0; l < numLineas; l++) {
-                for (int b = 0; b < numBarras; b++) {
-                    if ((int) datosLineas[l][5] == 1) {
-                        f[nCont] = -(A[b][l] + Eref[l][h]);
+//        long initTime = System.currentTimeMillis(); //<-Solo para debug
+        if (!useDisk) {
+            float[][][] E = new float[numBarras][numLineas][numHid];
+            for (int b = 0; b < numBarras; b++) {
+                for (int l = 0; l < numLineas; l++) {
+                    for (int h = 0; h < numHid; h++) {
+                        E[b][l][h] = 0;
                     }
-                    nCont++;
                 }
             }
-            byte[] bArray = GGDF.encode(f);
-            out.write(bArray, 0, bArray.length);
+            for (int b = 0; b < numBarras; b++) {
+                for (int l = 0; l < numLineas; l++) {
+                    if ((int) datosLineas[l][5] == 1) {
+                        for (int h = 0; h < numHid; h++) {
+                            E[b][l][h] = -(A[b][l] + Eref[l][h]);
+                        }
+                    }
+                }
+            }
+            return new GGDF(E);
+        } else {
+            File f_bin = PeajesCDEC.createTempFile("~GLDF", ".bin");
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(f_bin));
+            ////OPTION BYTE ARRAY:
+            for (int h = 0; h < numHid; h++) {
+                int nCont = 0;
+                float[] f = new float[numLineas * numBarras];
+                for (int l = 0; l < numLineas; l++) {
+                    for (int b = 0; b < numBarras; b++) {
+                        if ((int) datosLineas[l][5] == 1) {
+                            f[nCont] = -(A[b][l] + Eref[l][h]);
+                        }
+                        nCont++;
+                    }
+                }
+                byte[] bArray = GGDF.encode(f);
+                out.write(bArray, 0, bArray.length);
+            }
+            out.close();
+//        System.out.println("Finished writing bin file" + f_bin.getName() + " Time: " + ((System.currentTimeMillis() - initTime) / 1000) + "[sec]");
+            return new GGDF(f_bin, numBarras, numLineas, numHid);
         }
-        out.close();
-        System.out.println("Finished writing bin file" + f_bin.getName() + " Time: " + ((System.currentTimeMillis() - initTime) / 1000) + "[sec]");
-        return new GGDF(f_bin, numBarras, numLineas, numHid);
     }
      
     
@@ -634,8 +643,7 @@ public class Calc {
                 if(datosLineas[l][2]>110) {
                     perdidaTotalI2R+=perdidasI2R[l];
                 }
-            }
-            else{
+            } else {
                 if(datosLineas[l][2]<=110){
                     perdidaTotalI2R+=perdidasI2R[l];
                 }
@@ -648,8 +656,7 @@ public class Calc {
                 if(datosLineas[l][2]>110) {
                     perdidas[l]=PerdidaAProrratear*perdidasI2R[l]/perdidaTotalI2R;
                 }   
-            }
-            else{
+            } else {
                 if(datosLineas[l][2]<=110) {
                     perdidas[l]=PerdidaAProrratear*perdidasI2R[l]/perdidaTotalI2R;
                 }
@@ -661,7 +668,7 @@ public class Calc {
     //----------------------------------
     //Determina asignacion de perdidas a los consumos, para 1 hidrologia
     //----------------------------------
-    
+    @Deprecated
     static public float[] AsignaPerdidas(float flujoDC[], float E[][][], float perdidas[], float datosLineas[][],
     										float Consumos[][], int e, int h){
     	int numBarras=Consumos.length;
@@ -781,124 +788,123 @@ public class Calc {
         }
    }
     
-   public static void scalarMultiply(int[][] array, int scale){
-        for( int i=0; i<array.length; i++){
-            for( int j=0; j<array[i].length; j++){
-                array[i][j] = array[i][j] * scale; 
+    public static void scalarMultiply(int[][] array, int scale) {
+        for (int[] array1 : array) {
+            for (int j = 0; j < array1.length; j++) {
+                array1[j] = array1[j] * scale;
             }
         }
-   }
+    }
     
-        static public float[][] CalculaProrrCons(float flujoDC[][], float E[][][], float Consumos[][],int datosClientes[][],
-    						float datosLineas[][], int paramBarTroncal[][],int orientBarTroncal[][],int e){
-    	int numHid=flujoDC[0].length;
-    	int numLineas=flujoDC.length;
-    	int numClientes=Consumos.length;
-    	int areaTroncal=0;
-    	int sentidoFlujoLinea;
-    	int barraCx=0;
-        int barraCx2=0;
-        int sicosing=0;
-    	float[][] Prorratas=new float[numLineas][numClientes];
-    	float[][] ConsEquivTotal=new float[numLineas][numHid];
-    	float[][][] ConsEquiv=new float[numClientes][numLineas][numHid];
-    	
-    	for(int i=0;i<numClientes;i++){
-            for(int j=0;j<numLineas;j++){
-                Prorratas[j][i]=0;
-                for(int k=0;k<numHid;k++){
-                    ConsEquiv[i][j][k]=0;
+    @Deprecated
+    static public float[][] CalculaProrrCons(float flujoDC[][], float E[][][], float Consumos[][], int datosClientes[][],
+            float datosLineas[][], int paramBarTroncal[][], int orientBarTroncal[][], int e) {
+        int numHid = flujoDC[0].length;
+        int numLineas = flujoDC.length;
+        int numClientes = Consumos.length;
+        int areaTroncal = 0;
+        int sentidoFlujoLinea;
+        int barraCx = 0;
+        int barraCx2 = 0;
+        int sicosing = 0;
+        float[][] Prorratas = new float[numLineas][numClientes];
+        float[][] ConsEquivTotal = new float[numLineas][numHid];
+        float[][][] ConsEquiv = new float[numClientes][numLineas][numHid];
+
+        for (int i = 0; i < numClientes; i++) {
+            for (int j = 0; j < numLineas; j++) {
+                Prorratas[j][i] = 0;
+                for (int k = 0; k < numHid; k++) {
+                    ConsEquiv[i][j][k] = 0;
                 }
             }
-    	}
-   	
-    	for(int l=0;l<numLineas;l++){
-            for(int h=0;h<numHid;h++){
-                ConsEquivTotal[l][h]=0;
+        }
+
+        for (int l = 0; l < numLineas; l++) {
+            for (int h = 0; h < numHid; h++) {
+                ConsEquivTotal[l][h] = 0;
             }
-    	}
-    	
-    	for(int h=0;h<numHid;h++){
-            for(int l=0;l<numLineas;l++){
-                if((int)datosLineas[l][5]==1){						// si la linea está en servicio
-                    if((int) datosLineas[l][6]==1){					// si la línea es troncal
-                        if(flujoDC[l][h]!=0){
-                            areaTroncal=(int) datosLineas[l][7];			// AIC=>0, Norte=>1, Sur=>-1
-                            sentidoFlujoLinea=(int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
-                            sicosing=(int) datosLineas[l][9];
-                            for(int c=0;c<numClientes;c++){
-                                barraCx=datosClientes[c][0];
+        }
+
+        for (int h = 0; h < numHid; h++) {
+            for (int l = 0; l < numLineas; l++) {
+                if ((int) datosLineas[l][5] == 1) {						// si la linea está en servicio
+                    if ((int) datosLineas[l][6] == 1) {					// si la línea es troncal
+                        if (flujoDC[l][h] != 0) {
+                            areaTroncal = (int) datosLineas[l][7];			// AIC=>0, Norte=>1, Sur=>-1
+                            sentidoFlujoLinea = (int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
+                            sicosing = (int) datosLineas[l][9];
+                            for (int c = 0; c < numClientes; c++) {
+                                barraCx = datosClientes[c][0];
                                 //System.out.println(c+" "+barraCx);
                                 //System.out.println(c+" "+barraCx+" "+paramBarTroncal[barraCx][1]+" "+areaTroncal);
                                 //if (paramBarTroncal[barraCx][2]==sicosing && datosClientes[c][3]==1){
                                 //if (datosClientes[c][3]==0 || (datosClientes[c][3]==1 && paramBarTroncal[barraCx][2]==sicosing)){
-                                    //barraCx2=datosClientes[c][3];
-                                    //System.out.println(c+" "+barraCx2);
-                                    //barraCx2=paramBarTroncal[barraCx][2];
-                                    //System.out.println(c+" "+barraCx2+" "+barraCx);
-                                    //System.out.println(" ");
-                                    //barraCx2=sicosing;
-                                    //System.out.println(c+" "+barraCx2);
+                                //barraCx2=datosClientes[c][3];
+                                //System.out.println(c+" "+barraCx2);
+                                //barraCx2=paramBarTroncal[barraCx][2];
+                                //System.out.println(c+" "+barraCx2+" "+barraCx);
+                                //System.out.println(" ");
+                                //barraCx2=sicosing;
+                                //System.out.println(c+" "+barraCx2);
 
-                                    // si la barra de consumo está en la misma area troncal que la linea o en el AIC
-                                    if(paramBarTroncal[barraCx][1]==areaTroncal || areaTroncal==0){
-                                         // si está fuera del AIC y flujo alejandose y la barra está en el extremo contrario al AIC de la linea
-                                        if(areaTroncal!=0 && flujoDC[l][h]*sentidoFlujoLinea<0 && orientBarTroncal[barraCx][l]==areaTroncal){
-                                            if(Math.signum(flujoDC[l][h])==Math.signum(E[barraCx][l][h])){	//si está aguas abajo del flujo
-                                            ConsEquiv[c][l][h]=(float)(Math.abs(E[barraCx][l][h]))*Consumos[c][e];
-                                            ConsEquivTotal[l][h]+=ConsEquiv[c][l][h];
-//                                                ConsEquivTotal[l][h]+=100; //TEMP!
-                                             }
-                                        }
-                                         // si está en AIC y flujo tiene = signo que GLDF
-                                        else if(areaTroncal==0 && (flujoDC[l][h]*E[barraCx][l][h])>0){
-                                        ConsEquiv[c][l][h]=(float)(Math.abs(E[barraCx][l][h]))*Consumos[c][e];
-                                        ConsEquivTotal[l][h]+=ConsEquiv[c][l][h];
+                                // si la barra de consumo está en la misma area troncal que la linea o en el AIC
+                                if (paramBarTroncal[barraCx][1] == areaTroncal || areaTroncal == 0) {
+                                    // si está fuera del AIC y flujo alejandose y la barra está en el extremo contrario al AIC de la linea
+                                    if (areaTroncal != 0 && flujoDC[l][h] * sentidoFlujoLinea < 0 && orientBarTroncal[barraCx][l] == areaTroncal) {
+                                        if (Math.signum(flujoDC[l][h]) == Math.signum(E[barraCx][l][h])) {	//si está aguas abajo del flujo
+                                            ConsEquiv[c][l][h] = (float) (Math.abs(E[barraCx][l][h])) * Consumos[c][e];
+                                            ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
 //                                                ConsEquivTotal[l][h]+=100; //TEMP!
                                         }
+                                    } // si está en AIC y flujo tiene = signo que GLDF
+                                    else if (areaTroncal == 0 && (flujoDC[l][h] * E[barraCx][l][h]) > 0) {
+                                        ConsEquiv[c][l][h] = (float) (Math.abs(E[barraCx][l][h])) * Consumos[c][e];
+                                        ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+//                                                ConsEquivTotal[l][h]+=100; //TEMP!
                                     }
-                                
+                                }
+
                             }
                         }
                     }
                 }
             }
-    	}
-    	
-    	for(int h=0;h<numHid;h++){
-            for(int l=0;l<numLineas;l++){
-                for(int c=0;c<numClientes;c++){
+        }
+
+        for (int h = 0; h < numHid; h++) {
+            for (int l = 0; l < numLineas; l++) {
+                for (int c = 0; c < numClientes; c++) {
                     //System.out.println(h+" "+l+" "+c);
-                    barraCx=datosClientes[c][0];
-                    if((int) datosLineas[l][6]==1 && datosLineas[l][5]==1){
-                        if(ConsEquivTotal[l][h]!=0){
-                            
-                            if(datosClientes[c][3]==1 && paramBarTroncal[barraCx][2]!=datosLineas[l][9]){
-                            
-                            Prorratas[l][c]=0;
-                            //System.out.println(" ");
-                            //System.out.println(barraCx+" "+l);
-                            //System.out.println(Prorratas[l][c]);
-                            //System.out.println(datosLineas[l][9]+ " "+ paramBarTroncal[barraCx][2]);
-                            }
-                            else {
-                            
-                            Prorratas[l][c]+=(ConsEquiv[c][l][h]/ConsEquivTotal[l][h])/(float)numHid;   
+                    barraCx = datosClientes[c][0];
+                    if ((int) datosLineas[l][6] == 1 && datosLineas[l][5] == 1) {
+                        if (ConsEquivTotal[l][h] != 0) {
+
+                            if (datosClientes[c][3] == 1 && paramBarTroncal[barraCx][2] != datosLineas[l][9]) {
+
+                                Prorratas[l][c] = 0;
+                                //System.out.println(" ");
+                                //System.out.println(barraCx+" "+l);
+                                //System.out.println(Prorratas[l][c]);
+                                //System.out.println(datosLineas[l][9]+ " "+ paramBarTroncal[barraCx][2]);
+                            } else {
+
+                                Prorratas[l][c] += (ConsEquiv[c][l][h] / ConsEquivTotal[l][h]) / (float) numHid;
 //                                Prorratas[l][c]+=(1000/ConsEquivTotal[l][h])/(float)numHid;
-                          //if(l==1370 && c==649){
-                            
-                         //System.out.println(Prorratas[l][c]);      
-                          //}
-                        //System.out.println(Prorratas[l][c]);
-                                }
+                                //if(l==1370 && c==649){
+
+                                //System.out.println(Prorratas[l][c]);      
+                                //}
+                                //System.out.println(Prorratas[l][c]);
                             }
                         }
-                 
-                    }                
+                    }
+
                 }
             }
-            return Prorratas;
         }
+        return Prorratas;
+    }
     
         
     static float[][] calculaProrrCons(float flujoDC[][], GGDF E, float Consumos[][], int datosClientes[][],

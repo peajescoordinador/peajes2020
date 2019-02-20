@@ -97,4 +97,23 @@ public class PeajesConstant {
          */
         BOOLEAN;
     }
+    
+    /**
+     * Tipo de usos de memoria
+     */
+    public enum UsoMemoria {
+        /**
+         * Auto: Decide la applicacion
+         */
+        Auto, 
+        /**
+         * Minimo: Uso de disco
+         */
+        Min, 
+        /**
+         * Maximo: Todo en memoria (por ahora)
+         */
+        Max;
+    }
+    
 }

@@ -517,7 +517,7 @@ public class Prorratas {
                 ex.printStackTrace(System.out);
             }
         }
-        System.out.println("Fin lectura archivo despacho PLP : " + ((System.currentTimeMillis() - time_dispatch)/1000) + "[seg]");
+        System.out.println("Leyendo archivo despacho PLP : " + ((System.currentTimeMillis() - time_dispatch)/1000) + "[seg]");
         
         /*
          * Lectura de datos de Lineas del sistema reducido
@@ -544,7 +544,7 @@ public class Prorratas {
         testReadFile = new File(ArchivoPerdidasLineas);
         input = null;
         perdidasPLPMayor110 = new float[numEtapas][numHid];
-        System.out.println("Inicio lectura archivo flujos lineas PLP...");
+        System.out.println("Leyendo archivo flujos lineas PLP...");
         try {
             input = new BufferedReader( new InputStreamReader(new
                     FileInputStream(testReadFile), "Latin1"));
@@ -687,10 +687,32 @@ public class Prorratas {
         /*INICIO ITERACIONES (PARALELIZAR EL SIGUIENTE FOR)*/
         /**********LAS ITERACIONES SON POR ETAPA************/
         /***************************************************/
+        
+        //Lee opciones especificas del executor:
         String sMaxThreads = PeajesCDEC.getOptionValue("Max Threads", PeajesConstant.DataType.INTEGER);
         assert(sMaxThreads != null): "Como puede ser nulo esta importante llave? Cambiaste archivo config?";
         int nMaxThreads = Integer.parseInt(sMaxThreads);
-
+        
+        String sTimeOut = PeajesCDEC.getOptionValue("Thread timeout (en minutos)", PeajesConstant.DataType.INTEGER);
+        assert(sMaxThreads != null): "Como puede ser nulo 'Thread timeout'? Cambiaste archivo config?";
+        int nTimeOut = Integer.parseInt(sTimeOut);
+        
+        //Lee opciones de uso de memoria:
+        String sMemoryUsage = PeajesCDEC.getOptionValue("Uso Memoria::STRING::Auto::Max::Min", PeajesConstant.DataType.STRING);
+        PeajesConstant.UsoMemoria memory = PeajesConstant.UsoMemoria.valueOf(sMemoryUsage);
+        boolean useDisk = false;
+        switch (memory) {
+            case Auto:
+                useDisk = (nMaxThreads > 4);
+                break;
+            case Min:
+                useDisk = true;
+                break;
+            case Max:
+                useDisk = false;
+                break;
+        }
+        System.out.println("Usando executor: Total etapas=" + numEtapas + ". Threads Paralelo=" + nMaxThreads + ". Uso Memoria=" + !useDisk);
         ExecutorService exeService;
         if (USE_FACTORY) {
             if (nMaxThreads > 1) {
@@ -699,7 +721,7 @@ public class Prorratas {
                 exeService = Executors.newSingleThreadExecutor();
             }
         } else {
-            exeService = new ExtendedExecutor(nMaxThreads, 60); //TODO: Move time out to config
+            exeService = new ExtendedExecutor(nMaxThreads, nTimeOut);
         }
         
         long initExecutorTime = System.currentTimeMillis();
@@ -721,7 +743,7 @@ public class Prorratas {
                 paramLinEta[indiceLintron[l]][9] = datosLintron[l][2];
             }
             
-            exeService.submit(new ProrratasExe(etapa, nBarraSlack, numGen, numLin, numLinTron, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta));
+            exeService.submit(new ProrratasExe(etapa, nBarraSlack, numGen, numLin, numLinTron, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk));
 //            testMove(etapa, paramLinEta, barrasActivas, nBarraSlack, paramGener, Gx, Consumos, FallaEtaHid,  perdidasPLPMayor110, Flujo, paramBarTroncal, orientBarTroncal, centralesFlujo, lineasFlujo, DirBaseSalida, ConsumosClaves, datosClaves, prorrGx, numClaves, prorrCx);
         }
         long elapsed = System.currentTimeMillis() - initExecutorTime;
@@ -1042,7 +1064,7 @@ public class Prorratas {
         completo=true;
     }
 
-    public static void testMove(int etapa, int nBarraSlack, int numGen, int numLin, int numLinTron, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta) throws IOException {
+    public static void calculaEtapa(int etapa, int nBarraSlack, int numGen, int numLin, int numLinTron, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk) throws IOException {
         Matriz Ybarra;
         Matriz Xbarra;
         float[][] flujoDCEtapa = new float[numLin][numHid];
@@ -1093,7 +1115,7 @@ public class Prorratas {
         float[][] GSDF = Calc.CalculaGSDF(Xbarra,paramLinEta,barrasActivas, etapa);
         GLDFref=Calc.CalculaGLDFRef(GSDF,paramLinEta,paramGener,etapa,Gx);
 //        GLDFEtapa=Calc.CalculaGLDF(GSDF,GLDFref,paramLinEta,etapa);
-        GLDFEtapa=Calc.calculaGLDF(GSDF,GLDFref,paramLinEta);
+        GLDFEtapa=Calc.calculaGLDF(GSDF,GLDFref,paramLinEta, useDisk);
         // Calcula Flujo DC y asignacion de perdidas
         // -----------------------------------------
         float[] R=new float[numLin];                   // resistencias en p.u
@@ -1193,7 +1215,7 @@ public class Prorratas {
         */
         GGDFref=Calc.CalculaGGDFRef(GSDF,conMasPerdEta, paramLinEta);
 //        GGDFEtapa=Calc.CalculaGGDF(GSDF,GGDFref,paramLinEta,etapa);
-        GGDFEtapa=Calc.calculaGGDF(GSDF,GGDFref,paramLinEta);
+        GGDFEtapa=Calc.calculaGGDF(GSDF,GGDFref,paramLinEta, useDisk);
         /*
         * Calcula prorratas promedio por etapa
         */
@@ -1277,8 +1299,9 @@ class ProrratasExe implements Runnable {
     private String DirBaseSalida;
     private int numClaves;
     private float[][] paramLinEta;
+    private boolean useDisk;
 
-    public ProrratasExe(int etapa, int nBarraSlack, int numGen, int numLin, int numLinTron, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta) {
+    public ProrratasExe(int etapa, int nBarraSlack, int numGen, int numLin, int numLinTron, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk) {
         this.etapa = etapa;
         this.nBarraSlack = nBarraSlack;
         this.numGen = numGen;
@@ -1289,12 +1312,13 @@ class ProrratasExe implements Runnable {
         this.DirBaseSalida = DirBaseSalida;
         this.numClaves = numClaves;
         this.paramLinEta = paramLinEta;
+        this.useDisk = useDisk;
     }
     
     @Override
     public void run() {
         try {
-            Prorratas.testMove(etapa, nBarraSlack, numGen, numLin, numLinTron, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta);
+            Prorratas.calculaEtapa(etapa, nBarraSlack, numGen, numLin, numLinTron, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk);
         } catch (IOException e) {
             e.printStackTrace(System.out);
         } catch (Exception e) {
@@ -1352,11 +1376,12 @@ class ExtendedExecutor extends ThreadPoolExecutor {
  */
 class GGDF {
     
-    private final RandomAccessFile fp;
-    private final File f_bin;
+    private RandomAccessFile fp;
+    private File f_bin;
     private final int numBarras;
     private final int numLineas;
     private final int numHidro;
+    private float[][][] D;
 
     /**
      * Crea un nuevo objeto GGDF (o GLDF) a partir del archivo binario de
@@ -1378,6 +1403,28 @@ class GGDF {
     }
     
     /**
+     * Crea un nuevo objeto GGDF (o GLDF) a partir de la matriz del argumento
+     *
+     * @param E matriz 3D con los valores GGDF (barras, lineas, hidrologias)
+     */
+    public GGDF(float[][][] D) {
+        this.D = D;
+        this.numBarras = D.length;
+        this.numLineas = D[0].length;
+        this.numHidro = D[0][0].length;
+    }
+    
+    /**
+     * Chequea si este GDDF fue contruido desde una matriz en memoria o un
+     * archivo binario
+     *
+     * @return true si almacena sus valores en memoria. false si use disco
+     */
+    boolean isMemoryGGDF() {
+        return (D != null);
+    }
+    
+    /**
      * WARNING: Evite en lo posible usar! Solo cuando se desee leer algun numero
      * puntual
      * <br>Obtiene los valores GGDF para todas las barras, linea e hidrologia
@@ -1392,9 +1439,13 @@ class GGDF {
      * @return valor del GGDF
      */
     float get(int barra, int linea, int hidro) throws IOException {
-        long pos = position3D(hidro, linea, barra, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
-        fp.seek(pos);
-        return fp.readFloat();
+        if (isMemoryGGDF()) {
+            return D[barra][linea][hidro];
+        } else {
+            long pos = position3D(hidro, linea, barra, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
+            fp.seek(pos);
+            return fp.readFloat();
+        }
     }
     
     /**
@@ -1408,11 +1459,19 @@ class GGDF {
      * los valores guardados
      */
     float[] get(int hidro, int linea) throws IOException {
-        long pos = position3D(hidro, linea, 0, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
-        fp.seek(pos);
-        byte[] b = new byte[numBarras * 4];
-        int nRead = fp.read(b, 0, numBarras * 4);
-        return decode(b);
+        if (isMemoryGGDF()) {
+            float[] f = new float[numBarras];
+            for (int b = 0; b < numBarras; b++) {
+                f[b] = D[b][linea][hidro];
+            }
+            return f;
+        } else {
+            long pos = position3D(hidro, linea, 0, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
+            fp.seek(pos);
+            byte[] b = new byte[numBarras * 4];
+            int nRead = fp.read(b, 0, numBarras * 4);
+            return decode(b);
+        }
     }
     
     /**
@@ -1430,11 +1489,23 @@ class GGDF {
      * (incluyento ceros) los valores guardados
      */
     float[] get(int hidro) throws IOException {
-        long pos = position3D(hidro, 0, 0, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
-        fp.seek(pos);
-        byte[] b = new byte[numLineas * numBarras * 4]; //sin buffer?
-        int nRead = fp.read(b, 0, numLineas * numBarras * 4);
-        return decode(b);
+        if (isMemoryGGDF()) {
+            float[] f = new float[numLineas * numBarras];
+            int cont = 0;
+            for (int l = 0; l < numLineas; l++) {
+                for (int b = 0; b < numBarras; b++) {
+                    f[cont] = D[b][l][hidro];
+                    cont++;
+                }
+            }
+            return f;
+        } else {
+            long pos = position3D(hidro, 0, 0, numHidro, numLineas, numBarras) * 4; //4 bytes (float)
+            fp.seek(pos);
+            byte[] b = new byte[numLineas * numBarras * 4]; //sin buffer?
+            int nRead = fp.read(b, 0, numLineas * numBarras * 4);
+            return decode(b);
+        }
     }
     
 //    float[] get(int barra, int linea) {
@@ -1462,7 +1533,9 @@ class GGDF {
     
     /**
      * Point al archivo binario que almacena los datos
-     * @return archivo binario que almacena los datos
+     *
+     * @return archivo binario que almacena los datos. null si este es un GGDF
+     * almacenado en memoria
      */
     public File getF_bin() {
         return f_bin;
