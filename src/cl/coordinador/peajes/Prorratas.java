@@ -56,32 +56,30 @@ public class Prorratas {
     private static boolean completo=false;
 
     private static final boolean USE_FACTORY = false; //Temp switch for the thread factory
-    private static int numGen; //Numero de generadores en planilla centralesPLP (rango 'plpcnfce') de archivo Ent
-    private static int numLin; //Numero de lineas de transmision en archivo Ent
-    private static int numLinTron; //Numero de lineas de transmision troncal en archivo Ent
-    private static int numBarras; //Numero de barras en archivo Ent
-    private static int numHid; //Numero de hidrologias a considerar en calculo (definidas por usuario)
     
-    private static float [][][] Gx;
-    private static boolean[][] barrasActivas;
-    private static int[][] paramGener;
-    private static float[][] Consumos;
-    private static float[][] FallaEtaHid;
-    private static float[][] perdidasPLPMayor110;
-    private static float[][][] Flujo;
-    private static float[][][] prorrGx;
-    private static float[][][] prorrCx;
-    private static int[][] orientBarTroncal;
-    private static int[] centralesFlujo;
-    private static int[] lineasFlujo;
-    private static int[][] paramBarTroncal;
-    private static float[][] ConsumosClaves;
-    private static int[][] datosClaves;
+    //Arreglos comunes para cada etapa (para ejecucion en paralelo):
+    private static float [][][] Gx; //Generacion de PLP
+    private static boolean[][] barrasActivas; //Barras activas luego de revisar mantenimientos de lineas
+    private static int[][] paramGener; //datos de inyeccion en planilla Ent
+    private static float[][] Consumos; //datos de consumo en planilla Ent
+    private static float[][] FallaEtaHid; //energia no suministrada de etapa
+    private static float[][] perdidasPLPMayor110; //perdidas de etapa en PLP
+    private static float[][][] Flujo; //Flujo DC mediante GLDF por linea, etapa, hidrologia
+    private static float[][][] prorrGx; //Arreglo de salida donde se escribiran las prorratas de generacion
+    private static float[][][] prorrCx; //Arreglo de salida donde se escribiran las prorratas de consumos
+    private static int[][] orientBarTroncal; //datos de orientacion lineas troncal en planilla Ent
+    private static int[][] paramBarTroncal; //datos de barras troncal en planilla Ent
+    private static float[][] ConsumosClaves; //consumos reales en planilla Ent
+    private static int[][] datosClaves;  //datos de consumos en planilla Ent
     
     public static void CalculaProrratas(File DirEntrada, File DirSalida, int AnoAEvaluar, int tipoCalc, int AnoBase,
             int NumeroHidrologias ,int NumeroEtapasAno, int NumeroSlack,int ValorOffset,boolean ActClientes) throws IOException, FileNotFoundException {
         
-        numHid=NumeroHidrologias;//AnoIni-1962;
+        int numGen; //Numero de generadores en planilla centralesPLP (rango 'plpcnfce') de archivo Ent
+        int numLin; //Numero de lineas de transmision en archivo Ent
+        int numLinTron; //Numero de lineas de transmision troncal en archivo Ent
+        int numBarras; //Numero de barras en archivo Ent
+        int numHid=NumeroHidrologias; //AnoIni-1962 - Numero de hidrologias a considerar en calculo (definidas por usuario)
         final int offset=ValorOffset;//(AnoIni==2004?0:12);        
         String DirBaseEntrada=DirEntrada.toString();
         String DirBaseSalida=DirSalida.toString();
@@ -95,8 +93,6 @@ public class Prorratas {
         String[] TxtTemp2; //almacenamiento temporal de texto 2
         String[] TxtTemp3; //almacenamiento temporal de texto 3
         int[] IntTemp; //almacenamiento temporal de enteros
-        Matriz Ybarra;	// Ybarra (n x n)
-        Matriz Xbarra;	// Fila y columna de Slack se insertan con ceros (n x n)
         DecimalFormat dosDecimales=new DecimalFormat("0.00");
         long tInicioLectura = System.currentTimeMillis();
         cargandoInfo=true;
@@ -416,9 +412,8 @@ public class Prorratas {
          */
         long time_dispatch = System.currentTimeMillis();
         int cuenta = 0; //Contador de lineas
-        BufferedReader input = null;
         File testReadFile = new File(ArchivoDespachoGeneradores);
-        input = null;
+        BufferedReader input = null;
         Gx = new float[numGen][numEtapas][numHid]; //Despacho PLP
         FallaEtaHid = new float[numEtapas][numHid];   //Falla PLP
         System.out.println("Inicio lectura archivo despacho PLP...");
@@ -589,7 +584,7 @@ public class Prorratas {
             }
         }
         System.out.println("Fin lectura archivo flujos lineas PLP : " + ((System.currentTimeMillis() - time_flow)/1000) + "[seg]");
-
+        
         /*
          * Escalamiento de la demanda
          * ==========================
@@ -617,17 +612,10 @@ public class Prorratas {
         calculandoFlujos=true;
         long tInicioCalculo = System.currentTimeMillis();
 
-        /*
-         * Chequeo de consistencia
-         * =======================
-         */
-        barrasActivas = Calc.ChequeoConsistencia(paramLineas, LinMan,
-                numBarras, numEtapas);
 
-        /*
-         * Iteraciones
-         * ===========
-         */
+        //Chequeo de consistencia:
+        barrasActivas = Calc.ChequeoConsistencia(paramLineas, LinMan, numBarras, numEtapas);
+
         int nBarraSlack = Calc.Buscar(nombreSlack,nomBar);
         //
         Flujo = new float[numLin][numEtapas][numHid];
@@ -647,7 +635,8 @@ public class Prorratas {
         System.out.println("Calculando...");
         //
         
-        
+        int[] centralesFlujo;
+        int[] lineasFlujo;
         centralesFlujo = Lee.leeCentralesFlujo(libroEntrada, nomGen,"centrales_flujo");
         lineasFlujo = Lee.leeCentralesFlujo(libroEntrada, nombreLineas,"lineas_flujo");
         
@@ -1221,8 +1210,7 @@ public class Prorratas {
         */
 //        prorrEtaGx=Calc.CalculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
 //                orientBarTroncal, etapa, centralesFlujo, lineasFlujo,GSDF,GGDFref );
-        prorrEtaGx=Calc.calculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
-                orientBarTroncal, etapa, centralesFlujo, lineasFlujo,GSDF,GGDFref );
+        prorrEtaGx=Calc.calculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
         prorrEtaCons=Calc.calculaProrrCons(flujoDCEtapa, GLDFEtapa, ConsumosClaves, datosClaves, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
         for (int l = 0; l < numLin; l++) {
             for (int g = 0; g < numGen; g++) {

@@ -180,6 +180,21 @@ public class Calc {
     	return D;
     }
     
+    /**
+     * Funcion de calculo y almacenamiento de los factores GGDF para todas las
+     * hidrologias
+     *
+     * @param A matrix GSDF
+     * @param Eref matriz GLDF de la barra de referencia para todas las
+     * hidrologias
+     * @param datosLineas arreglo con datos de linea (sexta columna define el
+     * tipo)
+     * @param useDisk use true para almacenar GLDF de etapa en disco. false para
+     * dejar en memoria (puede ser muy grande!)
+     * @return instance de los GGDF
+     * @throws IOException en case de usar disco y encontrar error escribiendo
+     * archivos temporales
+     */
     static GGDF calculaGGDF(float A[][], float Dref[][], float datosLineas[][], boolean useDisk) throws IOException{
     	int numBarras=A.length;
     	int numLineas=datosLineas.length;
@@ -249,6 +264,18 @@ public class Calc {
         return Flujos;
     }
     
+    /**
+     * Recrea el flujo DC sin perdidas en todas las lineas mediante el metodo
+     * GLDF para la hidrologia h
+     *
+     * @param E matriz GLDF de etapa
+     * @param Consumos demanda ajustada para todas las hidrologias (incluye
+     * distribucion de energia no suministrada)
+     * @param h hidrologia actual
+     * @return arreglo de dimension numLineas con los flujos por cada
+     * @throws IOException si hay problemas leyendo los GLDF (solo si estan
+     * almacenados en disco)
+     */
     static float[] flujoDC_GLDF(GGDF E, float Consumos[][], int h) throws IOException {
         int numLineas = E.getNumLineas();
         int numBarras = E.getNumBarras();
@@ -417,8 +444,25 @@ public class Calc {
     	return Prorratas;
     }
     
+    /**
+     * Asignacion de prorratas de uso de lineas de tranmision por cada inyeccion
+     *
+     * @param flujoDC resultado del flujo DC usando metodo GLDF para la etapa
+     * (todas las hidrologias)
+     * @param D GGDF de etapa
+     * @param Gx generacion para todas las etapas e hidrologias
+     * @param datosGener datos de generadores en planilla Ent
+     * @param datosLineas datos de lineas en planilla Ent
+     * @param paramBarTroncal parametros de lineas troncal en planilla Ent
+     * @param orientBarTroncal datos de orientacion lineas en planilla Ent
+     * @param e etapa actual
+     * @return arreglo de dimensiones [numLineas][numConsumos] con las prorratas
+     * de cada consumo por linea
+     * @throws IOException si hay problemas leyendo los GLDF (solo si estan
+     * almacenados en disco)
+     */
     static float[][] calculaProrrGx(float flujoDC[][], GGDF D, float Gx[][][], int datosGener[][],
-            float datosLineas[][], int paramBarTroncal[][], int orientBarTroncal[][], int e, int[] gflux, int[] lineasFlujo, float A[][], float Dref[][]) throws IOException {
+            float datosLineas[][], int paramBarTroncal[][], int orientBarTroncal[][], int e) throws IOException {
         int numHid = flujoDC[0].length;
         int numLineas = flujoDC.length;
         int numGeneradores = Gx.length;
@@ -714,6 +758,22 @@ public class Calc {
     	return consumoModif;
     }
     
+    /**
+     * Funcion que asigna perdidas a los consumos usando el metodo factores GLDF
+     *
+     * @param flujoDC resultado del flujo DC usando metodo GLDF para la etapa e
+     * hidrologia
+     * @param E GLDF de etapa
+     * @param perdidas perdidas >110kV
+     * @param datosLineas datos de las lineas de transmision en Ent
+     * @param Consumos demanda ajustada para todas las hidrologias (incluye
+     * distribucion de energia no suministrada)
+     * @param h hidrologia actual (identifica en Consumos la demanda a usar)
+     * @return arreglo de dimension numBarras (igual a Consumos) con la demanda
+     * ajustada por perdidas
+     * @throws IOException si hay problemas leyendo los GLDF (solo si estan
+     * almacenados en disco)
+     */
     static float[] asignaPerdidas(float flujoDC[], GGDF E, float perdidas[], float datosLineas[][], float Consumos[][], int h) throws IOException {
         int numBarras = Consumos.length;
         int numLineas = flujoDC.length;
@@ -751,7 +811,7 @@ public class Calc {
         float[] E_h = E.get(h);
         for (int l = 0; l < numLineas; l++) {
             for (int b = 0; b < numBarras; b++) {
-                if ((int) datosLineas[l][5] == 1) {	// si la linea está en servicio
+                if ((int) datosLineas[l][5] == 1) { // si la linea está en servicio
                     if (flujoDC[l] != 0) {
                         float E_h_l_b = E_h[nCont];
                         if (Math.signum(flujoDC[l]) == Math.signum(E_h_l_b)) { //si está aguas abajo del flujo
@@ -906,7 +966,23 @@ public class Calc {
         return Prorratas;
     }
     
-        
+    /**
+     * Asignacion de prorratas de uso de lineas de tranmision por cada consumo
+     *
+     * @param flujoDC resultado del flujo DC usando metodo GLDF para la etapa
+     * (todas las hidrologias)
+     * @param E GLDF de etapa
+     * @param Consumos consumos reales por clientes en planilla Ent
+     * @param datosClientes datos de clientes en planilla Ent
+     * @param datosLineas datos de lineas en planilla Ent
+     * @param paramBarTroncal parametros de lineas troncal en planilla Ent
+     * @param orientBarTroncal datos de lineas en planilla Ent
+     * @param e etapa actual
+     * @return arreglo de dimensiones [numLineas][numConsumos] con las prorratas
+     * de cada consumo por linea
+     * @throws IOException si hay problemas leyendo los GLDF (solo si estan
+     * almacenados en disco)
+     */
     static float[][] calculaProrrCons(float flujoDC[][], GGDF E, float Consumos[][], int datosClientes[][],
             float datosLineas[][], int paramBarTroncal[][], int orientBarTroncal[][], int e) throws IOException {
         int numHid = flujoDC[0].length;
