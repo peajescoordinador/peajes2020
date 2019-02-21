@@ -29,7 +29,10 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.util.Scanner;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -45,7 +48,12 @@ import java.util.concurrent.TimeUnit;
  * @author
  */
 public class Prorratas {
-	
+
+    private static final boolean USE_BUFFEREDSTREAM = true;
+    private static final boolean USE_FILECHANNEL = false;
+    private static final boolean USE_SCANNER = false;
+    private static final boolean USE_MAPPED_NAMES = true;
+    
     private static int etapa;
     private static int numEtapas=0;
     private static String nombreSlack;
@@ -410,17 +418,37 @@ public class Prorratas {
          * Lectura de Generacion (Despachos) y energia no suministrada
          * ===========================================================
          */
+        System.out.println("Inicio lectura archivo despacho PLP...");
         long time_dispatch = System.currentTimeMillis();
         int cuenta = 0; //Contador de lineas
         File testReadFile = new File(ArchivoDespachoGeneradores);
         BufferedReader input = null;
         Gx = new float[numGen][numEtapas][numHid]; //Despacho PLP
         FallaEtaHid = new float[numEtapas][numHid];   //Falla PLP
-        System.out.println("Inicio lectura archivo despacho PLP...");
+        java.util.Map<String, Integer> m_nomGen = new java.util.TreeMap<String , Integer>();
+        java.util.Map<String, Integer> m_nomGen_Sin_Fallas = new java.util.TreeMap<String , Integer>();
+        
+        //Chequeamos consistencia en las contantes:
+        assert(!(USE_BUFFEREDSTREAM & (USE_SCANNER | USE_FILECHANNEL))) : "Only one opcion USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
+        assert(!(USE_FILECHANNEL & (USE_BUFFEREDSTREAM | USE_SCANNER))) : "Only one opcion USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
+        assert(!(USE_SCANNER & (USE_BUFFEREDSTREAM | USE_FILECHANNEL))) : "Only one opcion USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
+        
+        if (USE_MAPPED_NAMES) {
+            int cont=0;
+            for (String g: nomGen){
+                m_nomGen.put(g, cont);
+                cont++;
+            }
+            for (String g: nomGen_Sin_Fallas){
+                m_nomGen_Sin_Fallas.put(g, cont);
+                cont++;
+            }
+        }
+        
+        if (USE_BUFFEREDSTREAM) {
         try {
             //input = new BufferedReader( new FileReader(testReadFile) );
-            input = new BufferedReader( new InputStreamReader(new
-                    FileInputStream(testReadFile), "Latin1"));
+            input = new BufferedReader( new InputStreamReader(new FileInputStream(testReadFile), "Latin1"));
             String line = null;
             cuenta=0;
             int indGen=0;
@@ -429,43 +457,39 @@ public class Prorratas {
             int indEta=0;
             float Pgen=0;
             float ENS=0;
-            /*while ((line = input.readLine()) != null){
-                if(cuenta>0){
-                    if((line.substring(0,5).trim()).equals("MEDIA")==false){
-                        indGen = Calc.Buscar((line.substring(32,line.indexOf(",",32))).trim(),nomGen);
-                        //System.out.println("PLP "+(line.substring(32,line.indexOf(",",32))).trim());
-                        if(indGen>-1){
-                            //System.out.println(indGen +" "+nomGen[indGen]);
-                            indHid=Integer.valueOf((line.substring(4,6)).trim())-1;
-                            indEta=Integer.valueOf((line.substring(8,11)).trim())-1;
-                            Pgen=Float.valueOf((line.substring(103,110)).trim());
-                            if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
-                                Gx[indGen][indEta-etapaPeriodoIni][indHid]=Pgen;
-                                //System.out.println(Gx[indGen][indEta-etapaPeriodoIni][indHid]);
-                            }
-                        }
-                        else{//suma las fallas
-                            indHid=Integer.valueOf((line.substring(4,6)).trim())-1;
-                            indEta=Integer.valueOf((line.substring(8,11)).trim())-1;
-                            ENS=Float.valueOf((line.substring(103,110)).trim());
-                            if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
-                                FallaEtaHid[indEta-etapaPeriodoIni][indHid]+=ENS;
-                            }
-                        }
-                    }
-                }
-                cuenta++;
-            }*/
-                    
+            String sNomGenPrev = "";
+            Integer indexGen = null;
+            Integer indexGenSinFallas = null;
             while ((line = input.readLine()) != null){
                 if(cuenta>0){
                     if((line.substring(0,5).trim()).equals("MEDIA")==false){
-                        
-                        indGen = Calc.Buscar((line.substring(32,line.indexOf(",",32))).trim(),nomGen);
-                        //System.out.println("PLP "+(line.substring(32,line.indexOf(",",32))).trim() + " " + indGen);
-                        indGen2 = Calc.Buscar((line.substring(32,line.indexOf(",",32))).trim(),nomGen_Sin_Fallas);
-                        
-                        if(indGen2>-1){
+                        if (USE_MAPPED_NAMES) {
+                            String sNomGenActual = (line.substring(32, line.indexOf(",", 32))).trim();
+                            if (!sNomGenActual.equals(sNomGenPrev)) {
+                                indexGen = m_nomGen.get(sNomGenActual);
+                                indexGenSinFallas = m_nomGen_Sin_Fallas.get(sNomGenActual);
+                                sNomGenPrev = sNomGenActual;
+                            }
+                            if (indexGenSinFallas != null) {
+                                indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                                indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                if (indexGen != null) {
+                                    if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                        Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                        Gx[indGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                    }
+                                }
+                            } else {
+                                if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                    ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                    FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                }
+                            }
+                        } else {
+                            indGen = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen);
+                            indGen2 = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen_Sin_Fallas);
+                            
+                            if(indGen2>-1){
                           if(indGen>-1){  
                             
                             //System.out.println(indGen +" "+nomGen[indGen]);
@@ -475,7 +499,7 @@ public class Prorratas {
                             Pgen=Float.valueOf((line.substring(103,line.indexOf(",",103))).trim()); 
                             if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
                                 //System.out.println(indGen +" "+nomGen[indGen]);
-                                Gx[indGen][indEta-etapaPeriodoIni][indHid]=Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro y lower than the values in plp file!
+                                Gx[indGen][indEta-etapaPeriodoIni][indHid]=Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                 //System.out.println(Gx[indGen][indEta-etapaPeriodoIni][indHid]);
                             }
                             
@@ -490,9 +514,11 @@ public class Prorratas {
                             //ENS=Float.valueOf((line.substring(151,158)).trim());
                             ENS=Float.valueOf((line.substring(103,line.indexOf(",",103))).trim());
                             if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
-                                FallaEtaHid[indEta-etapaPeriodoIni][indHid]+=ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro y lower than the values in plp file!
+                                FallaEtaHid[indEta-etapaPeriodoIni][indHid]+=ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                             }
                         }
+                        }
+                        
                     }
                 }
                 cuenta++;
@@ -512,7 +538,106 @@ public class Prorratas {
                 ex.printStackTrace(System.out);
             }
         }
-        System.out.println("Leyendo archivo despacho PLP : " + ((System.currentTimeMillis() - time_dispatch)/1000) + "[seg]");
+        }
+
+        if (USE_FILECHANNEL) {
+            RandomAccessFile aFile = new RandomAccessFile(ArchivoDespachoGeneradores, "r");
+            FileChannel inChannel = aFile.getChannel();
+            ByteBuffer buffer = ByteBuffer.allocate(1024 * 1000); //1GB buffer
+            String line = "";
+            int indGen = 0;
+            int indGen2 = 0;
+            int indHid = 0;
+            int indEta = 0;
+            float Pgen = 0;
+            float ENS = 0;
+            while (inChannel.read(buffer) > 0) {
+                buffer.flip();
+                for (int i = 0; i < buffer.limit(); i++) {
+                    boolean isEOL = false;
+                    char c = ((char) buffer.get());
+                    if (c == '\r' || c == '\n') {
+                        isEOL = true;
+                    } else {
+                        line += c;
+                    }
+                    if (isEOL) {
+                        //Procesar linea:
+                        if (cuenta > 0) {
+                            if ((line.substring(0, 5).trim()).equals("MEDIA") == false) {
+                                indGen = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen);
+                                indGen2 = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen_Sin_Fallas);
+                                if (indGen2 > -1) {
+                                    if (indGen > -1) {
+                                        indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                                        indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                        Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                        if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                            Gx[indGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                        }
+                                    }
+                                } else {//suma las fallas
+                                    indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                                    indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                    ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                    if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                        FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                    }
+                                }
+                            }
+                        }
+                        line = "";
+                        cuenta++;
+                    }
+                }
+                buffer.clear(); // do something with the data and clear/compact it.
+            }
+            inChannel.close();
+            aFile.close();
+        }
+        
+        if (USE_SCANNER) {
+            RandomAccessFile aFile = new RandomAccessFile(ArchivoDespachoGeneradores, "r");
+            FileChannel inChannel = aFile.getChannel();
+            Scanner fileScanner = new Scanner(inChannel, StandardCharsets.ISO_8859_1.name());
+//            Scanner fileScanner = new Scanner(new BufferedReader(new InputStreamReader(new FileInputStream(ArchivoDespachoGeneradores), StandardCharsets.ISO_8859_1.name())));
+            String line = "";
+            int indGen = 0;
+            int indGen2 = 0;
+            int indHid = 0;
+            int indEta = 0;
+            float Pgen = 0;
+            float ENS = 0;
+            while (fileScanner.hasNextLine()) {
+                line = fileScanner.nextLine();
+                if (cuenta > 0) {
+                    if ((line.substring(0, 5).trim()).equals("MEDIA") == false) {
+                        indGen = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen);
+                        indGen2 = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen_Sin_Fallas);
+                        if (indGen2 > -1) {
+                            if (indGen > -1) {
+                                indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                                indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                    Gx[indGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                }
+                            }
+                        } else {//suma las fallas
+                            indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                            indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                            ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                            if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                            }
+                        }
+                    }
+                }
+                cuenta++;
+            }
+        }
+        
+        System.out.println("Fin lectura archivo despacho PLP : " + ((System.currentTimeMillis() - time_dispatch)/1000) + "[seg]");
         
         /*
          * Lectura de datos de Lineas del sistema reducido
@@ -536,10 +661,18 @@ public class Prorratas {
          * Lectura de Perdidas en lineas de tension >110 kV
          * ================================================
          */
+        System.out.println("Leyendo archivo flujos lineas PLP...");
         testReadFile = new File(ArchivoPerdidasLineas);
         input = null;
         perdidasPLPMayor110 = new float[numEtapas][numHid];
-        System.out.println("Leyendo archivo flujos lineas PLP...");
+        java.util.Map<String, Integer> m_nombreLineasSistRed = new java.util.TreeMap<String, Integer>();
+        if (USE_MAPPED_NAMES) {
+            int cont = 0;
+            for (String l: nombreLineasSistRed) {
+                m_nombreLineasSistRed.put(l, cont);
+                cont++;
+            }
+        }
         try {
             input = new BufferedReader( new InputStreamReader(new
                     FileInputStream(testReadFile), "Latin1"));
@@ -549,8 +682,29 @@ public class Prorratas {
             int indHid=0;
             int indEta=0;
             float Perd=0;
+            String sNomLineaPrev = "";
+            Integer indexLin = null;
             while (( line = input.readLine()) != null){
                 if(cuenta>0){
+                    if (USE_MAPPED_NAMES) {
+                        if ((line.substring(0, 5).trim()).equals("MEDIA") == false && (line.substring(0, 3).trim()).equals("Sim") == true) {
+                            String sNomLineaActual = (line.substring(32, 79)).trim();
+                            if (!sNomLineaActual.equals(sNomLineaPrev)) {
+                                indexLin = m_nombreLineasSistRed.get(sNomLineaActual);
+                                sNomLineaPrev = sNomLineaActual;
+                            }
+                            if (indexLin != null) {
+                                if (paramLinSistRed[indexLin] > 110) {
+                                    indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                                    indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                    if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                        Perd = Float.valueOf(line.substring(111, line.indexOf(",", 111)).trim());
+                                        perdidasPLPMayor110[indEta - etapaPeriodoIni][indHid] += Perd; //TODO
+                                    }
+                                }
+                            }
+                        }
+                    } else {
                     if((line.substring(0,5).trim()).equals("MEDIA")==false && (line.substring(0,3).trim()).equals("Sim")==true){
                         indLin=Calc.Buscar((line.substring(32,79)).trim(),nombreLineasSistRed);
                         if(indLin>-1){
@@ -564,6 +718,7 @@ public class Prorratas {
                                 }
                             }
                         }
+                    }
                     }
                 }
                 cuenta++;
@@ -637,8 +792,8 @@ public class Prorratas {
         
         int[] centralesFlujo;
         int[] lineasFlujo;
-        centralesFlujo = Lee.leeCentralesFlujo(libroEntrada, nomGen,"centrales_flujo");
-        lineasFlujo = Lee.leeCentralesFlujo(libroEntrada, nombreLineas,"lineas_flujo");
+        centralesFlujo = Lee.leeCentralesFlujo(libroEntrada, nomGen,"centrales_flujo", false); //TODO: move to config file
+        lineasFlujo = Lee.leeCentralesFlujo(libroEntrada, nombreLineas,"lineas_flujo", false); //TODO: move to config file
         
         //Escritura del header archivo prorratas.csv:
         FileWriter writerProrratas = new FileWriter(DirBaseSalida + SLASH + "prorratas.csv");

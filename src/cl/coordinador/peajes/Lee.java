@@ -959,34 +959,48 @@ public class Lee {
         return lineas = new int[1];
     }
     
+    @Deprecated
+    static int[] leeCentralesFlujo(String libroEntrada, String nombreLineas[], String areaNombre) {
+        return leeCentralesFlujo(libroEntrada, nombreLineas, areaNombre, true);
+    }
     
-     static int[] leeCentralesFlujo(String libroEntrada, String nombreLineas[], String areaNombre) {
+    /**
+     * Funcion para leer los rangos 'centrales_flujo' y/o 'lineas_flujo' desde
+     * la planilla Ent
+     *
+     * @param libroEntrada ruta a la planilla Ent
+     * @param nombres arreglo con el nombre de las lineas del sistema reducido
+     * @param nombreRango nombre del area
+     * @param print use 'true' para imprimir todas las lineas o centrales en el
+     * rango
+     * @return arreglo con la posicion (en el arreglo 'nombres') de las
+     * centrales y/o lineas en el rango 'nombreRango'
+     */
+    static int[] leeCentralesFlujo(String libroEntrada, String nombres[], String nombreRango, boolean printDebug) {
         int[] lineas;
         String Linea;
         try {
-            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));   
-            AreaReference arefFlujo = new AreaReference(wb.getNameAt(wb.getNameIndex(areaNombre)).getRefersToFormula(), wb.getSpreadsheetVersion());
+            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(libroEntrada));
+            AreaReference arefFlujo = new AreaReference(wb.getName(nombreRango).getRefersToFormula(), wb.getSpreadsheetVersion());
             CellReference[] crefsFlujo = arefFlujo.getAllReferencedCells();
             lineas = new int[crefsFlujo.length];
             Sheet s = wb.getSheet(crefsFlujo[0].getSheetName());
-            for (int i = 0 ; i< crefsFlujo.length;i++){
+            for (int i = 0; i < crefsFlujo.length; i++) {
                 Row r = s.getRow(crefsFlujo[i].getRow());
                 Linea = r.getCell(crefsFlujo[i].getCol()).toString().trim();
-                System.out.println(Linea);
-                lineas[i] = Calc.Buscar(Linea,nombreLineas);
-                System.out.println(lineas[i]);
-                
+                lineas[i] = Calc.Buscar(Linea, nombres);
+                if (printDebug) {
+                    System.out.println(Linea);
+                    System.out.println(lineas[i]);
+                }
             }
             return lineas;
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("No se puede acceder al archivo " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
         }
-        
-        catch (java.io.FileNotFoundException e) {
-                System.out.println( "No se puede acceder al archivo " + e.getMessage());
-        }
-        catch (Exception e) {
-                e.printStackTrace();
-        }
-        return lineas = new int[1];
+        return new int[1];
     }
     
     static void leeIndices(String libroEntrada, double[] dolar, double[] interes) {
