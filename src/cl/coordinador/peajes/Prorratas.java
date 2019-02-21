@@ -439,6 +439,7 @@ public class Prorratas {
                 m_nomGen.put(g, cont);
                 cont++;
             }
+            cont=0;
             for (String g: nomGen_Sin_Fallas){
                 m_nomGen_Sin_Fallas.put(g, cont);
                 cont++;
@@ -476,7 +477,7 @@ public class Prorratas {
                                 if (indexGen != null) {
                                     if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
                                         Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
-                                        Gx[indGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                        Gx[indexGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                     }
                                 }
                             } else {
@@ -887,8 +888,7 @@ public class Prorratas {
                 paramLinEta[indiceLintron[l]][9] = datosLintron[l][2];
             }
             
-            exeService.submit(new ProrratasExe(etapa, nBarraSlack, numGen, numLin, numLinTron, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk));
-//            testMove(etapa, paramLinEta, barrasActivas, nBarraSlack, paramGener, Gx, Consumos, FallaEtaHid,  perdidasPLPMayor110, Flujo, paramBarTroncal, orientBarTroncal, centralesFlujo, lineasFlujo, DirBaseSalida, ConsumosClaves, datosClaves, prorrGx, numClaves, prorrCx);
+            exeService.submit(new ProrratasExe(etapa, nBarraSlack, numGen, numLin, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk));
         }
         long elapsed = System.currentTimeMillis() - initExecutorTime;
         System.out.println("===========Submitted all tasks: Time: " + elapsed / 1000 + "[sec]===========");
@@ -1208,7 +1208,7 @@ public class Prorratas {
         completo=true;
     }
 
-    public static void calculaEtapa(int etapa, int nBarraSlack, int numGen, int numLin, int numLinTron, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk) throws IOException {
+    public static void calculaEtapa(int etapa, int nBarraSlack, int numGen, int numLin, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk) throws IOException {
         Matriz Ybarra;
         Matriz Xbarra;
         float[][] flujoDCEtapa = new float[numLin][numHid];
@@ -1436,7 +1436,6 @@ class ProrratasExe implements Runnable {
     private int nBarraSlack;
     private int numGen;
     private int numLin;
-    private int numLinTron;
     private int numBarras;
     private int numHid;
     private String DirBaseSalida;
@@ -1444,12 +1443,11 @@ class ProrratasExe implements Runnable {
     private float[][] paramLinEta;
     private boolean useDisk;
 
-    public ProrratasExe(int etapa, int nBarraSlack, int numGen, int numLin, int numLinTron, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk) {
+    public ProrratasExe(int etapa, int nBarraSlack, int numGen, int numLin, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk) {
         this.etapa = etapa;
         this.nBarraSlack = nBarraSlack;
         this.numGen = numGen;
         this.numLin = numLin;
-        this.numLinTron = numLinTron;
         this.numBarras = numBarras;
         this.numHid = numHid;
         this.DirBaseSalida = DirBaseSalida;
@@ -1461,7 +1459,7 @@ class ProrratasExe implements Runnable {
     @Override
     public void run() {
         try {
-            Prorratas.calculaEtapa(etapa, nBarraSlack, numGen, numLin, numLinTron, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk);
+            Prorratas.calculaEtapa(etapa, nBarraSlack, numGen, numLin, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk);
         } catch (IOException e) {
             e.printStackTrace(System.out);
         } catch (Exception e) {
