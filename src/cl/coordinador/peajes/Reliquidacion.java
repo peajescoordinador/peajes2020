@@ -214,8 +214,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
             AreaReference arefReliq;
             CellReference[] crefsReliq;
 
-            int nomRangoInd = wb.getNameIndex("Total");
-            Name nomRango = wb.getNameAt(nomRangoInd);
+            Name nomRango = wb.getName("Total");
             arefliq = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsliq = arefliq.getAllReferencedCells();
             Sheet s = wb.getSheet(crefsliq[0].getSheetName());
@@ -223,8 +222,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
            int filas=c4.getRow()-4;
            short columnas=c4.getCol();
            
-            int nomRangoIndRe = wbRel.getNameIndex("Total");
-            Name nomRangoRe = wbRel.getNameAt(nomRangoIndRe);
+            Name nomRangoRe = wbRel.getName("Total");
             arefReliq = new AreaReference(nomRangoRe.getRefersToFormula(), wb.getSpreadsheetVersion());
             crefsReliq = arefReliq.getAllReferencedCells();
             Sheet sRel = wbRel.getSheet(crefsReliq[0].getSheetName());
