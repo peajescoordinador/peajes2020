@@ -1215,10 +1215,10 @@ public class Prorratas {
         float[] flujoDCHid = new float[numLin];
         float[][] GLDFref;
 //        float[][][] GLDFEtapa; //Movido a objeto
-        GGDF GLDFEtapa;
+        GGDF GLDFEtapa = null;
         float[][] GGDFref;
 //        float[][][] GGDFEtapa; //Movido a objeto
-        GGDF GGDFEtapa;
+        GGDF GGDFEtapa = null;
         
         float[][] prorrEtaGx;
         float[][] prorrEtaCons;
@@ -1229,150 +1229,159 @@ public class Prorratas {
                 GxEtaHid[h] += Gx[g][etapa][h];
             }
         }
-
+        
         /*
         * Calcula matriz de Admitancias y matriz de Impedancias
         * =====================================================
         */
-        int barrasEliminadas=0;
-        // Calcula Ybarra considerando todas las barras, activas e inactivas
-        Ybarra=new Matriz(Calc.CalculaYBarra(paramLinEta,numBarras,numLin));
-        // Elimina de Ybarra las filas y columnas correspondientes a barras inactivas y la slack,
-        // de manera de obtener una matriz invertible
-        for(int b=0;b<numBarras;b++){
-            if(barrasActivas[b][etapa]==false || b==nBarraSlack){
-                Ybarra=(Ybarra.EliminarFila(b-barrasEliminadas)).EliminarColumna(b-barrasEliminadas);
-                barrasEliminadas++;
-            }
-        }
-        Xbarra=(Ybarra.InversionRapida()).uminus();
-        /* Se agregan las filas y columnas de las barras inactivas y la slack rellenas con ceros,
-        * de manera de mantener coeherencia en los indices de barras
-        */
-        for(int b=0;b<numBarras;b++){
-            if(barrasActivas[b][etapa]==false || b==nBarraSlack){
-                Xbarra=(Xbarra.InsertarCerosFila(b)).InsertarCerosColumna(b);
-            }
-        }
-        /* Calcula Factores de Desplazamiento A y
-        GLDF barra referencia y GLDF resto del sistema. */
-        float[][] GSDF = Calc.CalculaGSDF(Xbarra,paramLinEta,barrasActivas, etapa);
-        GLDFref=Calc.CalculaGLDFRef(GSDF,paramLinEta,paramGener,etapa,Gx);
-//        GLDFEtapa=Calc.CalculaGLDF(GSDF,GLDFref,paramLinEta,etapa);
-        GLDFEtapa=Calc.calculaGLDF(GSDF,GLDFref,paramLinEta, useDisk);
-        // Calcula Flujo DC y asignacion de perdidas
-        // -----------------------------------------
-        float[] R=new float[numLin];                   // resistencias en p.u
-        float[] perdI2R=new float[numLin];             // perdidas de cada linea segun I*I*R
-        float[] perdidas=new float[numLin];            // perdidas de cada linea segun diferencia entre Gx y Demanda
-        float[] perdMayor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
-        float[] perdMenor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
-        float[] perdRealesSistema=new float[numHid];   // perdidas del sistema
-        float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las lineas de tension > 110kV
-        float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las lineas de tension <= 110kV
-        float conSist;
-        float[][] conAjustado=new float[numBarras][numHid];
-        float[] genSist=new float[numHid];
-        float[] conMasPerd= new float[numBarras];      // consumos con asignacion de perdidas por iteracion [MW]
-        // Consumos con asignacion de perdidas por iteracion [MW]
-        float[][] conMasPerdEta= new float[numBarras][numHid];
-        for (int h = 0; h < numHid; h++) {
-            genSist[h] = GxEtaHid[h];
-            for (int b = 0; b > numBarras; b++) {
-                conAjustado[b][h] = 0;
-            }
-        }
-        for (int l = 0; l < numLin; l++) {
-            R[l] = paramLinEta[l][3];                    // resistencia en p.u.
-        }
-        
-//        FileWriter writerConsumos = new FileWriter(DirBaseSalida + SLASH + "consumos.csv");
-        //<--Inicio ciclo hidro
-        for (int h = 0; h < numHid; h++) {
-            
-//            writerConsumos.append(Float.toString(h));
-//            writerConsumos.append(",");
-//            writerConsumos.append(Float.toString(etapa));
-            
-            for (int l = 0; l < numLin; l++) {
-                perdI2R[l] = 0;
-                perdidas[l] = 0;
-                flujoDCHid[l] = 0;
-            }
-            perdRealesSistema[h] = 0;
-            perdI2RSistMayor110[h] = 0;
-            perdI2RSistMenor110[h] = 0;
-            conSist = 0;
-            for (int b = 0; b < numBarras; b++) {
-                conSist += Consumos[b][etapa];
-            }
-            for (int b = 0; b < numBarras; b++) {
-                conAjustado[b][h] += Consumos[b][etapa] * (conSist - FallaEtaHid[etapa][h]) / conSist;
-//                writerConsumos.append(",");
-//                writerConsumos.append(Float.toString(conAjustado[b][h]));
-            }
-//            writerConsumos.append("\n");
-            
-            perdRealesSistema[h] = genSist[h] - (conSist - FallaEtaHid[etapa][h]);
-            // Calculo de Flujo DC
-//            flujoDCHid = Calc.FlujoDC_GLDF(GLDFEtapa, conAjustado, h, etapa);//flujos en MW
-            flujoDCHid = Calc.flujoDC_GLDF(GLDFEtapa, conAjustado, h);//flujos en MW
-            //System.out.println("Flujo DC "+flujoDCHid[586]);
-            for (int l = 0; l < numLin; l++) {
-                flujoDCEtapa[l][h] = flujoDCHid[l];
-            }
-            // Calcula perdidas
-            for (int l = 0; l < numLin; l++) {
-                if (flujoDCHid[l] != 0) {
-                    float sBase = 100;
-                    perdI2R[l] = sBase * (R[l] * (flujoDCHid[l] / sBase) * (flujoDCHid[l] / sBase));	//perdidas en MW
-                    //System.out.println("Perdidas cuadraticas "+ perdI2R[l]);
-                }
-                if (paramLinEta[l][2] > 110) {
-                    perdI2RSistMayor110[h] += perdI2R[l];
-                } else {
-                    perdI2RSistMenor110[h] += perdI2R[l];
+        try {
+            int barrasEliminadas=0;
+            // Calcula Ybarra considerando todas las barras, activas e inactivas
+            Ybarra=new Matriz(Calc.CalculaYBarra(paramLinEta,numBarras,numLin));
+            // Elimina de Ybarra las filas y columnas correspondientes a barras inactivas y la slack,
+            // de manera de obtener una matriz invertible
+            for(int b=0;b<numBarras;b++){
+                if(barrasActivas[b][etapa]==false || b==nBarraSlack){
+                    Ybarra=(Ybarra.EliminarFila(b-barrasEliminadas)).EliminarColumna(b-barrasEliminadas);
+                    barrasEliminadas++;
                 }
             }
-            // Perdidas Reales prorrateadas en las lineas de acuerdo al I2R de cada una
-            perdMayor110 = Calc.ProrrPerdidas(perdidasPLPMayor110[etapa][h], perdI2R, paramLinEta, "Mayor_110", h);
-            perdMenor110 = Calc.ProrrPerdidas((perdRealesSistema[h] - perdidasPLPMayor110[etapa][h]), perdI2R, paramLinEta, "Menor_Igual_110", h);
+            Xbarra=(Ybarra.InversionRapida()).uminus();
+            /* Se agregan las filas y columnas de las barras inactivas y la slack rellenas con ceros,
+            * de manera de mantener coeherencia en los indices de barras
+            */
+            for(int b=0;b<numBarras;b++){
+                if(barrasActivas[b][etapa]==false || b==nBarraSlack){
+                    Xbarra=(Xbarra.InsertarCerosFila(b)).InsertarCerosColumna(b);
+                }
+            }
+            /* Calcula Factores de Desplazamiento A y
+            GLDF barra referencia y GLDF resto del sistema. */
+            float[][] GSDF = Calc.CalculaGSDF(Xbarra,paramLinEta,barrasActivas, etapa);
+            GLDFref=Calc.CalculaGLDFRef(GSDF,paramLinEta,paramGener,etapa,Gx);
+    //        GLDFEtapa=Calc.CalculaGLDF(GSDF,GLDFref,paramLinEta,etapa);
+            GLDFEtapa=Calc.calculaGLDF(GSDF,GLDFref,paramLinEta, useDisk);
+            // Calcula Flujo DC y asignacion de perdidas
+            // -----------------------------------------
+            float[] R=new float[numLin];                   // resistencias en p.u
+            float[] perdI2R=new float[numLin];             // perdidas de cada linea segun I*I*R
+            float[] perdidas=new float[numLin];            // perdidas de cada linea segun diferencia entre Gx y Demanda
+            float[] perdMayor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
+            float[] perdMenor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
+            float[] perdRealesSistema=new float[numHid];   // perdidas del sistema
+            float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las lineas de tension > 110kV
+            float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las lineas de tension <= 110kV
+            float conSist;
+            float[][] conAjustado=new float[numBarras][numHid];
+            float[] genSist=new float[numHid];
+            float[] conMasPerd= new float[numBarras];      // consumos con asignacion de perdidas por iteracion [MW]
+            // Consumos con asignacion de perdidas por iteracion [MW]
+            float[][] conMasPerdEta= new float[numBarras][numHid];
+            for (int h = 0; h < numHid; h++) {
+                genSist[h] = GxEtaHid[h];
+                for (int b = 0; b > numBarras; b++) {
+                    conAjustado[b][h] = 0;
+                }
+            }
             for (int l = 0; l < numLin; l++) {
-                perdidas[l] = perdMayor110[l] + perdMenor110[l];
+                R[l] = paramLinEta[l][3];                    // resistencia en p.u.
             }
-            // Asigna perdidas a consumos
-//            conMasPerd = Calc.AsignaPerdidas(flujoDCHid, GLDFEtapa, perdidas, paramLinEta, conAjustado, etapa, h);
-            conMasPerd = Calc.asignaPerdidas(flujoDCHid, GLDFEtapa, perdidas, paramLinEta, conAjustado, h);
-        }
-        //<--Fin ciclo hidro
-        
-        for (int h = 0; h < numHid; h++) {
+
+    //        FileWriter writerConsumos = new FileWriter(DirBaseSalida + SLASH + "consumos.csv");
+            //<--Inicio ciclo hidro
+            for (int h = 0; h < numHid; h++) {
+
+    //            writerConsumos.append(Float.toString(h));
+    //            writerConsumos.append(",");
+    //            writerConsumos.append(Float.toString(etapa));
+
+                for (int l = 0; l < numLin; l++) {
+                    perdI2R[l] = 0;
+                    perdidas[l] = 0;
+                    flujoDCHid[l] = 0;
+                }
+                perdRealesSistema[h] = 0;
+                perdI2RSistMayor110[h] = 0;
+                perdI2RSistMenor110[h] = 0;
+                conSist = 0;
+                for (int b = 0; b < numBarras; b++) {
+                    conSist += Consumos[b][etapa];
+                }
+                for (int b = 0; b < numBarras; b++) {
+                    conAjustado[b][h] += Consumos[b][etapa] * (conSist - FallaEtaHid[etapa][h]) / conSist;
+    //                writerConsumos.append(",");
+    //                writerConsumos.append(Float.toString(conAjustado[b][h]));
+                }
+    //            writerConsumos.append("\n");
+
+                perdRealesSistema[h] = genSist[h] - (conSist - FallaEtaHid[etapa][h]);
+                // Calculo de Flujo DC
+    //            flujoDCHid = Calc.FlujoDC_GLDF(GLDFEtapa, conAjustado, h, etapa);//flujos en MW
+                flujoDCHid = Calc.flujoDC_GLDF(GLDFEtapa, conAjustado, h);//flujos en MW
+                //System.out.println("Flujo DC "+flujoDCHid[586]);
+                for (int l = 0; l < numLin; l++) {
+                    flujoDCEtapa[l][h] = flujoDCHid[l];
+                }
+                // Calcula perdidas
+                for (int l = 0; l < numLin; l++) {
+                    if (flujoDCHid[l] != 0) {
+                        float sBase = 100;
+                        perdI2R[l] = sBase * (R[l] * (flujoDCHid[l] / sBase) * (flujoDCHid[l] / sBase));	//perdidas en MW
+                        //System.out.println("Perdidas cuadraticas "+ perdI2R[l]);
+                    }
+                    if (paramLinEta[l][2] > 110) {
+                        perdI2RSistMayor110[h] += perdI2R[l];
+                    } else {
+                        perdI2RSistMenor110[h] += perdI2R[l];
+                    }
+                }
+                // Perdidas Reales prorrateadas en las lineas de acuerdo al I2R de cada una
+                perdMayor110 = Calc.ProrrPerdidas(perdidasPLPMayor110[etapa][h], perdI2R, paramLinEta, "Mayor_110", h);
+                perdMenor110 = Calc.ProrrPerdidas((perdRealesSistema[h] - perdidasPLPMayor110[etapa][h]), perdI2R, paramLinEta, "Menor_Igual_110", h);
+                for (int l = 0; l < numLin; l++) {
+                    perdidas[l] = perdMayor110[l] + perdMenor110[l];
+                }
+                // Asigna perdidas a consumos
+    //            conMasPerd = Calc.AsignaPerdidas(flujoDCHid, GLDFEtapa, perdidas, paramLinEta, conAjustado, etapa, h);
+                conMasPerd = Calc.asignaPerdidas(flujoDCHid, GLDFEtapa, perdidas, paramLinEta, conAjustado, h);
+            }
+            //<--Fin ciclo hidro
+
+            for (int h = 0; h < numHid; h++) {
+                for (int l = 0; l < numLin; l++) {
+                    Flujo[l][etapa][h] = flujoDCEtapa[l][h];
+                }
+                for (int b = 0; b < numBarras; b++) {
+                    conMasPerdEta[b][h] = conMasPerd[b];
+                }
+            }
+            /*
+            * Calcula GGDF barra referencia y GGDF resto del sistema.
+            */
+            GGDFref=Calc.CalculaGGDFRef(GSDF,conMasPerdEta, paramLinEta);
+    //        GGDFEtapa=Calc.CalculaGGDF(GSDF,GGDFref,paramLinEta,etapa);
+            GGDFEtapa=Calc.calculaGGDF(GSDF,GGDFref,paramLinEta, useDisk);
+            /*
+            * Calcula prorratas promedio por etapa
+            */
+    //        prorrEtaGx=Calc.CalculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
+    //                orientBarTroncal, etapa, centralesFlujo, lineasFlujo,GSDF,GGDFref );
+            prorrEtaGx=Calc.calculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
+            prorrEtaCons=Calc.calculaProrrCons(flujoDCEtapa, GLDFEtapa, ConsumosClaves, datosClaves, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
             for (int l = 0; l < numLin; l++) {
-                Flujo[l][etapa][h] = flujoDCEtapa[l][h];
+                for (int g = 0; g < numGen; g++) {
+                    prorrGx[l][g][etapa] = prorrEtaGx[l][g];
+                }
+                for (int c = 0; c < numClaves; c++) {
+                    prorrCx[l][datosClaves[c][2]][etapa] += prorrEtaCons[l][c];
+                }
             }
-            for (int b = 0; b < numBarras; b++) {
-                conMasPerdEta[b][h] = conMasPerd[b];
+        } finally {
+            if (GGDFEtapa != null) {
+                GGDFEtapa.close();
             }
-        }
-        /*
-        * Calcula GGDF barra referencia y GGDF resto del sistema.
-        */
-        GGDFref=Calc.CalculaGGDFRef(GSDF,conMasPerdEta, paramLinEta);
-//        GGDFEtapa=Calc.CalculaGGDF(GSDF,GGDFref,paramLinEta,etapa);
-        GGDFEtapa=Calc.calculaGGDF(GSDF,GGDFref,paramLinEta, useDisk);
-        /*
-        * Calcula prorratas promedio por etapa
-        */
-//        prorrEtaGx=Calc.CalculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
-//                orientBarTroncal, etapa, centralesFlujo, lineasFlujo,GSDF,GGDFref );
-        prorrEtaGx=Calc.calculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
-        prorrEtaCons=Calc.calculaProrrCons(flujoDCEtapa, GLDFEtapa, ConsumosClaves, datosClaves, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
-        for (int l = 0; l < numLin; l++) {
-            for (int g = 0; g < numGen; g++) {
-                prorrGx[l][g][etapa] = prorrEtaGx[l][g];
-            }
-            for (int c = 0; c < numClaves; c++) {
-                prorrCx[l][datosClaves[c][2]][etapa] += prorrEtaCons[l][c];
+            if (GLDFEtapa != null) {
+                GLDFEtapa.close();
             }
         }
         System.out.println("Finalizado calculo etapa : "+ etapa);
@@ -1568,7 +1577,7 @@ class GGDF {
     /**
      * WARNING: Evite en lo posible usar! Solo cuando se desee leer algun numero
      * puntual
-     * <br>Obtiene los valores GGDF para todas las barras, linea e hidrologia
+     * <br>Obtiene los valores GGDF para la barra, linea e hidrologia
      * definida
      *
      * @param barra numero (0-base) de hidrologia segun orden en que fueron
@@ -1665,6 +1674,21 @@ class GGDF {
 //        }
 //        return lRet;
 //    }
+    
+    /**
+     * Cierra los stream y channels abiertos al archivo binario
+     */
+    void close() {
+        if (!isMemoryGGDF()) {
+            try {
+                if (fp != null) {
+                    fp.close();
+                }
+            } catch (IOException e) {
+                System.out.println("WARNING: temp file couldn't be cleaned. Must be done manually" + e.getMessage());
+            }
+        }
+    }
     
     private static long position3D(int x, int y, int z, int maxX, int maxY, int maxZ) {
         long pos = ((long) maxY * (long) maxZ) * (long) x + ((long) maxZ * (long) y) + (long) z;
