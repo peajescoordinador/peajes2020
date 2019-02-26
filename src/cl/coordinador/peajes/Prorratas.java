@@ -41,6 +41,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Modela y asigna perdidas a consumos
@@ -104,7 +105,7 @@ public class Prorratas {
         DecimalFormat dosDecimales=new DecimalFormat("0.00");
         long tInicioLectura = System.currentTimeMillis();
         cargandoInfo=true;
-        String libroEntrada = DirBaseEntrada + SLASH + "Ent" + AnoAEvaluar + ".xlsx";
+        String rutaLibroEnt = DirBaseEntrada + SLASH + "Ent" + AnoAEvaluar + ".xlsx";
         String[] EnergiaCU={"CUE2","CUE30","EUnit"};
         org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
 
@@ -112,8 +113,9 @@ public class Prorratas {
          * lee de Meses
          **************/
         System.out.println("Importando Informacion y Parametros");
+        XSSFWorkbook wb_Ent = new XSSFWorkbook(new FileInputStream( rutaLibroEnt ));
         int[] intAux1=new int[600];
-        int numSp = Lee.leeMeses(libroEntrada, intAux1, MESES);
+        int numSp = Lee.leeMeses(wb_Ent, intAux1, MESES);
         int[] paramEtapa = new int[numEtapas];
         System.arraycopy(intAux1, 0, paramEtapa, 0, numEtapas);
 
@@ -123,7 +125,7 @@ public class Prorratas {
          */
         TxtTemp1=new String[2500];
         double[][] Aux=new double[2500][11];
-        numLin = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
+        numLin = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);
         float[][] paramLineas;
         System.out.println("Lineas: "+numLin);
         paramLineas = new float[numLin][10];
@@ -143,7 +145,7 @@ public class Prorratas {
         int[][] intAux2 = new int[2500][3];
         TxtTemp1=new String[2500];
         TxtTemp2=new String[2500];
-        numLinTron = Lee.leeLintron(libroEntrada, TxtTemp1, nombreLineas,TxtTemp2, intAux1, intAux2);
+        numLinTron = Lee.leeLintron(wb_Ent, TxtTemp1, nombreLineas,TxtTemp2, intAux1, intAux2);
         String[] nomLinTron = new String[numLinTron];
         int[] indiceLintron = new int[numLinTron];
         int[][] datosLintron = new int[numLinTron][3];
@@ -206,7 +208,7 @@ public class Prorratas {
          */
         TxtTemp1=new String[2500];
         int[][] intAux3=new int[2500][4];
-        numBarras = Lee.leeDefbar(libroEntrada, TxtTemp1, intAux3);
+        numBarras = Lee.leeDefbar(wb_Ent, TxtTemp1, intAux3);
         String [] nomBar = new String[numBarras];
         paramBarTroncal = new int[numBarras][3];
         int numBarrasTroncales = 0;
@@ -229,7 +231,7 @@ public class Prorratas {
          * ===================
          */
         Consumos = new float[numBarras][numEtapas];
-        Lee.leeConsumoxBarra(libroEntrada,Consumos,numBarras,numEtapas);
+        Lee.leeConsumoxBarra(wb_Ent,Consumos,numBarras,numEtapas);
         float[][] consumoNormalizado=new float[numBarras][numEtapas];
         boolean[][] barrasConsumo = new boolean[numBarras][numEtapas];
         float[] ConsEta = new float[numEtapas];
@@ -246,7 +248,7 @@ public class Prorratas {
             }
         }
         int[] duracionEta = new int[numEtapas];
-        Lee.leeEtapas(libroEntrada,duracionEta,numEtapas);
+        Lee.leeEtapas(wb_Ent,duracionEta,numEtapas);
 
         /*
          * Lectura de mantenimientos de lineas
@@ -259,7 +261,7 @@ public class Prorratas {
                 LinMan[i][j] = -1;
             }
         }
-        Lee.leeLinman(libroEntrada, LinMan, nombreLineas, numEtapas);
+        Lee.leeLinman(wb_Ent, LinMan, nombreLineas, numEtapas);
 
         /*******************
         Lectura de Centrales
@@ -268,7 +270,7 @@ public class Prorratas {
         String [] TxtTemp1_2 = new String[700];
         float[] Temp1 = new float[700];
         float[] Temp2= new float[700];
-        int numCen = Lee.leeCentrales(libroEntrada, TxtTemp1,Temp1,Temp2);
+        int numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2);
         String[] nombreCentrales = new String[numCen];
         System.arraycopy(TxtTemp1, 0, nombreCentrales, 0, numCen);
 
@@ -277,10 +279,10 @@ public class Prorratas {
         *******************************/
         TxtTemp1 = new String[1000];
         
-        numGen = Lee.leePlpcnfe(libroEntrada,TxtTemp1,
+        numGen = Lee.leePlpcnfe(wb_Ent,TxtTemp1,
                 intAux3,nombreCentrales);
         
-        int numGen_Sin_Fallas = Lee.leePlpcnfe(libroEntrada,TxtTemp1_2,nombreCentrales);
+        int numGen_Sin_Fallas = Lee.leePlpcnfe(wb_Ent,TxtTemp1_2,nombreCentrales);
         
         
         System.out.println("Generadores: "+numGen);
@@ -311,7 +313,7 @@ public class Prorratas {
                 orientBarTroncal[i][j]=0;
             }
         }
-        Lee.leeOrient(libroEntrada, orientBarTroncal, nomBar,
+        Lee.leeOrient(wb_Ent, orientBarTroncal, nomBar,
                 nombreLineas);
 
         /**************************
@@ -334,10 +336,10 @@ public class Prorratas {
         int numClaves;
 
         if (ActClientes) {
-            numClaves = Lee.leeConsumos2(libroEntrada, Temporal1, Temporal2, numEtapas,
+            numClaves = Lee.leeConsumos2(rutaLibroEnt, Temporal1, Temporal2, numEtapas,
                      paramEtapa, duracionEta, Temporal3);
         } else {
-            numClaves = Lee.leeConsumos(libroEntrada, Temporal1, Temporal2, numEtapas,
+            numClaves = Lee.leeConsumos(wb_Ent, Temporal1, Temporal2, numEtapas,
                      paramEtapa, duracionEta, Temporal3);
         }
 
@@ -373,7 +375,7 @@ public class Prorratas {
         *******************/
         TxtTemp1 = new String[2500];
         String[] Exen = new String[2500];
-        int numCli = Lee.leeClientes(libroEntrada, TxtTemp1,Exen);
+        int numCli = Lee.leeClientes(wb_Ent, TxtTemp1,Exen);
         String [] nomCli = new String[numCli];
         System.arraycopy(TxtTemp1, 0, nomCli, 0, numCli);
 
@@ -382,7 +384,7 @@ public class Prorratas {
         **************************/
         TxtTemp1 = new String[2500];
         TxtTemp2 = new String[2500];
-        int clav = Lee.leeBarcli(libroEntrada, TxtTemp1,
+        int clav = Lee.leeBarcli(wb_Ent, TxtTemp1,
                 TxtTemp2, intAux3, nomCli, nomBar);
         String[] nombreClaves = new String[numClaves];
 //        String[] nombreClClientes = new String[numClaves];
@@ -429,9 +431,9 @@ public class Prorratas {
         java.util.Map<String, Integer> m_nomGen_Sin_Fallas = new java.util.TreeMap<String , Integer>();
         
         //Chequeamos consistencia en las contantes:
-        assert(!(USE_BUFFEREDSTREAM & (USE_SCANNER | USE_FILECHANNEL))) : "Only one opcion USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
-        assert(!(USE_FILECHANNEL & (USE_BUFFEREDSTREAM | USE_SCANNER))) : "Only one opcion USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
-        assert(!(USE_SCANNER & (USE_BUFFEREDSTREAM | USE_FILECHANNEL))) : "Only one opcion USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
+        assert(!(USE_BUFFEREDSTREAM & (USE_SCANNER | USE_FILECHANNEL))) : "Only one option USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
+        assert(!(USE_FILECHANNEL & (USE_BUFFEREDSTREAM | USE_SCANNER))) : "Only one option USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
+        assert(!(USE_SCANNER & (USE_BUFFEREDSTREAM | USE_FILECHANNEL))) : "Only one option USE_BUFFEREDSTREAM, USE_SCANNER or USE_FILECHANNEL should be true! Did you mess with these constants?";
         
         if (USE_MAPPED_NAMES) {
             int cont=0;
@@ -647,7 +649,7 @@ public class Prorratas {
         long time_flow = System.currentTimeMillis();
         TxtTemp1=new String[600];
         float[][] Aux1 = new float[600][1];
-        int numLinSistRed = Lee.leeLinPLP(libroEntrada, TxtTemp1, Aux1);
+        int numLinSistRed = Lee.leeLinPLP(wb_Ent, TxtTemp1, Aux1);
         int[] paramLinSistRed=new int[numLinSistRed];
         String [] nombreLineasSistRed = new String[numLinSistRed];
         for(int i=0;i<numLinSistRed;i++){
@@ -793,8 +795,10 @@ public class Prorratas {
         
         int[] centralesFlujo;
         int[] lineasFlujo;
-        centralesFlujo = Lee.leeCentralesFlujo(libroEntrada, nomGen,"centrales_flujo", false); //TODO: move to config file
-        lineasFlujo = Lee.leeCentralesFlujo(libroEntrada, nombreLineas,"lineas_flujo", false); //TODO: move to config file
+//        centralesFlujo = Lee.leeCentralesFlujo(rutaLibroEnt, nomGen,"centrales_flujo");
+        centralesFlujo = Lee.leeCentralesFlujo(wb_Ent, nomGen,"centrales_flujo", false); //TODO: move to config file
+//        lineasFlujo = Lee.leeCentralesFlujo(rutaLibroEnt, nombreLineas,"lineas_flujo");
+        lineasFlujo = Lee.leeCentralesFlujo(wb_Ent, nombreLineas,"lineas_flujo", false); //TODO: move to config file
         
         //Escritura del header archivo prorratas.csv:
         FileWriter writerProrratas = new FileWriter(DirBaseSalida + SLASH + "prorratas.csv");
@@ -1146,57 +1150,72 @@ public class Prorratas {
          * =======================
          */
         String libroSalidaXLS = DirBaseSalida + SLASH + "Prorrata" + AnoAEvaluar + ".xlsx";
-        Escribe.crearLibro(libroSalidaXLS);
+//        Escribe.crearLibro(libroSalidaXLS);
+        XSSFWorkbook wb_salida = Escribe.crearLibroVacio (libroSalidaXLS);
+        
         Escribe.creaH3F_3d_double(
                 "Prorratas de Generación", prorrMesLinG,
                 "Línea", nomLinTx,
                 "Central", nombreCentrales,
-                "Zona",zona,
+                "Zona", zona,
                 "Mes", MESES,
-                libroSalidaXLS,"ProrrGMes","0.000%;[Red]-0.000%;\"-\"");
+                wb_salida, "ProrrGMes", "0.000%;[Red]-0.000%;\"-\"");
+        System.out.println("Acaba de crear la hoja xls ProrrGMes");
         Escribe.creaH3F_3d_double(
                 "Prorratas de Consumo", prorrMesLinC,
-                "Línea",nomLinTx,
-                "Cliente",nomCli,
-                "Zona",zona,
+                "Línea", nomLinTx,
+                "Cliente", nomCli,
+                "Zona", zona,
                 "Mes", MESES,
-                libroSalidaXLS,"ProrrCMes","0.000%;[Red]-0.000%;\"-\"");
+                wb_salida, "ProrrCMes", "0.000%;[Red]-0.000%;\"-\"");
+        System.out.println("Acaba de crear la hoja xls ProrrCMes");
         Escribe.creaH1F_2d_double(
                 "Prorratas por Línea", prorrataLinea,
                 "Línea", nomLinTx,
                 "Mes", MESES,
-                libroSalidaXLS, "ProrrLin","0.000%;[Red]-0.000%;\"-\"");
+                wb_salida, "ProrrLin", "0.000%;[Red]-0.000%;\"-\"");
+        System.out.println("Acaba de crear la hoja xls ProrrLin");
         Escribe.creaH1F_2d_double(
                 "Generación [GWh]", generacionMes,
                 "Central", nombreCentrales,
                 "Mes", MESES,
-                libroSalidaXLS, "GMes","0.0;[Red]-0.0;\"-\"");
+                wb_salida, "GMes", "0.0;[Red]-0.0;\"-\"");
+        System.out.println("Acaba de crear la hoja xls GMes");
         Escribe.creaH1F_2d_float(
-                "Consumo [MWh]",ConsClaveMes,
+                "Consumo [MWh]", ConsClaveMes,
                 "Cliente", nombreClaves,
                 "Mes", MESES,
-                libroSalidaXLS, "CMes","0.0;[Red]-0.0;\"-\"");
+                wb_salida, "CMes", "0.0;[Red]-0.0;\"-\"");
+        System.out.println("Acaba de crear la hoja xls CMes");
         Escribe.creaH1F_2d_double(
                 "Detalle de prorratas de Generación", Calc.transponer(prorrAnoTroncG),
                 "Central", nomGen,
                 "Línea", nomLinTx,
-                libroSalidaXLS, "ProrrG","0.000%");
+                wb_salida, "ProrrG", "0.000%");
+        System.out.println("Acaba de crear la hoja xls ProrrG");
         Escribe.creaH1F_2d_double(
                 "Detalle de prorratas de Consumo", Calc.transponer(prorrAnoTroncC),
                 "Clave", nomCli,
                 "Linea", nomLinTx,
-                libroSalidaXLS, "ProrrC","0.000%");
+                wb_salida, "ProrrC", "0.000%");
+        System.out.println("Acaba de crear la hoja xls ProrrC");
         Escribe.creaH1FT_2d_float(
                 "Consumo [MWh]", CMes, ECUCli,
                 "Cliente", nomCli,
-                "Mes", MESES, EnergiaCU,"CU",
-                libroSalidaXLS, "CMesCli","0.0;[Red]-0.0;\"-\"");
-         Escribe.crea_verifProrrPeaj(prorrataLineaTron,
-                 nomLinTron,
-                libroEntrada, "verProrr","0.000%;[Red]-0.000%;\"-\"",12);
-
-
-
+                "Mes", MESES, EnergiaCU, "CU",
+                wb_salida, "CMesCli", "0.0;[Red]-0.0;\"-\"");
+        System.out.println("Acaba de crear la hoja xls CMesCli");
+        Escribe.crea_verifProrrPeaj(prorrataLineaTron,
+                nomLinTron,
+                wb_Ent, "verProrr", "0.000%;[Red]-0.000%;\"-\"", 12);
+        System.out.println("Acaba de actualiza planilla Ent hoja xls verProrr");
+        
+        // Graba y cierra conexion:
+        Escribe.guardaLibroDisco(wb_Ent, rutaLibroEnt);
+        Escribe.guardaLibroDisco(wb_salida, libroSalidaXLS);
+        wb_Ent.close();
+        wb_salida.close();
+         
         guardandoDatos=false;
         long tFinalEscritura = System.currentTimeMillis();
         System.out.println("Tiempo Adquisición de datos     : "+dosDecimales.format((tFinalLectura-tInicioLectura)/1000.0)+" s");
