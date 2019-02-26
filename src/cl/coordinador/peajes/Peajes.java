@@ -21,6 +21,9 @@ import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
 import static cl.coordinador.peajes.PeajesConstant.MESES;
 import static cl.coordinador.peajes.PeajesConstant.SLASH;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * 
@@ -30,11 +33,23 @@ public class Peajes {
 
     public static void calculaPeajes(File DirEntrada, File DirSalida, int Ano) {
 
+        long timeInit = System.currentTimeMillis();
         String DirBaseEnt = DirEntrada.toString();
         String DirBaseSal = DirSalida.toString();
         String libroEntrada = DirBaseEnt + SLASH + "Ent" + Ano + ".xlsx";
         System.out.println(libroEntrada);
         org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
+        
+        //Abre las conexiones:
+        XSSFWorkbook wb_Ent;
+        try {
+            wb_Ent = new XSSFWorkbook(new FileInputStream( libroEntrada ));
+        } catch (IOException e) {
+            System.out.println("No se pudo conectar con planilla entrada " + libroEntrada);
+            System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
+            return;
+        }
+        
         /**********
          * lee VATT
          **********/
@@ -44,7 +59,7 @@ public class Peajes {
         double[][] Aux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
         String[] TxtTemp1 = new String[INIT_SIZE_ARRAY];
         String[] TxtTemp2 = new String[INIT_SIZE_ARRAY];
-        int numLineasVATT = Lee.leeVATT(libroEntrada, TxtTemp1, TxtTemp2, Aux);
+        int numLineasVATT = Lee.leeVATT(wb_Ent, TxtTemp1, TxtTemp2, Aux);
         double[][] VATT = new double[numLineasVATT][NUMERO_MESES];
         String[] nomLinVATT = new String[numLineasVATT];
         String[] nomProp = new String[numLineasVATT];
@@ -61,9 +76,7 @@ public class Peajes {
                 TxtTemp3[numTx] = nomProp[i];
                 numTx++;
             }
-            for (int j = 0; j < NUMERO_MESES; j++) {
-                VATT[i][j] = Aux[i][j];
-            }
+            System.arraycopy(Aux[i], 0, VATT[i], 0, NUMERO_MESES);
         }
         String[] TxtTemp4 = new String[numLineasVATT];
         for (int i = 0; i < numLineasVATT; i++) {
@@ -78,19 +91,15 @@ public class Peajes {
             }
         }
         String[] nombreTx = new String[numTx];
-        for (int i = 0; i < numTx; i++) {
-            nombreTx[i] = TxtTemp3[i];
-        }
+        System.arraycopy(TxtTemp3, 0, nombreTx, 0, numTx);
         String[] nomLinTx = new String[numLinTx];
-        for (int i = 0; i < numLinTx; i++) {
-            nomLinTx[i] = TxtTemp4[i];
-        }
+        System.arraycopy(TxtTemp4, 0, nomLinTx, 0, numLinTx);
 
         /************
-         * lee Líneas
+         * lee Lineas
          *************/
         TxtTemp1 = new String[INIT_SIZE_ARRAY];
-        int numLineas = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
+        int numLineas = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);
         double[][] paramLineas = new double[numLineas][10];
         String[] nomLin = new String[numLineas];
         for (int i = 0; i < numLineas; i++) {
@@ -105,10 +114,10 @@ public class Peajes {
         double[] dolar = new double[NUMERO_MESES];
         double[] interes = new double[NUMERO_MESES];
        // Lee.leeEscribeIndices(libroEntrada, LibroAVI, Ano);
-        Lee.leeIndices(libroEntrada, dolar, interes);
+        Lee.leeIndices(wb_Ent, dolar, interes);
 
         /**********************
-         * lee Líneas Troncales
+         * lee Lineas Troncales
          **********************/
         TxtTemp1 = new String[INIT_SIZE_ARRAY];
         TxtTemp2 = new String[INIT_SIZE_ARRAY];
@@ -118,7 +127,7 @@ public class Peajes {
         double[][] ITEGAux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
         double[][] ITERAux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
         double[][] ITPAux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
-        int numLinT = Lee.leeLintronIT2(libroEntrada, TxtTemp1, TxtTemp2,
+        int numLinT = Lee.leeLintronIT2(wb_Ent, TxtTemp1, TxtTemp2,
                 nomLin, intAux1, ITEAux,ITEGAux,ITERAux, ITPAux,numLineasIT);
         String[] nomLinIT = new String[numLinT];
         String[] nomLinIT_Tx = new String[numLinT];
@@ -188,51 +197,78 @@ public class Peajes {
          * =======================
          */
         String libroSalidaGXLS = DirBaseSal + SLASH + "Peaje" + Ano + ".xlsx";
-        Escribe.crearLibro(libroSalidaGXLS);
-        Escribe.creaH1F_2d_long(
-                "Peajes [$]", peajeLin,
-                "Línea", nomLinTx,
-                "Mes", MESES,
-                libroSalidaGXLS, "Peajes", "#,###,##0;[Red]-#,###,##0;\"-\"");
-        Escribe.creaH1F_2d_long(
-                "Ingreso Tarifario Energía Asignable a Generadores[$]", ITEGo,
-                "Línea", nomLinTx,
-                "Mes", MESES,
-                libroSalidaGXLS, "ITEG", "#,###,##0;[Red]-#,###,##0;\"-\"");
-        Escribe.creaH1F_2d_long(
-                "Ingreso Tarifario Energía Asignable a Retiro[$]", ITERo,
-                "Línea", nomLinTx,
-                "Mes", MESES,
-                libroSalidaGXLS, "ITER", "#,###,##0;[Red]-#,###,##0;\"-\"");
+//        Escribe.crearLibro(libroSalidaGXLS);
+        try {
+            XSSFWorkbook wb_salida = Escribe.crearLibroVacio(libroSalidaGXLS);
+            Escribe.creaH1F_2d_long(
+                    "Peajes [$]", peajeLin,
+                    "Línea", nomLinTx,
+                    "Mes", MESES,
+                    wb_salida, "Peajes", "#,###,##0;[Red]-#,###,##0;\"-\"");
+            System.out.println("Acaba de crear la hoja xls Peajes");
+            Escribe.creaH1F_2d_long(
+                    "Ingreso Tarifario Energía Asignable a Generadores[$]", ITEGo,
+                    "Línea", nomLinTx,
+                    "Mes", MESES,
+                    wb_salida, "ITEG", "#,###,##0;[Red]-#,###,##0;\"-\"");
+            System.out.println("Acaba de crear la hoja xls ITEG");
+            Escribe.creaH1F_2d_long(
+                    "Ingreso Tarifario Energía Asignable a Retiro[$]", ITERo,
+                    "Línea", nomLinTx,
+                    "Mes", MESES,
+                    wb_salida, "ITER", "#,###,##0;[Red]-#,###,##0;\"-\"");
+            System.out.println("Acaba de crear la hoja xls ITER");
+            Escribe.creaH1F_2d_long(
+                    "Ingreso Tarifario Energía [$]", ITEo,
+                    "Línea", nomLinTx,
+                    "Mes", MESES,
+                    wb_salida, "ITE", "#,###,##0;[Red]-#,###,##0;\"-\"");
+            System.out.println("Acaba de crear la hoja xls ITE");
+            Escribe.creaH1F_2d_long(
+                    "Ingreso Tarifario Potencia [$]", ITPo,
+                    "Línea", nomLinTx,
+                    "Mes", MESES,
+                    wb_salida, "ITP", "#,###,##0;[Red]-#,###,##0;\"-\"");
+            //modificar por formulas
+            System.out.println("Acaba de crear la hoja xls ITP");
+            Escribe.creaH1F_2d_long(
+                    "Ingreso Tarifario [$]", ITo,
+                    "Línea", nomLinTx,
+                    "Mes", MESES,
+                    wb_salida, "IT", "#,###,##0;[Red]-#,###,##0;\"-\"");
+            // \modificar por formulas
+            System.out.println("Acaba de crear la hoja xls IT");
+            Escribe.creaH1F_2d_long(
+                    "VATT [$]", VATTLin,
+                    "Línea", nomLinTx,
+                    "Mes", MESES,
+                    wb_salida, "VATT", "#,###,##0;[Red]-#,###,##0;\"-\"");
+            System.out.println("Acaba de crear la hoja xls VATT");
+            Escribe.guardaLibroDisco(wb_salida, libroSalidaGXLS);
+            wb_salida.close();
+            System.out.println("Finalizado escritura Peajes"); //temporal!
+        } catch (IOException e) {
+            System.out.println("Error al escribir resultados de peajes a archivo " + libroSalidaGXLS);
+            System.out.println(e.getMessage());
+            return;
+        }
         
-        Escribe.creaH1F_2d_long(
-                "Ingreso Tarifario Energía [$]", ITEo,
-                "Línea", nomLinTx,
-                "Mes", MESES,
-                libroSalidaGXLS, "ITE", "#,###,##0;[Red]-#,###,##0;\"-\"");
-        Escribe.creaH1F_2d_long(
-                "Ingreso Tarifario Potencia [$]", ITPo,
-                "Línea", nomLinTx,
-                "Mes", MESES,
-                libroSalidaGXLS, "ITP", "#,###,##0;[Red]-#,###,##0;\"-\"");
-        //modificar por formulas
-        
-        Escribe.creaH1F_2d_long(
-                "Ingreso Tarifario [$]", ITo,
-                "Línea", nomLinTx,
-                "Mes", MESES,
-                libroSalidaGXLS, "IT", "#,###,##0;[Red]-#,###,##0;\"-\"");
-        // \modificar por formulas
-               
-        Escribe.creaH1F_2d_long(
-                "VATT [$]", VATTLin,
-                "Línea", nomLinTx,
-                "Mes", MESES,
-                libroSalidaGXLS, "VATT", "#,###,##0;[Red]-#,###,##0;\"-\"");
-        Escribe.crea_verifProrr(peajeLin,
-                numLineasIT[0], nomLinTx,
-                libroEntrada, "verProrr","0.000%;[Red]-0.000%;\"-\"",0);
-        System.out.println("Peajes Calculados");
+        //Actualiza la planilla Ent hoja verProrr:
+        try {
+            Escribe.crea_verifProrr(peajeLin,
+                    numLineasIT[0], nomLinTx,
+                    wb_Ent, "verProrr", "0.000%;[Red]-0.000%;\"-\"", 0);
+            System.out.println("Acaba de actualiza planilla Ent hoja xls verProrr");
+            Escribe.guardaLibroDisco(wb_Ent, libroEntrada);
+            wb_Ent.close();
+            System.out.println("Actualizada planilla Ent"); //temporal!
+        } catch (IOException e) {
+            System.out.println("Error al actualizar hoja 'verProrr' de planilla de entrada " + libroEntrada);
+            System.out.println(e.getMessage());
+            return;
+        }
+        System.out.println("Peajes Calculados. Tiempo Total: " + ((System.currentTimeMillis() - timeInit) / 1000) + "[seg]");
         System.out.println();
+        
     }
 }
