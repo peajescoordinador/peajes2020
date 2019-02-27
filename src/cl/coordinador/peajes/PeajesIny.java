@@ -19,10 +19,15 @@ import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
 import static cl.coordinador.peajes.PeajesConstant.MESES;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
 import static cl.coordinador.peajes.PeajesConstant.SLASH;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -30,6 +35,9 @@ import java.text.DecimalFormat;
  */
 public class PeajesIny {
 
+    private static final boolean USE_MEMORY_READER = true; //swtich para usar nuevo API lectura poi
+    private static final boolean USE_MEMORY_WRITER = true; //swtich para usar nuevo API escritura poi
+    
     static double peajeEmpTxO[][][]; //TODO: Encapsulate
     private static double prorrMesGO[][][];
     private static double peajeLinGO[][][];
@@ -59,13 +67,9 @@ public class PeajesIny {
     static double[] PagoAnualEmpGO; //TODO: Encapsulate
     static double[] PeajeAnualEmpGO; //TODO: Encapsulate
     static String[] nomGen; //TODO: Encapsulate
-    private static int numCen;
     static String[] nombreTx; //TODO: Encapsulate
-    private static int numTx; //Numero de transmisores
     static String[] nomEmpGO; //TODO: Encapsulate
-    private static int numEmpG;
     static String[] nomLinTx; //TODO: Encapsulate
-    private static int numLinTx;
     static String[] nomGenO; //TODO: Encapsulate
     static String[] nomMGNCO; //TODO: Encapsulate
     private static String DirBaseSal;
@@ -99,7 +103,17 @@ public class PeajesIny {
         long tInicioLectura = System.currentTimeMillis();
         cargandoInfo=true;
         org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
-        String libroEntrada = DirBaseSal + SLASH + "Peaje" + Ano + ".xlsx";
+        
+        // Libro peajes
+        String libroEntradaPeajes = DirBaseSal + SLASH + "Peaje" + Ano + ".xlsx";
+        XSSFWorkbook wb_Peajes;
+        try {
+            wb_Peajes = new XSSFWorkbook(new java.io.FileInputStream( libroEntradaPeajes ));
+        } catch (IOException e) {
+            System.out.println("No se pudo conectar con planilla entrada " + libroEntradaPeajes);
+            System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
+            return;
+        }
 
         /************
          * lee Peajes e IT
@@ -111,11 +125,24 @@ public class PeajesIny {
         double[][] longAuxITP = new double[1000][NUMERO_MESES];
         String[] TxtTemp = new String[1000];
         String[] TxtTempIT = new String[1000];
-        int numLinea = Lee.leePeajes(libroEntrada, TxtTemp, longAux);
-        int numLineaIT = Lee.leeIT(libroEntrada, TxtTempIT, longAuxIT,"ITEG");
-        int numLineaITR = Lee.leeIT(libroEntrada, TxtTempIT, longAuxITR,"ITER");
-        int numLineaVATT = Lee.leeIT(libroEntrada, TxtTempIT, longAuxVATT,"VATT");
-        int numLineaITP = Lee.leeIT(libroEntrada, TxtTempIT, longAuxITP,"ITP");
+        int numLinea;
+        int numLineaVATT;
+        int numLineaIT;
+        int numLineaITR;
+        int numLineaITP;
+        if (USE_MEMORY_READER) {
+            numLinea = Lee.leePeajes(wb_Peajes, TxtTemp, longAux);
+            numLineaIT = Lee.leeIT(wb_Peajes, TxtTempIT, longAuxIT, "ITEG");
+            numLineaITR = Lee.leeIT(wb_Peajes, TxtTempIT, longAuxITR, "ITER");
+            numLineaVATT = Lee.leeIT(wb_Peajes, TxtTempIT, longAuxVATT, "VATT");
+            numLineaITP = Lee.leeIT(wb_Peajes, TxtTempIT, longAuxITP, "ITP");
+        } else {
+            numLinea = Lee.leePeajes(libroEntradaPeajes, TxtTemp, longAux);
+            numLineaIT = Lee.leeIT(libroEntradaPeajes, TxtTempIT, longAuxIT, "ITEG");
+            numLineaITR = Lee.leeIT(libroEntradaPeajes, TxtTempIT, longAuxITR, "ITER");
+            numLineaVATT = Lee.leeIT(libroEntradaPeajes, TxtTempIT, longAuxVATT, "VATT");
+            numLineaITP = Lee.leeIT(libroEntradaPeajes, TxtTempIT, longAuxITP, "ITP");
+        }
         nomLineasN = new String[numLinea];
         double[][] PeajeN = new double[numLinea][12];
         double[][] VATTN = new double[numLineaVATT][12];
@@ -142,7 +169,15 @@ public class PeajesIny {
         }
 
         // Libro Ent
-        libroEntrada = DirBaseEnt + SLASH + "Ent" + Ano + ".xlsx";
+        String libroEntrada = DirBaseEnt + SLASH + "Ent" + Ano + ".xlsx";
+        XSSFWorkbook wb_Ent;
+        try {
+            wb_Ent = new XSSFWorkbook(new java.io.FileInputStream( libroEntrada ));
+        } catch (IOException e) {
+            System.out.println("No se pudo conectar con planilla entrada " + libroEntrada);
+            System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
+            return;
+        }
 
         /**********
          * lee VATT
@@ -150,15 +185,18 @@ public class PeajesIny {
         double[][] Aux = new double[1500][NUMERO_MESES];
         String[] TxtTemp1 = new String[1500];
         String[] TxtTemp2 = new String[1500];
-        int numLineasVATT = Lee.leeVATT(libroEntrada, TxtTemp1, TxtTemp2,
-                Aux);
-//        String[] nomLinVATT = new String[numLineasVATT];
+        int numLineasVATT ;
+        if (USE_MEMORY_READER) {
+            numLineasVATT = Lee.leeVATT(wb_Ent, TxtTemp1, TxtTemp2, Aux);
+        } else {
+            numLineasVATT = Lee.leeVATT(libroEntrada, TxtTemp1, TxtTemp2, Aux);
+        }
         String[] nomProp = new String[numLineasVATT];
         String[] TxtTemp3 = new String[numLineasVATT];
         for (int i = 0; i < numLineasVATT; i++) {
             TxtTemp3[i] = "";
         }
-        numTx = 0;
+        int numTx = 0; //numero de transmisores
         for (int i = 0; i < numLineasVATT; i++) {
 //            nomLinVATT[i] = TxtTemp1[i];
             nomProp[i] = TxtTemp2[i];
@@ -205,7 +243,12 @@ public class PeajesIny {
         double PotNetaTot=0;
         float[] Temp1 = new float[600];
         float[] Temp2= new float[600];
-        numCen = Lee.leeCentrales(libroEntrada, TxtTemp1,Temp1,Temp2);
+        int numCen;
+        if (USE_MEMORY_READER) {
+            numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2);
+        } else {
+            numCen = Lee.leeCentrales(libroEntrada, TxtTemp1,Temp1,Temp2);
+        }
         nomGen = new String[numCen];
         double[] PotNeta = new double[numCen];
         float[] MGNC = new float[numCen];
@@ -228,7 +271,7 @@ public class PeajesIny {
         for (int i = 0; i < numCen; i++) {
             TxtTemp1[i] = "";
         }
-       numEmpG = 0;
+        int numEmpG = 0;
         for (int j = 0; j < numCen; j++) {
             String[] tmp = nomGen[j].split("#");
             int l = Calc.Buscar(tmp[0], TxtTemp1);
@@ -245,7 +288,12 @@ public class PeajesIny {
          * lee Lineas
          *************/
         TxtTemp1 = new String[2000];
-        int numLineas = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
+        int numLineas;
+        if (USE_MEMORY_READER) {
+            numLineas = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);
+        } else {
+            numLineas = Lee.leeDeflin(libroEntrada, TxtTemp1, Aux);
+        }
         double[][] paramLineas = new double[numLineas][10];
         String[] nomLin = new String[numLineas];
         for (int i = 0; i < numLineas; i++) {
@@ -262,8 +310,12 @@ public class PeajesIny {
         TxtTemp2 = new String[2000];
         int[] intAux1 = new int[600];
         int[][] intAux2 = new int[600][NUMERO_MESES];
-        int numLinIT = Lee.leeLintron(libroEntrada, TxtTemp1,
-                nomLin,TxtTemp2, intAux1, intAux2);
+        int numLinIT;
+        if (USE_MEMORY_READER) {
+            numLinIT = Lee.leeLintron(wb_Ent, TxtTemp1, nomLin, TxtTemp2,intAux1, intAux2);
+        } else {
+            numLinIT = Lee.leeLintron(libroEntrada, TxtTemp1, nomLin, TxtTemp2,intAux1, intAux2);
+        }
         String TxtTemp4[]=new String[numLinIT];
         nomLinIT = new String[numLinIT];
         zonaLinIT= new int[numLinIT];        
@@ -307,7 +359,7 @@ public class PeajesIny {
 //         TxtTemp3=new String[numLinIT];
 
 
-        numLinTx = 0;
+        int numLinTx = 0;
         for (int i = 0; i <numLinIT; i++) {
             int l = Calc.Buscar(nomLinIT[i] + "#" + propietario[i], TxtTemp4);
             if (l == -1) {
@@ -335,13 +387,26 @@ public class PeajesIny {
 
         // Libro Prorrata
         String libroEntradaP = DirBaseSal + SLASH + "Prorrata" + Ano + ".xlsx";
+        XSSFWorkbook wb_Prorratas;
+        try {
+            wb_Prorratas = new XSSFWorkbook(new java.io.FileInputStream( libroEntradaP ));
+        } catch (IOException e) {
+            System.out.println("No se pudo conectar con planilla prorratas " + libroEntradaP);
+            System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
+            return;
+        }
 
         /*****************************
          * lee Prorratas de Generacion
          *****************************/
         prorrMesGenTx = new double[numLinTx][numCen][NUMERO_MESES];
         prorrMesGenTxTot = new double[numLinTx][NUMERO_MESES];
-        Lee.leeProrratasGx(libroEntradaP, prorrMesGenTx);
+        if (USE_MEMORY_READER) {
+            Lee.leeProrratasGxExcel(wb_Prorratas, prorrMesGenTx);
+        } else {
+            Lee.leeProrratasGx(libroEntradaP, prorrMesGenTx);
+        }
+        
         for (int l = 0 ; l < numLinTx; l++){
             for (int m = 0 ; m < NUMERO_MESES; m ++ ){
                 for (int c = 0 ; c < numCen; c ++ ){
@@ -360,7 +425,12 @@ public class PeajesIny {
         double[] GenAnoxCen= new double[numCen];
         int [][] MesesAct=new int[numCen][NUMERO_MESES];
         int [] numMesesAct=new int[numCen];
-        Lee.leeGeneracionMes(libroEntradaP,GenerMensual);
+        if (USE_MEMORY_READER) {
+            Lee.leeGeneracionMes(wb_Prorratas,GenerMensual);
+        } else {
+            Lee.leeGeneracionMes(libroEntradaP,GenerMensual);
+        }
+        
 
         /*LEE MESES CENTRALES ACTIVO*/
         for (int i=0;i<numCen;i++){
@@ -893,16 +963,17 @@ public class PeajesIny {
          * =======================
          */
         String libroSalidaGXLS = DirBaseSal + SLASH + "PagoIny" + Ano + ".xlsx";
-        Escribe.crearLibro(libroSalidaGXLS);
-        Escribe.creaH2F_3d_long(
-                "Pago de Peaje por Línea y Central [$]", peajeLinGO,
-                "Línea", nomLineasN,
-                "Central", nomGenO,
-                "Factor de Excención",MGNCO,
-                "Mes", MESES,
-                libroSalidaGXLS, "PjeCenLin",
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
-        /*Escribe.creaH2F_3d_long(
+        if (!USE_MEMORY_WRITER) {
+            Escribe.crearLibro(libroSalidaGXLS);
+            Escribe.creaH2F_3d_long(
+                    "Pago de Peaje por Línea y Central [$]", peajeLinGO,
+                    "Línea", nomLineasN,
+                    "Central", nomGenO,
+                    "Factor de Excención", MGNCO,
+                    "Mes", MESES,
+                    libroSalidaGXLS, "PjeCenLin",
+                    "#,###,##0;[Red]-#,###,##0;\"-\"");
+            /*Escribe.creaH2F_3d_long(
                 "Pago Peaje por Central y Transmisor [$]", peajeCenTxO,
                 "Central", nomGenO,
                 "Transmisor", nombreTx,
@@ -929,99 +1000,211 @@ public class PeajesIny {
                 libroSalidaGXLS, "PjeEmp",
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
          * 
-         */
+             */
 
-        for(int m=0;m<NUMERO_MESES;m++){
-            Escribe.creaPIny(m,
-                "Pago Peaje por Empresa y Transmisor [$]",peajeEmpTxO,
-                 AjusMGNCEmpTxO,PagoEmpTxO,
-                 peajeEmpGO,AjusMGNCEmpO,PagoEmpO,
-                "Empresa",nomEmpGO,
-                "Transmisor", nombreTx,
-                libroSalidaGXLS, MESES[m],
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
+            for (int m = 0; m < NUMERO_MESES; m++) {
+                Escribe.creaPIny(m,
+                        "Pago Peaje por Empresa y Transmisor [$]", peajeEmpTxO,
+                        AjusMGNCEmpTxO, PagoEmpTxO,
+                        peajeEmpGO, AjusMGNCEmpO, PagoEmpO,
+                        "Empresa", nomEmpGO,
+                        "Transmisor", nombreTx,
+                        libroSalidaGXLS, MESES[m],
+                        "#,###,##0;[Red]-#,###,##0;\"-\"");
 
-            Escribe.creaDetallePIny(m,
-                "Detalle de Pagos por Central [$]",peajeGenTxZonaO,peajeCenTxO,ExcenCenO,
-                 AjusMGNCTxO,PagoTotCenTxO,
-                 peajeGenO, ExcTotCenO,AjusMGNCTotO,PagoTotCenO,
-                 CapConjExcep,FCorrec,
-                "Central",nomGenO,
-                "Transmisor", nombreTx,
-                "Factor Excención", MGNCO,
-                //"PNeta", PotNetaO,
-                //"Inyeccion Mensual", GenPromMesCenO,
-                //"Factor",facPagoO ,
-                libroSalidaGXLS, MESES[m],
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
+                Escribe.creaDetallePIny(m,
+                        "Detalle de Pagos por Central [$]", peajeGenTxZonaO, peajeCenTxO, ExcenCenO,
+                        AjusMGNCTxO, PagoTotCenTxO,
+                        peajeGenO, ExcTotCenO, AjusMGNCTotO, PagoTotCenO,
+                        CapConjExcep, FCorrec,
+                        "Central", nomGenO,
+                        "Transmisor", nombreTx,
+                        "Factor Excención", MGNCO,
+                        //"PNeta", PotNetaO,
+                        //"Inyeccion Mensual", GenPromMesCenO,
+                        //"Factor",facPagoO ,
+                        libroSalidaGXLS, MESES[m],
+                        "#,###,##0;[Red]-#,###,##0;\"-\"");
+            }
+            Escribe.crea_verificaIny(
+                    "Verifica Pagos de Inyección", libroEntrada,
+                    "Mes", MESES,
+                    "Calculo", PagoInyMes,
+                    "Prorrata Línea", pagoInyMesLin,
+                    "Diferencia",
+                    "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
+            Escribe.crea_verificaCalcPeajes(
+                    "Verifica cálculo de Peajes", libroEntrada,
+                    "Mes", MESES,
+                    "Peajes", PeajeNMes,
+                    "Pago Ret", "Pago Iny", "Diferencia",
+                    "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
+        } else {
+            
+            try {
+                XSSFWorkbook wb_salida = Escribe.crearLibroVacio(libroSalidaGXLS);
+                Escribe.creaH2F_3d_long(
+                        "Pago de Peaje por Línea y Central [$]", peajeLinGO,
+                        "Línea", nomLineasN,
+                        "Central", nomGenO,
+                        "Factor de Excención", MGNCO,
+                        "Mes", MESES,
+                        wb_salida, "PjeCenLin",
+                        "#,###,##0;[Red]-#,###,##0;\"-\"");
+                for (int m = 0; m < NUMERO_MESES; m++) {
+                    Escribe.creaPIny(m,
+                            "Pago Peaje por Empresa y Transmisor [$]", peajeEmpTxO,
+                            AjusMGNCEmpTxO, PagoEmpTxO,
+                            peajeEmpGO, AjusMGNCEmpO, PagoEmpO,
+                            "Empresa", nomEmpGO,
+                            "Transmisor", nombreTx,
+                            wb_salida, MESES[m],
+                            "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.creaDetallePIny(m,
+                            "Detalle de Pagos por Central [$]", peajeGenTxZonaO, peajeCenTxO, ExcenCenO,
+                            AjusMGNCTxO, PagoTotCenTxO,
+                            peajeGenO, ExcTotCenO, AjusMGNCTotO, PagoTotCenO,
+                            CapConjExcep, FCorrec,
+                            "Central", nomGenO,
+                            "Transmisor", nombreTx,
+                            "Factor Excención", MGNCO,
+                            //"PNeta", PotNetaO,
+                            //"Inyeccion Mensual", GenPromMesCenO,
+                            //"Factor",facPagoO ,
+                            wb_salida, MESES[m],
+                            "#,###,##0;[Red]-#,###,##0;\"-\"");
+                }
+                Escribe.crea_verificaIny(
+                        "Verifica Pagos de Inyección", wb_Ent,
+                        "Mes", MESES,
+                        "Calculo", PagoInyMes,
+                        "Prorrata Línea", pagoInyMesLin,
+                        "Diferencia",
+                        "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                Escribe.crea_verificaCalcPeajes(
+                        "Verifica cálculo de Peajes", wb_Ent,
+                        "Mes", MESES,
+                        "Peajes", PeajeNMes,
+                        "Pago Ret", "Pago Iny", "Diferencia",
+                        "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                Escribe.guardaLibroDisco(wb_salida, libroSalidaGXLS);
+                Escribe.guardaLibroDisco(wb_Ent, libroEntrada);
+                wb_Peajes.close();
+                wb_Ent.close();
+                wb_Prorratas.close();
+                wb_salida.close();
+            } catch (IOException e) {
+                System.out.println("Error al escribir resultados de pagos inyecciones a archivo " + libroSalidaGXLS);
+                System.out.println(e.getMessage());
+                e.printStackTrace(System.err);
+            }
+            
         }
-        Escribe.crea_verificaIny(
-                  "Verifica Pagos de Inyección",libroEntrada,
-                  "Mes",MESES,
-                  "Calculo", PagoInyMes,
-                  "Prorrata Línea",pagoInyMesLin,
-                  "Diferencia",
-                  "verifica","#,###,##0;[Red]-#,###,##0;\"-\"");
-        Escribe.crea_verificaCalcPeajes(
-                  "Verifica cálculo de Peajes",libroEntrada,
-                  "Mes",MESES,
-                  "Peajes", PeajeNMes,
-                  "Pago Ret","Pago Iny","Diferencia",
-                  "verifica","#,###,##0;[Red]-#,###,##0;\"-\"");
-        EscribirPagos=true;
         long tFinalEscritura = System.currentTimeMillis();
+        
+        EscribirPagos=true;
+        
         System.out.println("Pagos de Inyección Anual Calculados");
-        System.out.println("Tiempo Adquisicion de datos     : "+DosDecimales.format((tFinalLectura-tInicioLectura)/(1000.0*60))+" m");
-        System.out.println("Tiempo Cálculo                  : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/(1000.0*60))+" m");
-        System.out.println("Tiempo Escritura de Resultados  : "+DosDecimales.format((tFinalEscritura-tInicioEscritura)/(1000.0*60))+" m");
+        System.out.println("Tiempo Adquisicion de datos     : "+DosDecimales.format((tFinalLectura-tInicioLectura)/(1000.0))+" seg");
+        System.out.println("Tiempo Cálculo                  : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/(1000.0))+" seg");
+        System.out.println("Tiempo Escritura de Resultados  : "+DosDecimales.format((tFinalEscritura-tInicioEscritura)/(1000.0))+" seg");
         System.out.println();
     }
 
-      public static void LiquiMesIny(String mes, int Ano) {
-          int m=0;
-          for(int i=0;i<NUMERO_MESES;i++){
-              if(mes.equals(MESES[i]))
-                  m=i;
-          }
-     String libroSalidaGXLSMes= DirBaseSal + SLASH +"PagoIny" + MESES[m] + ".xlsx";
-     Escribe.crearLibro(libroSalidaGXLSMes);
-     Escribe.creaLiquidacionMesIny(m,
-                "Pago de Peajes de Inyección",peajeCenTxO,
-                 AjusMGNCTxO,PagoTotCenTxO,
-                 peajeGenO,AjusMGNCTotO,PagoTotCenO,
-                "Central",nomGenO,
-                "Transmisor", nombreTx,
-                "MGNC", MGNCO,
-                "PNeta", PotNetaO,
-                "Inyeccion [GWh]",GenPromMesCenO,
-                "Factor",facPagoO ,
-                libroSalidaGXLSMes, MESES[m],Ano,"#,###,##0;[Red]-#,###,##0;\"-\"");
-     Escribe.creaProrrataMes(m,
-                "Participación de Inyecciones [%]",prorrMesGenTx,"Participación "+MESES[m],
-                "Cliente",nomGen,
-                "Línea",  nomLinTx,
-                "AIC", zonaLinTx,
-                libroSalidaGXLSMes, "PartIny"+MESES[m],
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
-    Escribe.creaProrrataMes_long(m,
-                "Pagos por Inyección "+MESES[m]+" [$]",
-                peajeLinGO,
-                "Pago "+MESES[m],
-                "Central",
-                nomGenO,
-                "Línea",
-                nomLineasN,
-                "AIC",
-                zonaLinPe,
-                "Pago IT",
-                ItLinGO,
-                libroSalidaGXLSMes,
-                "PagoxLinea",
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
-    System.out.println("Archivo Pago de Inyección Mensual creado");
-    System.out.println();
+    public static void LiquiMesIny(String mes, int Ano) {
+        int m = 0;
+        for (int i = 0; i < NUMERO_MESES; i++) {
+            if (mes.equals(MESES[i])) {
+                m = i;
+            }
+        }
+        String libroSalidaGXLSMes = DirBaseSal + SLASH + "PagoIny" + MESES[m] + ".xlsx";
+        if (!USE_MEMORY_WRITER) {
+            Escribe.crearLibro(libroSalidaGXLSMes);
+            Escribe.creaLiquidacionMesIny(m,
+                    "Pago de Peajes de Inyección", peajeCenTxO,
+                    AjusMGNCTxO, PagoTotCenTxO,
+                    peajeGenO, AjusMGNCTotO, PagoTotCenO,
+                    "Central", nomGenO,
+                    "Transmisor", nombreTx,
+                    "MGNC", MGNCO,
+                    "PNeta", PotNetaO,
+                    "Inyeccion [GWh]", GenPromMesCenO,
+                    "Factor", facPagoO,
+                    libroSalidaGXLSMes, MESES[m], Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
+            Escribe.creaProrrataMes(m,
+                    "Participación de Inyecciones [%]", prorrMesGenTx, "Participación " + MESES[m],
+                    "Cliente", nomGen,
+                    "Línea", nomLinTx,
+                    "AIC", zonaLinTx,
+                    libroSalidaGXLSMes, "PartIny" + MESES[m],
+                    "#,###,##0;[Red]-#,###,##0;\"-\"");
+            Escribe.creaProrrataMes_long(m,
+                    "Pagos por Inyección " + MESES[m] + " [$]",
+                    peajeLinGO,
+                    "Pago " + MESES[m],
+                    "Central",
+                    nomGenO,
+                    "Línea",
+                    nomLineasN,
+                    "AIC",
+                    zonaLinPe,
+                    "Pago IT",
+                    ItLinGO,
+                    libroSalidaGXLSMes,
+                    "PagoxLinea",
+                    "#,###,##0;[Red]-#,###,##0;\"-\"");
+        } else {
 
-           }
+            try {
+                XSSFWorkbook wb_salida = Escribe.crearLibroVacio(libroSalidaGXLSMes);
+                Escribe.creaLiquidacionMesIny(m,
+                        "Pago de Peajes de Inyección", peajeCenTxO,
+                        AjusMGNCTxO, PagoTotCenTxO,
+                        peajeGenO, AjusMGNCTotO, PagoTotCenO,
+                        "Central", nomGenO,
+                        "Transmisor", nombreTx,
+                        "MGNC", MGNCO,
+                        "PNeta", PotNetaO,
+                        "Inyeccion [GWh]", GenPromMesCenO,
+                        "Factor", facPagoO,
+                        wb_salida, MESES[m], Ano, "#,###,##0;[Red]-#,###,##0;\"-\"");
+                Escribe.creaProrrataMes(m,
+                        "Participación de Inyecciones [%]", prorrMesGenTx, "Participación " + MESES[m],
+                        "Cliente", nomGen,
+                        "Línea", nomLinTx,
+                        "AIC", zonaLinTx,
+                        wb_salida, "PartIny" + MESES[m],
+                        "#,###,##0;[Red]-#,###,##0;\"-\"");
+                Escribe.creaProrrataMes_long(m,
+                        "Pagos por Inyección " + MESES[m] + " [$]",
+                        peajeLinGO,
+                        "Pago " + MESES[m],
+                        "Central",
+                        nomGenO,
+                        "Línea",
+                        nomLineasN,
+                        "AIC",
+                        zonaLinPe,
+                        "Pago IT",
+                        ItLinGO,
+                        wb_salida,
+                        "PagoxLinea",
+                        "#,###,##0;[Red]-#,###,##0;\"-\"");
+                Escribe.guardaLibroDisco(wb_salida, libroSalidaGXLSMes);
+                wb_salida.close();
+            } catch (IOException e) {
+                System.out.println("Error al escribir resultados de pagos inyecciones a archivo " + libroSalidaGXLSMes);
+                System.out.println(e.getMessage());
+                e.printStackTrace(System.err);
+            }
+
+        }
+
+        System.out.println("Archivo Pago de Inyección Mensual creado");
+        System.out.println();
+
+    }
 
     public static boolean cargando() {
         return cargandoInfo;
