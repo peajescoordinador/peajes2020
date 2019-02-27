@@ -3473,7 +3473,7 @@ public class Escribe {
         }
 
         cellTC = rowTmp.getCell(2);
-        cellTC.setCellValue("Pagos por Inyecci‹n");
+        cellTC.setCellValue("Pagos por Inyección");
         cellTC.setCellStyle(estiloTitulo1);
         CellReference RefI = new CellReference(cellTC.getRowIndex(), cellTC.getColumnIndex());
         CellReference RefF = new CellReference(cellTC.getRowIndex(), 1 + (dim2 + 1));
@@ -8204,7 +8204,7 @@ public class Escribe {
         reference = nomHoja + "!$B$2:" + cellRef.formatAsString(); // area reference
         //hoja.addMergedRegion(CellRangeAddress.valueOf(reference));
         cellT = row.createCell(5 + dim3);
-        cellT.setCellValue("Participaci‹n de Suministradores sobre pagos de empresas Distribuidoras");
+        cellT.setCellValue("Participación de Suministradores sobre pagos de empresas Distribuidoras");
         cellT.setCellStyle(estiloTitulo);
 
     }

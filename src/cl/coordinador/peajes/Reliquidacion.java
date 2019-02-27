@@ -47,7 +47,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * Clase de reliquidacion:
  * <li>craer un archivo que se llame reliquidacion con el resumen de los IT de
  * facturaccion luego a este archivo se le iran agregadon hojas</li>
- * <li>leer el archivo liquidacion mes del directorio de la liquidaci‹n y copiar
+ * <li>leer el archivo liquidacion mes del directorio de la liquidacion y copiar
  * tablas y pegarlas en un nuevo archivo</li>
  * <li>leer el archivo liquidacion mes del directorio de la RELIQUIDACION y
  * copiar tablas y pegarlas en EL MISMO ARCHIVO</li>
@@ -241,7 +241,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                      rowcuadro = hojacuadro.createRow(i+5);
                      rowRitRel = hojarit.createRow(i+10+filas);//hoja detalle, celdas para pagos con IT Real
                      rowRitIT = hojarit.createRow(i+14+filas*2);//hoja detalle, celdas para diferencia entre IT estiamdo - IT Real
-                     //Lee datos en archivo de liquidaci‹n con IT estimado
+                     //Lee datos en archivo de liquidacion con IT estimado
                      for (int j=0; j<columnas+1; j++) {
                          rowliq = s.getRow(crefsliq[i*columnas].getRow());
                          cLiq = rowliq.getCell(j);
@@ -256,7 +256,7 @@ public static void Reliquidacion(File DirectorioLiquidacion, File DirectorioReli
                                  }
                              }
                          }
-                         //copia datos en archivo de reliquidaci‹n rit.xls
+                         //copia datos en archivo de reliquidacion rit.xls
                          else{
                              tipo=cLiq.getCellType();
                              if(null!=tipo)switch (tipo) {
