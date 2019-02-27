@@ -840,7 +840,7 @@ public class Prorratas {
         //Lee opciones especificas del executor:
         String sMaxThreads = PeajesCDEC.getOptionValue("Max Threads", PeajesConstant.DataType.INTEGER);
         assert(sMaxThreads != null): "Como puede ser nulo esta importante llave? Cambiaste archivo config?";
-        int nMaxThreads = Integer.parseInt(sMaxThreads);
+        int nMaxThreads = Math.max(Math.min(numEtapas, Integer.parseInt(sMaxThreads)), 1);
         
         String sTimeOut = PeajesCDEC.getOptionValue("Thread timeout (en minutos)", PeajesConstant.DataType.INTEGER);
         assert(sMaxThreads != null): "Como puede ser nulo 'Thread timeout'? Cambiaste archivo config?";
