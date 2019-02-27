@@ -1959,29 +1959,14 @@ public class Lee {
         return numSum;
     }
 
-    public static void leePropiedades(Properties propiedades, String ruta){
+    public static int leePropiedades(Properties propiedades, String ruta) throws IOException {
         InputStream is = null;
-        try {
-            File f = new File(ruta);
-            is = new FileInputStream( f );
-            propiedades.load(is);
-        }
-        catch ( Exception e ) {
-            e.printStackTrace();
-            is = null;
-        }
-        if (is != null) {
-            try {
-                is.close();
-            }
-            catch ( Exception e ) {
-            e.printStackTrace();
-            }
-        }
-
-
+        File f = new File(ruta);
+        is = new FileInputStream(f);
+        propiedades.load(is);
+        is.close();
+        return propiedades.size();
     }
-
 
 }
 

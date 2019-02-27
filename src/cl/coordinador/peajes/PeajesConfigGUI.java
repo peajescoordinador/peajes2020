@@ -31,6 +31,7 @@ public class PeajesConfigGUI extends javax.swing.JDialog {
     
     private java.util.Properties propiedades = null;
     private KeyPropertyTable tblMain;
+    private boolean hasSavedChanges = false;
     
     /**
      * Crea una nueva interfaz de usuario para visualizacion y modificacion de
@@ -123,11 +124,13 @@ public class PeajesConfigGUI extends javax.swing.JDialog {
     }
     
     private void userWantsSave() {
-        tblMain.updateProperties(propiedades);
+        boolean hasChanges = tblMain.updateProperties(propiedades);
         try {
-            PeajesCDEC.saveOptionFile(propiedades);
-            
-            System.out.println("Guardado de propiedades de configuracion exitosa");
+            if (hasChanges) {
+                PeajesCDEC.saveOptionFile(propiedades);
+                hasSavedChanges = hasChanges;
+                System.out.println("Guardado de propiedades de configuracion exitosa");
+            }
         } catch (java.io.FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Error interno. No se pudo grabar el archivo", "Error guardad", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace(System.err);
@@ -146,7 +149,15 @@ public class PeajesConfigGUI extends javax.swing.JDialog {
             }
         }
     }
-
+    
+    /**
+     * Chequea si hay cambios guardados al archivo de propiedades
+     *
+     * @return true si hay cambios guardados al archivo de propiedades
+     */
+    public boolean hasSavedChanges() {
+        return hasSavedChanges;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -330,14 +341,24 @@ class KeyPropertyTable extends javax.swing.JTable {
      * tabla
      *
      * @param propiedades instancia de propiedades. no use null!
+     * @return true si es 'update'. Es decir, el valor ingresado reemplaza un
+     * valor distinto almacenado
      */
-    public void updateProperties(java.util.Properties propiedades) {
+    public boolean updateProperties(java.util.Properties propiedades) {
+        boolean hasChanges = false;
         for (int row = 0; row < getRowCount(); row++) {
             String key = getValueAt(row, 2).toString();
-            String value = getValueAt(row, 1).toString();
-            propiedades.put(key, value);
+            String newValue = getValueAt(row, 1).toString();
+            Object oldValue = propiedades.put(key, newValue);
+            if (oldValue != null) {
+                if (!oldValue.toString().equals(newValue)) {
+                    hasChanges = true;
+                }
+            }
         }
+        return hasChanges;
     }
+    
 }
 
 /**

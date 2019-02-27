@@ -20,6 +20,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -826,8 +827,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
         );
 
         jMenu1.setText("File");
+        jMenu1.setFont(jMenu1.getFont().deriveFont(jMenu1.getFont().getSize()-2f));
 
-        jMenuItem1.setText("Carga Configuracion");
+        jMenuItem1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jMenuItem1.setText("Carga Opciones Caso");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -835,7 +838,8 @@ public class PeajesCDEC extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
-        jMenuItem2.setText("Guarda Configuracion");
+        jMenuItem2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jMenuItem2.setText("Guarda Opciones Caso");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -843,7 +847,8 @@ public class PeajesCDEC extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
-        menuOpciones.setText("Opciones");
+        menuOpciones.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        menuOpciones.setText("Configuración");
         menuOpciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuOpcionesActionPerformed(evt);
@@ -1275,22 +1280,22 @@ public class PeajesCDEC extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void abrirDirectorioEntAccion() {
-        String nombreOs = System.getProperty("os.name");
-        System.out.println(nombreOs);
-        File directorio0;
+//        String nombreOs = System.getProperty("os.name");
+//        System.out.println(nombreOs);
+//        File directorio0;
         final JFileChooser selectorDirEnt = new JFileChooser(".");
-        if(nombreOs.equals("Windows XP")) {
-            directorio0 = selectorDirEnt.getCurrentDirectory().getParentFile().getParentFile();
-        }
-        else {
-            directorio0 = selectorDirEnt.getCurrentDirectory().getParentFile().getParentFile().getParentFile();
-        }
-        selectorDirEnt.setCurrentDirectory(directorio0);
-        selectorDirEnt.setCurrentDirectory(new File(selectorDirEnt.getCurrentDirectory()+File.separator+"DatosPeajes"+File.separator+cuadroAnoAEvaluar.getSelectedItem()));
-        File directorio = selectorDirEnt.getCurrentDirectory();
-        if(directorio0.equals(directorio)) {
-            JOptionPane.showMessageDialog(this,"Año a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
-        }
+//        if(nombreOs.equals("Windows XP")) {
+//            directorio0 = selectorDirEnt.getCurrentDirectory().getParentFile().getParentFile();
+//        }
+//        else {
+//            directorio0 = selectorDirEnt.getCurrentDirectory().getParentFile().getParentFile().getParentFile();
+//        }
+//        selectorDirEnt.setCurrentDirectory(directorio0);
+//        selectorDirEnt.setCurrentDirectory(new File(selectorDirEnt.getCurrentDirectory()+File.separator+"DatosPeajes"+File.separator+cuadroAnoAEvaluar.getSelectedItem()));
+//        File directorio = selectorDirEnt.getCurrentDirectory();
+//        if(directorio0.equals(directorio)) {
+//            JOptionPane.showMessageDialog(this,"Año a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
+//        }
         selectorDirEnt.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorDirEnt.showOpenDialog(this);
         if(resultado==JFileChooser.CANCEL_OPTION) return;
@@ -1299,21 +1304,21 @@ public class PeajesCDEC extends javax.swing.JFrame {
     }
 
     private void abrirDirectorioSalAccion() {
-        String nombreOs = System.getProperty("os.name");
-        File directorio0;
+//        String nombreOs = System.getProperty("os.name");
+//        File directorio0;
         final JFileChooser selectorDirSal = new JFileChooser(".");
-        if(nombreOs.equals("Windows XP")) {
-            directorio0 = selectorDirSal.getCurrentDirectory().getParentFile().getParentFile();
-        }
-        else {
-            directorio0 = selectorDirSal.getCurrentDirectory().getParentFile().getParentFile().getParentFile();
-        }
-        selectorDirSal.setCurrentDirectory(directorio0);
-        selectorDirSal.setCurrentDirectory(new File(selectorDirSal.getCurrentDirectory()+File.separator+"DatosPeajes"+File.separator+cuadroAnoAEvaluar.getSelectedItem()));
-        File directorio = selectorDirSal.getCurrentDirectory();
-        if(directorio0.equals(directorio)) {
-            JOptionPane.showMessageDialog(this,"Año a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
-        }
+//        if(nombreOs.equals("Windows XP")) {
+//            directorio0 = selectorDirSal.getCurrentDirectory().getParentFile().getParentFile();
+//        }
+//        else {
+//            directorio0 = selectorDirSal.getCurrentDirectory().getParentFile().getParentFile().getParentFile();
+//        }
+//        selectorDirSal.setCurrentDirectory(directorio0);
+//        selectorDirSal.setCurrentDirectory(new File(selectorDirSal.getCurrentDirectory()+File.separator+"DatosPeajes"+File.separator+cuadroAnoAEvaluar.getSelectedItem()));
+//        File directorio = selectorDirSal.getCurrentDirectory();
+//        if(directorio0.equals(directorio)) {
+//            JOptionPane.showMessageDialog(this,"Año a evaluar no ha sido creado.","Peajes Coordinador",JOptionPane.ERROR_MESSAGE);
+//        }
         selectorDirSal.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorDirSal.showOpenDialog(this);
         if(resultado==JFileChooser.CANCEL_OPTION) return;
@@ -1323,7 +1328,11 @@ public class PeajesCDEC extends javax.swing.JFrame {
 
     private void seleccionaNumHid() {
         anoAEvaluar = Integer.parseInt((String) cuadroAnoAEvaluar.getSelectedItem());
-        cuadroSeleccionHidro.setSelectedIndex((anoAEvaluar-1962)-40+1);
+        int nHydroMin = Integer.parseInt(cuadroSeleccionHidro.getItemAt(0).toString());
+        int nHydro = (anoAEvaluar-1962)-nHydroMin+1;
+        if (0 <= nHydro && nHydro < cuadroSeleccionHidro.getItemCount()) {
+            cuadroSeleccionHidro.setSelectedIndex(nHydro);
+        }
     }
 
     private void habilitarAnoABase() {
@@ -1546,15 +1555,27 @@ public class PeajesCDEC extends javax.swing.JFrame {
         System.exit(0);    
     }
  
-    private void leePropiedades(){
+    private void leePropiedades() {
         propiedades = new Properties();
         if (nombreDirEnt == null) {
             abrirDirectorioEntAccion();
         }
-        String DirBaseEntrada=nombreDirEnt.toString();
-        String ArchivoConfiguracion=DirBaseEntrada + SLASH +  "config.properties";
+        if (nombreDirEnt == null) {
+            return;
+        }
+        String DirBaseEntrada = nombreDirEnt.toString();
+        String ArchivoConfiguracion = DirBaseEntrada + SLASH + "config.properties";
         System.out.println("Cargando archivo desde " + ArchivoConfiguracion);
-        Lee.leePropiedades(propiedades,ArchivoConfiguracion);
+        try {
+            int nValues = Lee.leePropiedades(propiedades, ArchivoConfiguracion);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Archivo de configuracion de caso no encontrado. Asegurese que el archivo se encuentra en la ruta de entrada y su nombre se 'config.properties'");
+            return;
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+            return;
+        }
         //cuadroSeleccionHidro.setSelectedIndex((anoAEvaluar-1962)-40+1);
         propiedades.list(System.out);
         jTextField1.setText(propiedades.getProperty("fecha_pago_liq"));
@@ -1566,33 +1587,26 @@ public class PeajesCDEC extends javax.swing.JFrame {
         cuadroSeleccionOffset.setText(propiedades.getProperty("offset"));
         cuadroSeleccionNEtapas.setText(propiedades.getProperty("num_etapas_anno"));
         cuadroAnoAEvaluar.setSelectedItem(propiedades.getProperty("a_evaluar"));
-        
+
         LiquidacionReliquidacion = Boolean.parseBoolean(propiedades.getProperty("liquidacionreliquidacion"));
-        cuadroSeleccionTipoCalculo1.setSelectedIndex(LiquidacionReliquidacion?0:1);
+        cuadroSeleccionTipoCalculo1.setSelectedIndex(LiquidacionReliquidacion ? 0 : 1);
         nombreDirEnt = new File(propiedades.getProperty("dir_entrada"));
         campoDirectorioEntrada.setText(nombreDirEnt.getPath());
         nombreDirSal = new File(propiedades.getProperty("dir_salida"));
         campoDirectorioSalida.setText(nombreDirSal.getPath());
-        
-        
+
         tipoCalcSeleccionado = Integer.parseInt(propiedades.getProperty("tipo_calculo_seleccionado"));// propiedades.setProperty("tipo_calculo_seleccionado", Integer.toString(tipoCalcSeleccionado));
-        
+
         cuadroSeleccionTipoCalculo.setSelectedIndex(tipoCalcSeleccionado);
-        if(tipoCalcSeleccionado==0) cuadroAnoBase.setEnabled(false);
-        else {
+        if (tipoCalcSeleccionado == 0) {
+            cuadroAnoBase.setEnabled(false);
+        } else {
             cuadroAnoBase.setEnabled(true);
             cuadroAnoBase.setSelectedItem(propiedades.getProperty("a_base"));
         }
-        
-        
-        ActClientes.setSelected(Boolean.parseBoolean(propiedades.getProperty("clientes")));
 
-        
-        
-        
-        
- 
- }
+        ActClientes.setSelected(Boolean.parseBoolean(propiedades.getProperty("clientes")));
+    }
  
  
     private void EscribrePropiedades(){
@@ -1604,18 +1618,14 @@ public class PeajesCDEC extends javax.swing.JFrame {
         String ArchivoConfiguracion = DirBaseEntrada + SLASH +  "config.properties";
         System.out.println("Guardando archivo");
         
-        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("Cálculo de Liquidación")?true:false);
+        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("Cálculo de Liquidación"));
         
         int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
+        if (tipoCalcSeleccionado == 0) {
+            anoBase = anoAEvaluar;
+        } else {
+            anoBase = Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
         }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
-        
-        }
-        
-        
         
         //guardo parametros en propiedades
         
@@ -1658,11 +1668,13 @@ public class PeajesCDEC extends javax.swing.JFrame {
             agnos[0] = sMinEvalua;
         } else {
             agnos = new String[nMaxEvalua - nMinEvalua + 1];
-            for (int h = nMinEvalua; h <= nMaxEvalua; h++) {
-                agnos[h - nMinEvalua] = String.valueOf(h);
+            for (int a = nMinEvalua; a <= nMaxEvalua; a++) {
+                agnos[a - nMinEvalua] = String.valueOf(a);
             }
         }
+        String sAgno = cuadroAnoAEvaluar.getSelectedItem().toString();
         cuadroAnoAEvaluar.setModel(new javax.swing.DefaultComboBoxModel(agnos));
+        cuadroAnoAEvaluar.setSelectedItem(sAgno);
         
         //Hidrologias:
         String[] hydros;
@@ -1679,7 +1691,9 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 hydros[h - nMinHydro] = String.valueOf(h);
             }
         }
+        String sHydro = cuadroSeleccionHidro.getSelectedItem().toString();
         cuadroSeleccionHidro.setModel(new javax.swing.DefaultComboBoxModel(hydros));
+        cuadroSeleccionHidro.setSelectedItem(sHydro);
         
         //Actualiza clientes:
         String sActClientes = getOptionValue("Actualiza Clientes", PeajesConstant.DataType.BOOLEAN);
@@ -1702,7 +1716,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             File f_user = getUserOptionFile();
             Properties pDefault = new Properties();
             java.io.InputStream in_default = getClass().getResourceAsStream("/cl/coordinador/peajes/resources/" + ARCHIVO_CONFIG); //resources deben cargarse desde un stream
-            assert (in_default != null) : "Cambiaron de ubicacion el archivo de configuracion o renombraron los packages?";
+            assert (in_default != null) : "Cambiaron de ubicacion del archivo de configuracion o renombraron los packages?";
             pDefault.loadFromXML(in_default);
             if (!f_user.exists()) {
                 config = pDefault;
@@ -1731,7 +1745,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
         PeajesConfigGUI guiOption = new PeajesConfigGUI(this, config);
         guiOption.setLocationRelativeTo(this);
         guiOption.setVisible(true);
-        reLoadOptions(); //Asume que espera que se cierre la ventana para continuar
+        
+        if (guiOption.hasSavedChanges()) {
+            reLoadOptions(); //Asume que espera que se cierre la ventana para continuar
+        }
     }
     
     private static java.io.File getUserOptionFile () {
@@ -1808,7 +1825,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
      * <br>Se supone la VM limpia estos temporales (no creo que sirva)
      *
      * @param prefix prefijo opcional
-     * @param suffix sufijo opcional (incluir 'punto' para agregla extensiones).
+     * @param suffix sufijo opcional (incluir 'punto' para agregar extension).
      * Eg. '.bin'
      * @return instancia del archivo temporal creado
      * @throws IOException si no se pudo crear el archivo temporal
