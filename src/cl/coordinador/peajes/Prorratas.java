@@ -1702,9 +1702,10 @@ class GGDF {
             try {
                 if (fp != null) {
                     fp.close();
+                    java.nio.file.Files.delete(f_bin.toPath());
                 }
             } catch (IOException e) {
-                System.out.println("WARNING: temp file couldn't be cleaned. Must be done manually" + e.getMessage());
+                System.out.println("WARNING: archivo temporal no eliminado. Debe hacerse manualmente" + e.getMessage());
             }
         }
     }
