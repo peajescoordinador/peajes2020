@@ -246,7 +246,6 @@ public class Peajes {
             System.out.println("Acaba de crear la hoja xls VATT");
             Escribe.guardaLibroDisco(wb_salida, libroSalidaGXLS);
             wb_salida.close();
-            System.out.println("Finalizado escritura Peajes"); //temporal!
         } catch (IOException e) {
             System.out.println("Error al escribir resultados de peajes a archivo " + libroSalidaGXLS);
             System.out.println(e.getMessage());
@@ -258,7 +257,7 @@ public class Peajes {
             Escribe.crea_verifProrr(peajeLin,
                     numLineasIT[0], nomLinTx,
                     wb_Ent, "verProrr", "0.000%;[Red]-0.000%;\"-\"", 0);
-            System.out.println("Acaba de actualiza planilla Ent hoja xls verProrr");
+            System.out.println("Acaba de actualizar planilla Ent hoja xls verProrr");
             Escribe.guardaLibroDisco(wb_Ent, libroEntrada);
             wb_Ent.close();
             System.out.println("Actualizada planilla Ent"); //temporal!
