@@ -64,6 +64,7 @@ public class Prorratas {
     private static final boolean USE_MEMORY_WRITER = false; //switch para usar nuevo API escritura poi
     
     private static int etapa;
+    private static int etapaFinalizada;
     private static int numEtapas=0;
     private static String nombreSlack;
     private static boolean cargandoInfo=false;
@@ -923,6 +924,7 @@ public class Prorratas {
         }
         
         long initExecutorTime = System.currentTimeMillis();
+        etapaFinalizada = 0;
         for(etapa=0;etapa<numEtapas;etapa++) {
 //            System.out.println("etapa : "+etapa);
             float[][] paramLinEta = new float[numLin][10];
@@ -1696,6 +1698,7 @@ public class Prorratas {
                 GLDFEtapa.close();
             }
         }
+        etapaFinalizada++;
         System.out.println("Finalizado calculo etapa : "+ etapa);
     }
     
@@ -1707,7 +1710,8 @@ public class Prorratas {
         if (numEtapas==0)
             progreso=0;
         else
-            progreso=(float)(etapa+1)/(numEtapas);
+//            progreso=(float)(etapa+1)/(numEtapas);
+            progreso=(float)(etapaFinalizada)/(numEtapas);
         return progreso;
     }
 

@@ -46,7 +46,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
     private String mesAEvaluar;
     private long tInicio;
     private Time tiempo=new Time(0);
-//    private Timer timer;
+    private Timer timer;
     private Properties propiedades; //Configuraciones del caso TODO: rename
     private static Properties config; //Configuraciones de la herramienta TODO: rename
     private static final String ARCHIVO_CONFIG = "config.xml"; //Nombre archivo unico de configuracion de la herramienta
@@ -55,7 +55,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
     public PeajesCDEC() {
         initComponents();
         reLoadOptions();
-//        timer = new Timer(1000, new TimerListener());
+        timer = new Timer(1000, new TimerListener());
     }
 
     /** This method is called from within the constructor to
@@ -1350,7 +1350,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
 
     private void calcular() {
         botonCalcular.setEnabled(false);
-//        timer.start();
+        timer.start();
         int numEtapasAno = Integer.parseInt(cuadroSeleccionNEtapas.getText());
         int offset = Integer.parseInt(cuadroSeleccionOffset.getText());
         int numSlack = Integer.parseInt(cuadroSeleccionSlack.getText());
@@ -1552,7 +1552,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             f.delete();
         }
         this.dispose();
-        System.exit(0);    
+        System.exit(0);
     }
  
     private void leePropiedades() {
@@ -1833,11 +1833,11 @@ public class PeajesCDEC extends javax.swing.JFrame {
     public static File createTempFile(String prefix, String suffix) throws IOException {
 
         File temp = File.createTempFile(prefix, suffix);
-        temp.deleteOnExit();
-        if (!(temp.delete())) {
-            throw new IOException("Could not delete temp file: " + temp.getAbsolutePath());
-        }
-        lTempFiles.add(temp);
+            temp.deleteOnExit();
+            if (!(temp.delete())) {
+                throw new IOException("Could not delete temp file: " + temp.getAbsolutePath());
+            }
+            lTempFiles.add(temp);
         return temp;
     }
 
@@ -1881,7 +1881,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             else if (Prorratas.terminado()==true) {
                 textoCalculo.setText("Terminado");
                 Toolkit.getDefaultToolkit().beep();
-//                timer.stop();
+                timer.stop();
                 botonCalcular.setEnabled(true);
                 progreso.setIndeterminate(false);
                 progreso.setValue(maximum);
