@@ -1548,11 +1548,16 @@ public class PeajesCDEC extends javax.swing.JFrame {
  
     private void salirPeajes() {
         //Delete all registered temp files:
-        for (File f: lTempFiles){
-            f.delete();
+        try {
+            for (File f : lTempFiles) {
+                if (f != null) {
+                    f.delete();
+                }
+            }
+            this.dispose();
+        } finally {
+            System.exit(0);
         }
-        this.dispose();
-        System.exit(0);
     }
  
     private void leePropiedades() {
@@ -1831,13 +1836,15 @@ public class PeajesCDEC extends javax.swing.JFrame {
      * @throws IOException si no se pudo crear el archivo temporal
      */
     public static File createTempFile(String prefix, String suffix) throws IOException {
-
         File temp = File.createTempFile(prefix, suffix);
+        if (temp != null) {
             temp.deleteOnExit();
             if (!(temp.delete())) {
                 throw new IOException("Could not delete temp file: " + temp.getAbsolutePath());
             }
+
             lTempFiles.add(temp);
+        }
         return temp;
     }
 
