@@ -19,9 +19,13 @@ import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
 import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
 import static cl.coordinador.peajes.PeajesConstant.MESES;
 import static cl.coordinador.peajes.PeajesConstant.SLASH;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -1372,24 +1376,28 @@ public class PeajesRet {
          * Escritura de Resultados
          * =======================
          */
-        String libroSalidaCXLS = DirBaseSal + SLASH + "PagoRet" + Ano + ".xlsx";
-        if (!USE_MEMORY_WRITER) {
-            Escribe.crearLibro(libroSalidaCXLS);
-            Escribe.creaH2F_3d2_long(
-                    "Pago de Peaje por Línea y Cliente [$]", peajeLinCO,
-                    "Línea", nomLineasN,
-                    "Cliente", nomCliO,
-                    "Mes", MESES,
-                    libroSalidaCXLS, "PjeClienLin",
-                    "#,###,##0;[Red]-#,###,##0;\"-\"");
-            Escribe.creaH2F_3d2_long(
-                    "Pago Peaje por Cliente y Transmisor (Clientes No Exentos) [$]", peajeClienTxNOExenO,
-                    "Cliente", nombreCliNOExenO,
-                    "Transmisor", nombreTx,
-                    "Mes", MESES,
-                    libroSalidaCXLS, "PjeClienTx",
-                    "#,###,##0;[Red]-#,###,##0;\"-\"");
-            /*Escribe.creaH1F_2d_long(
+        System.out.println("Escribiendo resultados a archivos de salida");
+        String sEscribeXLS = PeajesCDEC.getOptionValue("Imprime pagos a Excel", PeajesConstant.DataType.BOOLEAN);
+        boolean bEscribeXLS = Boolean.parseBoolean(sEscribeXLS);
+        if (bEscribeXLS) {
+            String libroSalidaCXLS = DirBaseSal + SLASH + "PagoRet" + Ano + ".xlsx";
+            if (!USE_MEMORY_WRITER) {
+                Escribe.crearLibro(libroSalidaCXLS);
+                Escribe.creaH2F_3d2_long(
+                        "Pago de Peaje por Línea y Cliente [$]", peajeLinCO,
+                        "Línea", nomLineasN,
+                        "Cliente", nomCliO,
+                        "Mes", MESES,
+                        libroSalidaCXLS, "PjeClienLin",
+                        "#,###,##0;[Red]-#,###,##0;\"-\"");
+                Escribe.creaH2F_3d2_long(
+                        "Pago Peaje por Cliente y Transmisor (Clientes No Exentos) [$]", peajeClienTxNOExenO,
+                        "Cliente", nombreCliNOExenO,
+                        "Transmisor", nombreTx,
+                        "Mes", MESES,
+                        libroSalidaCXLS, "PjeClienTx",
+                        "#,###,##0;[Red]-#,###,##0;\"-\"");
+                /*Escribe.creaH1F_2d_long(
                 "Pago Peaje por Cliente (Clientes No Exentos) [$]", peajeClienNOExenO,
                 "Central", nombreCliNOExenO,
                 "Mes", nomMes,
@@ -1409,42 +1417,42 @@ public class PeajesRet {
                 libroSalidaCXLS, "PjeEmp",
                 "#,###,##0;[Red]-#,###,##0;\"-\"");
        *
-             */
-            if (numClienExentos != 0) {
-                Escribe.creaH2F_3d2_long(
-                        "Pago Peaje de Cliente Exento y Transmisor[$]", peajeClienTxExenO,
-                        "Cliente", nombreClientesExenO,
-                        "Transmisor", nombreTx,
-                        "Mes", MESES,
-                        libroSalidaCXLS, "PjeClienTxExen", "#,###,##0;[Red]-#,###,##0;\"-\"");
-            }
-            /*Escribe.creaH1F_2d_long(
+                 */
+                if (numClienExentos != 0) {
+                    Escribe.creaH2F_3d2_long(
+                            "Pago Peaje de Cliente Exento y Transmisor[$]", peajeClienTxExenO,
+                            "Cliente", nombreClientesExenO,
+                            "Transmisor", nombreTx,
+                            "Mes", MESES,
+                            libroSalidaCXLS, "PjeClienTxExen", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                }
+                /*Escribe.creaH1F_2d_long(
                 "Pago Peaje por Cliente Exento [$]", peajeClienExenO,
                 "Cliente",nombreClientesExenO,
                 "Mes", nomMes,
                 libroSalidaCXLS, "PjexClienteExen",
                 "#,###,##0;[Red]-#,###,##0;\"-\"");*/
-            Escribe.creaH3F_3d_double(
-                    "Pago por Ajuste de Retiros Exentos por Central y Transmisor [$]", AjusClienExenCenTxO,
-                    "Central", nomCenO,
-                    "Transmisor", nombreTx,
-                    "Mes", MESES,
-                    "Inyeccion Anual", GenAnoxCenO,
-                    libroSalidaCXLS, "AjusExenTx", "#,###,##0;[Red]-#,###,##0;\"-\"");
-            /*Escribe.creaH2F_3d_double(
+                Escribe.creaH3F_3d_double(
+                        "Pago por Ajuste de Retiros Exentos por Central y Transmisor [$]", AjusClienExenCenTxO,
+                        "Central", nomCenO,
+                        "Transmisor", nombreTx,
+                        "Mes", MESES,
+                        "Inyeccion Anual", GenAnoxCenO,
+                        libroSalidaCXLS, "AjusExenTx", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                /*Escribe.creaH2F_3d_double(
                 "Pago por Ajuste por Empresa y Transmisor [$]", AjusEmpCTxO,
                 "Empresa", nomEmpO,
                 "Transmisor", nombreTx,
                 "Mes", nomMes,
                 libroSalidaCXLS, "AjusEmpTx",
                 "#,###,##0;[Red]-#,###,##0;\"-\"");*/
-            Escribe.creaH1F_2d_double(
-                    "Ajuste por Empresa [$]", AjusEmpCO,
-                    "Empresa", nomEmpO,
-                    "Mes", MESES,
-                    libroSalidaCXLS, "AjusEmp",
-                    "#,###,##0;[Red]-#,###,##0;\"-\"");
-            /* Escribe.creaH2F_3d_double(
+                Escribe.creaH1F_2d_double(
+                        "Ajuste por Empresa [$]", AjusEmpCO,
+                        "Empresa", nomEmpO,
+                        "Mes", MESES,
+                        libroSalidaCXLS, "AjusEmp",
+                        "#,###,##0;[Red]-#,###,##0;\"-\"");
+                /* Escribe.creaH2F_3d_double(
                 "Pago por Empresa y Transmisor por RM88 [$]", AjusRM88TxO,
                 "Empresa", nomEmpO,
                 "Transmisor", nombreTx,
@@ -1457,128 +1465,36 @@ public class PeajesRet {
                 "Mes", nomMes,
                 libroSalidaCXLS, "AjusRM88",
                 "#,###,##0;[Red]-#,###,##0;\"-\"");*/
-            Escribe.creaH3F_4d_double(
-                    "Pago por Contratos con Distribuidoras [$]", pjeEmpDxTx,
-                    "Sumnistrador", nomSumi,
-                    "Distrubuidora", nomDx,
-                    "Mes", MESES,
-                    "Transmisor", nombreTx,
-                    libroSalidaCXLS, "PagosDx", "#,###,##0;[Red]-#,###,##0;\"-\"");
-
-            Escribe.creaH2F_3d_double(
-                    "Pagos de Peaje de Retiro RE2288 por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxRE2288O,
-                    "Empresa", nomSumiRM88O,
-                    "Transmisor", nombreTx,
-                    "Mes", MESES,
-                    libroSalidaCXLS, "PagosRE2288",
-                    "#,###,##0;[Red]-#,###,##0;\"-\"");
-
-            // Escribe.CopiaHoja(DirBaseEnt + slash + "Ent" + Ano + ".xlsx",libroSalidaCXLS, "Distribuidoras");
-            Escribe.creaH2F_3d_double(
-                    "Pagos de Peaje de Retiro por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxO,
-                    "Empresa", nomEmpO,
-                    "Transmisor", nombreTx,
-                    "Mes", MESES,
-                    libroSalidaCXLS, "PagoEmpTx",
-                    "#,###,##0;[Red]-#,###,##0;\"-\"");
-            /*Escribe.creaH1F_2d_double(
-                "Pago Total de Peajes de Retiro por Empresa (Peaje Clientes No Exentos + Ajuste + RM88)[$]", TotRetEmpO,
-                "Empresa", nomEmpO,
-                "Mes", nomMes,
-                libroSalidaCXLS, "TotRetEmp",
-                "#,###,##0;[Red]-#,###,##0;\"-\"");*/
-            Escribe.crea_SalidaCU(
-                    "Cargo Unitario [$/MWh]",
-                    "Barra", nomBarO,
-                    "Transmisor", nombreTx,
-                    "Consumo", "Consumo CU2", "Consumo CU30", ECUbarraO,
-                    "Prorrata", "Prorrata CU2", "Prorrata CU30", ProrrCUO,
-                    "Pagos", "Pago CU2", "Pago CU30", PagoCUO,
-                    PagoAnoBarraO,
-                    libroSalidaCXLS, "CargoUnitario",
-                    "#,###,##0;[Red]-#,###,##0;\"-\"");
-            Escribe.creaH2F_3d_double(
-                    "Pago Unitario [$/MWh]", PUO,
-                    "Barra", nomBarO,
-                    "Transmisor", nombreTx,
-                    "Mes", MESES,
-                    libroSalidaCXLS, "PUnit",
-                    "#,###,##0.###;[Red]-#,###,##0.###;\"-\"");
-            Escribe.crea_verificaRet(
-                    "Verifica Pagos de Retiro", libroEntrada,
-                    "CUE", "CUE2", "CUE30", "Pago", "Consumo",
-                    PagoCUAnual, ECUAnual,
-                    "Mes", MESES,
-                    "Calculo", TotMensualRetEmp,
-                    "Prorrata Línea", SumMensualPjeLin,
-                    "Diferencia",
-                    "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
-            Escribe.crea_verificaCalcPeajes(
-                    "Verifica Cálculo de Peajes", libroEntrada,
-                    "Mes", MESES,
-                    "Peajes", PeajeNMes,
-                    "Pago Ret", "Pago Iny", "Diferencia",
-                    "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
-        } else {
-
-            try {
-                XSSFWorkbook wb_salida = Escribe.crearLibroVacio(libroSalidaCXLS);
-                Escribe.creaH2F_3d2_long(
-                        "Pago de Peaje por Línea y Cliente [$]", peajeLinCO,
-                        "Línea", nomLineasN,
-                        "Cliente", nomCliO,
-                        "Mes", MESES,
-                        wb_salida, "PjeClienLin",
-                        "#,###,##0;[Red]-#,###,##0;\"-\"");
-                Escribe.creaH2F_3d2_long(
-                        "Pago Peaje por Cliente y Transmisor (Clientes No Exentos) [$]", peajeClienTxNOExenO,
-                        "Cliente", nombreCliNOExenO,
-                        "Transmisor", nombreTx,
-                        "Mes", MESES,
-                        wb_salida, "PjeClienTx",
-                        "#,###,##0;[Red]-#,###,##0;\"-\"");
-                if (numClienExentos != 0) {
-                    Escribe.creaH2F_3d2_long(
-                            "Pago Peaje de Cliente Exento y Transmisor[$]", peajeClienTxExenO,
-                            "Cliente", nombreClientesExenO,
-                            "Transmisor", nombreTx,
-                            "Mes", MESES,
-                            wb_salida, "PjeClienTxExen", "#,###,##0;[Red]-#,###,##0;\"-\"");
-                }
-                Escribe.creaH3F_3d_double(
-                        "Pago por Ajuste de Retiros Exentos por Central y Transmisor [$]", AjusClienExenCenTxO,
-                        "Central", nomCenO,
-                        "Transmisor", nombreTx,
-                        "Mes", MESES,
-                        "Inyeccion Anual", GenAnoxCenO,
-                        wb_salida, "AjusExenTx", "#,###,##0;[Red]-#,###,##0;\"-\"");
-                Escribe.creaH1F_2d_double(
-                        "Ajuste por Empresa [$]", AjusEmpCO,
-                        "Empresa", nomEmpO,
-                        "Mes", MESES,
-                        wb_salida, "AjusEmp",
-                        "#,###,##0;[Red]-#,###,##0;\"-\"");
                 Escribe.creaH3F_4d_double(
                         "Pago por Contratos con Distribuidoras [$]", pjeEmpDxTx,
                         "Sumnistrador", nomSumi,
                         "Distrubuidora", nomDx,
                         "Mes", MESES,
                         "Transmisor", nombreTx,
-                        wb_salida, "PagosDx", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                        libroSalidaCXLS, "PagosDx", "#,###,##0;[Red]-#,###,##0;\"-\"");
+
                 Escribe.creaH2F_3d_double(
                         "Pagos de Peaje de Retiro RE2288 por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxRE2288O,
                         "Empresa", nomSumiRM88O,
                         "Transmisor", nombreTx,
                         "Mes", MESES,
-                        wb_salida, "PagosRE2288",
+                        libroSalidaCXLS, "PagosRE2288",
                         "#,###,##0;[Red]-#,###,##0;\"-\"");
+
+                // Escribe.CopiaHoja(DirBaseEnt + slash + "Ent" + Ano + ".xlsx",libroSalidaCXLS, "Distribuidoras");
                 Escribe.creaH2F_3d_double(
                         "Pagos de Peaje de Retiro por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxO,
                         "Empresa", nomEmpO,
                         "Transmisor", nombreTx,
                         "Mes", MESES,
-                        wb_salida, "PagoEmpTx",
+                        libroSalidaCXLS, "PagoEmpTx",
                         "#,###,##0;[Red]-#,###,##0;\"-\"");
+                /*Escribe.creaH1F_2d_double(
+                "Pago Total de Peajes de Retiro por Empresa (Peaje Clientes No Exentos + Ajuste + RM88)[$]", TotRetEmpO,
+                "Empresa", nomEmpO,
+                "Mes", nomMes,
+                libroSalidaCXLS, "TotRetEmp",
+                "#,###,##0;[Red]-#,###,##0;\"-\"");*/
                 Escribe.crea_SalidaCU(
                         "Cargo Unitario [$/MWh]",
                         "Barra", nomBarO,
@@ -1587,17 +1503,17 @@ public class PeajesRet {
                         "Prorrata", "Prorrata CU2", "Prorrata CU30", ProrrCUO,
                         "Pagos", "Pago CU2", "Pago CU30", PagoCUO,
                         PagoAnoBarraO,
-                        wb_salida, "CargoUnitario",
+                        libroSalidaCXLS, "CargoUnitario",
                         "#,###,##0;[Red]-#,###,##0;\"-\"");
                 Escribe.creaH2F_3d_double(
                         "Pago Unitario [$/MWh]", PUO,
                         "Barra", nomBarO,
                         "Transmisor", nombreTx,
                         "Mes", MESES,
-                        wb_salida, "PUnit",
+                        libroSalidaCXLS, "PUnit",
                         "#,###,##0.###;[Red]-#,###,##0.###;\"-\"");
                 Escribe.crea_verificaRet(
-                        "Verifica Pagos de Retiro", wb_Ent,
+                        "Verifica Pagos de Retiro", libroEntrada,
                         "CUE", "CUE2", "CUE30", "Pago", "Consumo",
                         PagoCUAnual, ECUAnual,
                         "Mes", MESES,
@@ -1606,29 +1522,233 @@ public class PeajesRet {
                         "Diferencia",
                         "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
                 Escribe.crea_verificaCalcPeajes(
-                        "Verifica Cálculo de Peajes", wb_Ent,
+                        "Verifica Cálculo de Peajes", libroEntrada,
                         "Mes", MESES,
                         "Peajes", PeajeNMes,
                         "Pago Ret", "Pago Iny", "Diferencia",
                         "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
-                Escribe.guardaLibroDisco(wb_salida, libroSalidaCXLS);
-                Escribe.guardaLibroDisco(wb_Ent, libroEntrada);
-                wb_Peajes.close();
-                wb_Ent.close();
-                wb_Prorratas.close();
-                wb_salida.close();
-            } catch (IOException e) {
-                System.out.println("Error al escribir resultados de pagos retiros a archivo " + libroSalidaCXLS);
-                System.out.println(e.getMessage());
-                e.printStackTrace(System.err);
+            } else {
+
+                try {
+                    XSSFWorkbook wb_salida = Escribe.crearLibroVacio(libroSalidaCXLS);
+                    Escribe.creaH2F_3d2_long(
+                            "Pago de Peaje por Línea y Cliente [$]", peajeLinCO,
+                            "Línea", nomLineasN,
+                            "Cliente", nomCliO,
+                            "Mes", MESES,
+                            wb_salida, "PjeClienLin",
+                            "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.creaH2F_3d2_long(
+                            "Pago Peaje por Cliente y Transmisor (Clientes No Exentos) [$]", peajeClienTxNOExenO,
+                            "Cliente", nombreCliNOExenO,
+                            "Transmisor", nombreTx,
+                            "Mes", MESES,
+                            wb_salida, "PjeClienTx",
+                            "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    if (numClienExentos != 0) {
+                        Escribe.creaH2F_3d2_long(
+                                "Pago Peaje de Cliente Exento y Transmisor[$]", peajeClienTxExenO,
+                                "Cliente", nombreClientesExenO,
+                                "Transmisor", nombreTx,
+                                "Mes", MESES,
+                                wb_salida, "PjeClienTxExen", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    }
+                    Escribe.creaH3F_3d_double(
+                            "Pago por Ajuste de Retiros Exentos por Central y Transmisor [$]", AjusClienExenCenTxO,
+                            "Central", nomCenO,
+                            "Transmisor", nombreTx,
+                            "Mes", MESES,
+                            "Inyeccion Anual", GenAnoxCenO,
+                            wb_salida, "AjusExenTx", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.creaH1F_2d_double(
+                            "Ajuste por Empresa [$]", AjusEmpCO,
+                            "Empresa", nomEmpO,
+                            "Mes", MESES,
+                            wb_salida, "AjusEmp",
+                            "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.creaH3F_4d_double(
+                            "Pago por Contratos con Distribuidoras [$]", pjeEmpDxTx,
+                            "Sumnistrador", nomSumi,
+                            "Distrubuidora", nomDx,
+                            "Mes", MESES,
+                            "Transmisor", nombreTx,
+                            wb_salida, "PagosDx", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.creaH2F_3d_double(
+                            "Pagos de Peaje de Retiro RE2288 por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxRE2288O,
+                            "Empresa", nomSumiRM88O,
+                            "Transmisor", nombreTx,
+                            "Mes", MESES,
+                            wb_salida, "PagosRE2288",
+                            "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.creaH2F_3d_double(
+                            "Pagos de Peaje de Retiro por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxO,
+                            "Empresa", nomEmpO,
+                            "Transmisor", nombreTx,
+                            "Mes", MESES,
+                            wb_salida, "PagoEmpTx",
+                            "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.crea_SalidaCU(
+                            "Cargo Unitario [$/MWh]",
+                            "Barra", nomBarO,
+                            "Transmisor", nombreTx,
+                            "Consumo", "Consumo CU2", "Consumo CU30", ECUbarraO,
+                            "Prorrata", "Prorrata CU2", "Prorrata CU30", ProrrCUO,
+                            "Pagos", "Pago CU2", "Pago CU30", PagoCUO,
+                            PagoAnoBarraO,
+                            wb_salida, "CargoUnitario",
+                            "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.creaH2F_3d_double(
+                            "Pago Unitario [$/MWh]", PUO,
+                            "Barra", nomBarO,
+                            "Transmisor", nombreTx,
+                            "Mes", MESES,
+                            wb_salida, "PUnit",
+                            "#,###,##0.###;[Red]-#,###,##0.###;\"-\"");
+                    Escribe.crea_verificaRet(
+                            "Verifica Pagos de Retiro", wb_Ent,
+                            "CUE", "CUE2", "CUE30", "Pago", "Consumo",
+                            PagoCUAnual, ECUAnual,
+                            "Mes", MESES,
+                            "Calculo", TotMensualRetEmp,
+                            "Prorrata Línea", SumMensualPjeLin,
+                            "Diferencia",
+                            "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.crea_verificaCalcPeajes(
+                            "Verifica Cálculo de Peajes", wb_Ent,
+                            "Mes", MESES,
+                            "Peajes", PeajeNMes,
+                            "Pago Ret", "Pago Iny", "Diferencia",
+                            "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                    Escribe.guardaLibroDisco(wb_salida, libroSalidaCXLS);
+                    Escribe.guardaLibroDisco(wb_Ent, libroEntrada);
+                    wb_Peajes.close();
+                    wb_Ent.close();
+                    wb_Prorratas.close();
+                    wb_salida.close();
+                } catch (IOException e) {
+                    System.out.println("Error al escribir resultados de pagos retiros a archivo " + libroSalidaCXLS);
+                    System.out.println(e.getMessage());
+                    e.printStackTrace(System.err);
+                }
             }
         }
-        
         long tFinalEscritura = System.currentTimeMillis();
+        
+        //Escribe archivos csv de salida:
+        long tInicioEscrituraCSV = System.currentTimeMillis();
+        String sEscribeCSV = PeajesCDEC.getOptionValue("Imprime pagos a csv", PeajesConstant.DataType.BOOLEAN);
+        boolean bEscribeCSV = Boolean.parseBoolean(sEscribeCSV);
+        if (bEscribeCSV) {
+            
+            //Escribe reporte PjeClienLin:
+            String libroSalidaCLCSV = DirBaseSal + SLASH + "PjeClienLin" + Ano + ".csv";
+            BufferedWriter writerCSV = null;
+            try {
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(libroSalidaCLCSV), StandardCharsets.ISO_8859_1));
+                String sLineText;
+                //Escribimos el header:
+                writerCSV.write("Tramo,Transmisor,Cliente,Suministrador,Barra,Mes,PagoxLinea[$]");
+//                writerCSV.write("Tramo,Transmisor,Cliente,Suministrador,Barra,Mes,Pago(todos)xLinea[$],Pago(No-Exentos)xLinea[$]");
+                writerCSV.newLine();
+                //Escribimos los datos:
+                for (int l=0; l<numLinTx; l++) {
+                    String[] sTramoTransmisor = nomLineasN[l].split("#");
+                    assert (sTramoTransmisor.length == 2) : "Como se formaron estos nombres?";
+                    for (int c=0; c<numCli; c++) {
+                        String[] sClienteSuministradorBarra = nomCliO[c].split("#");
+                        assert (sClienteSuministradorBarra.length == 3) : "Como se formaron estos nombres?";
+                        for (int m=0; m<NUMERO_MESES; m++) {
+                            sLineText = "";
+                            for (String s : sTramoTransmisor) {
+                                sLineText += s + ","; //Tramo,Transmisor
+                            }
+                            for (String s : sClienteSuministradorBarra) {
+                                sLineText += s + ","; //Cliente,Suministrador,Barra
+                            }
+                            sLineText += MESES[m] + ","; //mes
+                            sLineText += peajeLinCO[l][c][m] + ","; //pagostodos
+                            
+                            writerCSV.write(sLineText);
+                            writerCSV.newLine();
+                        }
+                    }
+                }
+                System.out.println("Finalizado escritura de resultados PjeClienLin.csv");
+            } catch (IOException e) {
+                System.out.println("WARNING: No se pudo escribir PjeClienLin.csv. Error: " + e.getMessage());
+                e.printStackTrace(System.out);
+            } finally {
+                if (writerCSV != null) {
+                    try {
+                        writerCSV.close();
+                    } catch (IOException e) {
+                        System.out.println("No se pudo cerrar conexion con PjeClienLin.csv. Error: " + e.getMessage());
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+            
+            //Escribe reporte PjeClienTx:
+            String libroSalidaCTCSV = DirBaseSal + SLASH + "PjeClienTx" + Ano + ".csv";
+            try {
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(libroSalidaCTCSV), StandardCharsets.ISO_8859_1));
+                String sLineText;
+                //Escribimos el header:
+                writerCSV.write("Cliente,Suministrador,Barra,Transmisor,Mes,PagoUnitario,Energia");
+//                writerCSV.write("Tramo,Transmisor,Cliente,Suministrador,Barra,Mes,Pago(todos)xLinea[$],Pago(No-Exentos)xLinea[$]");
+                writerCSV.newLine();
+                //Escribimos los datos:
+                for (int c = 0; c < numCli; c++) {
+                    String[] sClienteSuministradorBarra = nomCli[c].split("#");
+                    assert (sClienteSuministradorBarra.length == 3) : "Como se formaron estos nombres?";
+                    int nPosBarraC = Calc.Buscar(sClienteSuministradorBarra[2], nomBar);
+                    for (int t = 0; t < numTx; t++) {
+                        for (int m = 0; m < NUMERO_MESES; m++) {
+                            sLineText = "";
+                            for (String s : sClienteSuministradorBarra) {
+                                sLineText += s + ","; //Cliente,Suministrador,Barra
+                            }
+                            sLineText += nombreTx[t] + ","; //mes
+                            sLineText += MESES[m] + ","; //mes
+                            if (CondiClienExe[c] == -1) {
+                                sLineText += PU[nPosBarraC][t][m] + ","; //PU
+                            } else if (CondiClienExe[c] == 0) {
+                                //TODO: Que hacemos con los exentos?
+                                sLineText += 0.0 + ",";
+                            }
+                            sLineText += CMesCli[c][m]; //Energia
+                            writerCSV.write(sLineText);
+                            writerCSV.newLine();
+                        }
+                    }
+                }
+                System.out.println("Finalizado escritura de resultados PjeClienTx.csv");
+            } catch (IOException e) {
+                System.out.println("WARNING: No se pudo escribir PjeClienTx.csv. Error: " + e.getMessage());
+                e.printStackTrace(System.out);
+            } finally {
+                if (writerCSV != null) {
+                    try {
+                        writerCSV.close();
+                    } catch (IOException e) {
+                        System.out.println("No se pudo cerrar conexion con PjeClienTx.csv. Error: " + e.getMessage());
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+            
+        }
+        long tFinalEscrituraCSV = System.currentTimeMillis();
+        
         System.out.println("Pagos de Retiro Anual Calculados");
         System.out.println("Tiempo Adquisicion de datos     : " + DosDecimales.format((tFinalLectura - tInicioLectura) / 1000.0) + " seg");
         System.out.println("Tiempo Cálculo                  : " + DosDecimales.format((tFinalCalculo - tInicioCalculo) / 1000.0) + " seg");
-        System.out.println("Tiempo Escritura de Resultados  : " + DosDecimales.format((tFinalEscritura - tInicioEscritura) / 1000.0) + " seg");
+        if (bEscribeXLS) {
+            System.out.println("Tiempo Escritura de Resultados  : " + DosDecimales.format((tFinalEscritura - tInicioEscritura) / 1000.0) + " seg");
+        }
+        if (bEscribeCSV) {
+            System.out.println("Tiempo Escritura PeajesRet.csv  : "+DosDecimales.format((tFinalEscrituraCSV-tInicioEscrituraCSV)/(1000.0))+" seg");
+        }
         System.out.println();
     }
 

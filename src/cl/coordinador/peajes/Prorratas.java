@@ -20,12 +20,15 @@ import static cl.coordinador.peajes.PeajesConstant.MESES;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
 import static cl.coordinador.peajes.PeajesConstant.SLASH;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -50,10 +53,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class Prorratas {
 
+    //Switchs para alternativas y benchmark:
     private static final boolean USE_BUFFEREDSTREAM = true;
     private static final boolean USE_FILECHANNEL = false;
     private static final boolean USE_SCANNER = false;
     private static final boolean USE_MAPPED_NAMES = true;
+    private static final boolean USE_CONSUMO_CLIENTES_CLAVE = false;
+    private static final boolean USE_FACTORY = false; //Temp switch for the thread factory
+    private static final boolean USE_MEMORY_READER = true; //switch para usar nuevo API lectura poi
+    private static final boolean USE_MEMORY_WRITER = false; //switch para usar nuevo API escritura poi
     
     private static int etapa;
     private static int numEtapas=0;
@@ -63,8 +71,6 @@ public class Prorratas {
     private static boolean calculandoProrr=false;
     private static boolean guardandoDatos=false;
     private static boolean completo=false;
-
-    private static final boolean USE_FACTORY = false; //Temp switch for the thread factory
     
     //Arreglos comunes para cada etapa (para ejecucion en paralelo):
     private static float [][][] Gx; //Generacion de PLP
@@ -423,6 +429,7 @@ public class Prorratas {
         System.out.println("Inicio lectura archivo despacho PLP...");
         long time_dispatch = System.currentTimeMillis();
         int cuenta = 0; //Contador de lineas
+        int numHidCenPLP = 0; //Numero de hidrologias
         File testReadFile = new File(ArchivoDespachoGeneradores);
         BufferedReader input = null;
         Gx = new float[numGen][numEtapas][numHid]; //Despacho PLP
@@ -449,98 +456,120 @@ public class Prorratas {
         }
         
         if (USE_BUFFEREDSTREAM) {
-        try {
-            //input = new BufferedReader( new FileReader(testReadFile) );
-            input = new BufferedReader( new InputStreamReader(new FileInputStream(testReadFile), "Latin1"));
-            String line = null;
-            cuenta=0;
-            int indGen=0;
-            int indGen2=0;
-            int indHid=0;
-            int indEta=0;
-            float Pgen=0;
-            float ENS=0;
-            String sNomGenPrev = "";
-            Integer indexGen = null;
-            Integer indexGenSinFallas = null;
-            while ((line = input.readLine()) != null){
-                if(cuenta>0){
-                    if((line.substring(0,5).trim()).equals("MEDIA")==false){
-                        if (USE_MAPPED_NAMES) {
-                            String sNomGenActual = (line.substring(32, line.indexOf(",", 32))).trim();
-                            if (!sNomGenActual.equals(sNomGenPrev)) {
-                                indexGen = m_nomGen.get(sNomGenActual);
-                                indexGenSinFallas = m_nomGen_Sin_Fallas.get(sNomGenActual);
-                                sNomGenPrev = sNomGenActual;
-                            }
-                            if (indexGenSinFallas != null) {
+            try {
+                //input = new BufferedReader( new FileReader(testReadFile) );
+                input = new BufferedReader( new InputStreamReader(new FileInputStream(testReadFile), "Latin1"));
+                String line = null;
+                cuenta=0;
+                int indGen=0;
+                int indGen2=0;
+                int indHid=0;
+                int indEta=0;
+                float Pgen=0;
+                float ENS=0;
+                String sNomGenPrev = "";
+                Integer indexGen = null;
+                Integer indexGenSinFallas = null;
+                while ((line = input.readLine()) != null){
+                    if(cuenta>0){
+                        if((line.substring(0,5).trim()).equals("MEDIA")==false){
+                            if (USE_MAPPED_NAMES) {
+                                String sNomGenActual = (line.substring(32, line.indexOf(",", 32))).trim();
+                                if (!sNomGenActual.equals(sNomGenPrev)) {
+                                    indexGen = m_nomGen.get(sNomGenActual);
+                                    indexGenSinFallas = m_nomGen_Sin_Fallas.get(sNomGenActual);
+                                    sNomGenPrev = sNomGenActual;
+                                }
                                 indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
                                 indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
-                                if (indexGen != null) {
+                                if (indHid > numHidCenPLP) {
+                                    numHidCenPLP = indHid;
+                                }
+                                if (indHid + 1 > numHid) {
+                                    cuenta++;
+                                    continue;
+                                }
+                                if (indexGenSinFallas != null) {
+                                    if (indexGen != null) {
+                                        if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                            Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                            Gx[indexGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                        }
+                                    }
+                                } else {
                                     if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
-                                        Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
-                                        Gx[indexGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                        ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                        FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                     }
                                 }
                             } else {
-                                if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                indGen = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen);
+                                indGen2 = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen_Sin_Fallas);
+
+                                if (indGen2 > -1) {
+                                    if (indGen > -1) {
+                                        
+                                        //System.out.println(indGen +" "+nomGen[indGen]);
+                                        indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                                        indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                        if (indHid > numHidCenPLP) {
+                                            numHidCenPLP = indHid;
+                                        }
+                                        if (indHid + 1 > numHid) {
+                                            cuenta++;
+                                            continue;
+                                        }
+                                        //Pgen=Float.valueOf((line.substring(151,158)).trim()); //Peajes
+                                        Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                        if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                            //System.out.println(indGen +" "+nomGen[indGen]);
+                                            Gx[indGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                            //System.out.println(Gx[indGen][indEta-etapaPeriodoIni][indHid]);
+                                        }
+
+                                    }
+                                } else {//suma las fallas
+                                    indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                                    indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                    if (indHid > numHidCenPLP) {
+                                        numHidCenPLP = indHid;
+                                    }
+                                    if (indHid + 1 > numHid) {
+                                        cuenta++;
+                                        continue;
+                                    }
+                                    //ENS=Float.valueOf((line.substring(151,158)).trim());
                                     ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
-                                    FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                    if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
+                                        FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
+                                    }
                                 }
                             }
-                        } else {
-                            indGen = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen);
-                            indGen2 = Calc.Buscar((line.substring(32, line.indexOf(",", 32))).trim(), nomGen_Sin_Fallas);
-                            
-                            if(indGen2>-1){
-                          if(indGen>-1){  
-                            
-                            //System.out.println(indGen +" "+nomGen[indGen]);
-                            indHid=Integer.valueOf((line.substring(4,line.indexOf(",",4))).trim())-1;
-                            indEta=Integer.valueOf((line.substring(8,line.indexOf(",",8))).trim())-1;
-                            //Pgen=Float.valueOf((line.substring(151,158)).trim()); //Peajes
-                            Pgen=Float.valueOf((line.substring(103,line.indexOf(",",103))).trim()); 
-                            if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
-                                //System.out.println(indGen +" "+nomGen[indGen]);
-                                Gx[indGen][indEta-etapaPeriodoIni][indHid]=Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
-                                //System.out.println(Gx[indGen][indEta-etapaPeriodoIni][indHid]);
-                            }
-                            
-                          }
-                            
                         }
-                        
-                        
-                        else{//suma las fallas
-                            indHid=Integer.valueOf((line.substring(4,line.indexOf(",",4))).trim())-1;
-                            indEta=Integer.valueOf((line.substring(8,line.indexOf(",",8))).trim())-1;
-                            //ENS=Float.valueOf((line.substring(151,158)).trim());
-                            ENS=Float.valueOf((line.substring(103,line.indexOf(",",103))).trim());
-                            if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
-                                FallaEtaHid[indEta-etapaPeriodoIni][indHid]+=ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
-                            }
-                        }
-                        }
-                        
                     }
+                    cuenta++;
                 }
-                cuenta++;
-            }
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace(System.out);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.out);
-        } catch (NumberFormatException e) {
-            throw new IOException("No fue posible convertir valor en linea '" + cuenta + "' archivo plp '" + ArchivoDespachoGeneradores +"'", e);
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace(System.out);
             } catch (IOException ex) {
                 ex.printStackTrace(System.out);
+            } catch (NumberFormatException e) {
+                throw new IOException("No fue posible convertir valor en linea '" + cuenta + "' archivo plp '" + ArchivoDespachoGeneradores +"'", e);
+            } finally {
+                try {
+                    if (input != null) {
+                        input.close();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace(System.out);
+                }
             }
-        }
+            numHidCenPLP++;
+            if (numHidCenPLP > numHid) {
+                throw new IOException("WARNING: Se encontraron " + numHidCenPLP + " hidrologias en archivo despachos PLP pero solo se leyeron " + numHid + ". Los resultados pueden ser imprecisos");
+            } else if (numHidCenPLP < numHid) {
+                throw new IOException("WARNING: Solo se encontraron " + numHidCenPLP + " hidrologias en archivo despachos PLP y se esperaban " + numHid + ". Los resultados pueden ser imprecisos");
+            }
         }
 
         if (USE_FILECHANNEL) {
@@ -665,6 +694,7 @@ public class Prorratas {
          * ================================================
          */
         System.out.println("Leyendo archivo flujos lineas PLP...");
+        int numHidLinPLP = 0;
         testReadFile = new File(ArchivoPerdidasLineas);
         input = null;
         perdidasPLPMayor110 = new float[numEtapas][numHid];
@@ -677,8 +707,7 @@ public class Prorratas {
             }
         }
         try {
-            input = new BufferedReader( new InputStreamReader(new
-                    FileInputStream(testReadFile), "Latin1"));
+            input = new BufferedReader( new InputStreamReader(new FileInputStream(testReadFile), "Latin1"));
             String line = null;
             cuenta=0;
             int indLin=0;
@@ -699,10 +728,17 @@ public class Prorratas {
                             if (indexLin != null) {
                                 if (paramLinSistRed[indexLin] > 110) {
                                     indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
+                                    if (indHid > numHidLinPLP) {
+                                        numHidLinPLP = indHid;
+                                    }
+                                    if (indHid + 1 > numHid) {
+                                        cuenta++;
+                                        continue;
+                                    }
                                     indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
                                     if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
                                         Perd = Float.valueOf(line.substring(111, line.indexOf(",", 111)).trim());
-                                        perdidasPLPMayor110[indEta - etapaPeriodoIni][indHid] += Perd; //TODO
+                                        perdidasPLPMayor110[indEta - etapaPeriodoIni][indHid] += Perd;
                                     }
                                 }
                             }
@@ -715,9 +751,16 @@ public class Prorratas {
                             indHid=Integer.valueOf((line.substring(4,line.indexOf(",",4))).trim())-1;
                             indEta=Integer.valueOf((line.substring(8,line.indexOf(",",8))).trim())-1;
                             Perd=Float.valueOf(line.substring(111,line.indexOf(",",111)).trim());
+                            if (indHid > numHidLinPLP) {
+                                numHidLinPLP = indHid;
+                            }
+                            if (indHid + 1 > numHid) {
+                                cuenta++;
+                                continue;
+                            }
                             if(indEta<etapaPeriodoFin && indEta>=etapaPeriodoIni){
                                 if(paramLinSistRed[indLin]>110){
-                                    perdidasPLPMayor110[indEta-etapaPeriodoIni][indHid]+=Perd; //TODO
+                                    perdidasPLPMayor110[indEta-etapaPeriodoIni][indHid]+=Perd;
                                 }
                             }
                         }
@@ -740,6 +783,12 @@ public class Prorratas {
             } catch (IOException ex) {
                 ex.printStackTrace(System.out);
             }
+        }
+        numHidLinPLP++;
+        if (numHidLinPLP > numHid) {
+            throw new IOException("WARNING: Se encontraron " + numHidLinPLP + " hidrologias en archivo flujos lineas PLP pero solo se leyeron " + numHid);
+        } else if (numHidLinPLP < numHid) {
+            throw new IOException("WARNING: Solo se encontraron " + numHidLinPLP + " hidrologias en archivo flujos lineas PLP y se esperaban " + numHid + ". Los resultados pueden ser imprecisos");
         }
         System.out.println("Fin lectura archivo flujos lineas PLP : " + ((System.currentTimeMillis() - time_flow)/1000) + "[seg]");
         
@@ -852,7 +901,7 @@ public class Prorratas {
         boolean useDisk = false;
         switch (memory) {
             case Auto:
-                useDisk = (nMaxThreads > 4);
+                useDisk = (nMaxThreads >= 4);
                 break;
             case Min:
                 useDisk = true;
@@ -1005,7 +1054,7 @@ public class Prorratas {
             }
         }
         
-        // Calcula prorratas mensuales y anuales para para las lineas troncales:
+        // Calcula prorratas mensuales y anuales para las lineas troncales:
         double[][] prorrAnoTroncG = new double[numLinTx][numGen];
         double[][] prorrAnoTroncC = new double[numLinTx][numCli];
         double[][][] prorrMesTroncG=new double[numLinTx][numGen][NUMERO_MESES];
@@ -1081,148 +1130,392 @@ public class Prorratas {
             }
         }
         
-        // Procesa salida prorratas de generacion
-        double[][][] prorrMesLinG = new double[numLinTx][numCen][NUMERO_MESES];
-        double[][] generacionMes = new double[numCen][NUMERO_MESES];
-        for(int m=0; m<NUMERO_MESES; m++) {
-            for(int c=0; c<numCen; c++) {
-                generacionMes[c][m] = 0;
-                for(int l=0; l<numLinTx; l++) {
-                    prorrMesLinG[l][c][m] = 0;
-                }
-            }
-        }
-        for (int l=0; l<numLinTx; l++) {
-            for(int m=0; m<NUMERO_MESES; m++) {
-                for (int g=0; g<numGen; g++) {
-                    if (sumPorrMesG[g] != 0) {
-                        if (paramGener[g][1] == -1)
-                            System.out.println("Generador " + g +" no asignado en 'centrales'");             
-                        prorrMesLinG[l][paramGener[g][1]][m]
-                                += prorrMesTroncG[l][g][m]*FactorG[l][m];
-                    }
-                }
-            }
-        }
-        for (int g=0; g<numGen; g++) {
-            if (sumPorrMesG[g] != 0) {
-                for(int e=0;e<numEtapas;e++) {
-                    for(int h=0; h<numHid; h++){
-                        //System.out.println(Gx[g][e][h]);
-                        generacionMes[paramGener[g][1]][paramEtapa[e]]
-                                += Gx[g][e][h]*duracionEta[e]/numHid/1000;
-                        //System.out.println(generacionMes[paramGener[g][1]][paramEtapa[e]]);
-                    }
-                }
-            }
-        }
-        
-        // Procesa salida final de prorratas de consumo
-        double[][][] prorrMesLinC = new double[numLinTx][numCli][NUMERO_MESES];
-        for (int l = 0; l < numLinTx; l++) {
-            for (int c = 0; c < numCli; c++) {
-                for (int m = 0; m < NUMERO_MESES; m++) {
-                    prorrMesLinC[l][c][m]
-                            += prorrMesTroncC[l][c][m] * FactorC[l][m];
-                }
-            }
-        }
-        String[] nombreEtapas=new String[numEtapas];
-        String[] nombreHid=new String[numHid];
-        for(int a=0; a<1; a++) {
-            for(int e=etapaPeriodoIni;e<etapaPeriodoFin;e++){
-                nombreEtapas[e-etapaPeriodoIni]="";
-                nombreEtapas[e-etapaPeriodoIni]+=(e-etapaPeriodoIni+1);
-            }
-            for(int h=0; h<numHid; h++){
-                nombreHid[h] = "";
-                nombreHid[h] += (h+1);
-            }
-        }
-
         calculandoProrr=false;
-        long tFinalCalculo = System.currentTimeMillis();
-        long tInicioEscritura = System.currentTimeMillis();
         guardandoDatos=true;
+        long tFinalCalculo = System.currentTimeMillis();
+        
+        //Escritura de resultados a archivos de texto:
+        long tInicioEscrituraCSV = System.currentTimeMillis();
+        String sEscribeCSV = PeajesCDEC.getOptionValue("Imprime prorratas a csv", PeajesConstant.DataType.BOOLEAN);
+        boolean bEscribeCSV = Boolean.parseBoolean(sEscribeCSV);
+        
+        if (bEscribeCSV) {
+            
+            String prorrataGCSV = DirBaseSalida + SLASH + "ProrratasGen" + AnoAEvaluar + ".csv";
+            BufferedWriter writerCSV = null;
+            try {
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(prorrataGCSV), StandardCharsets.ISO_8859_1));
+                String sLineText;
+                writerCSV.write("Línea,Zona,Central/Cliente,Mes,ProrrataGen");
+                writerCSV.newLine();
+                //Escribe prorratas generacion (por central):
+                for (int m = 0; m < NUMERO_MESES; m++) {
+                    float[][] prorrMesLinCentral = new float[numLinTx][numCen];
+                    for (int g = 0; g < numGen; g++) {
+                        for (int l = 0; l < numLinTx; l++) {
+                            if (sumPorrMesG[g] != 0) {
+                                prorrMesLinCentral[l][paramGener[g][1]] += prorrMesTroncG[l][g][m] * FactorG[l][m];
+                            }
+                        }
+                    }
+                    for (int l = 0; l < numLinTx; l++) {
+                        for (int c = 0; c < numCen; c++) {
+                            sLineText = "";
+                            sLineText += nomLinTx[l] + ",";
+                            sLineText += zona[l] + ",";
+                            sLineText += nombreCentrales[c] + ",";
+                            sLineText += MESES[m] + ",";
+                            sLineText += prorrMesLinCentral[l][c];
+                            writerCSV.write(sLineText);
+                            writerCSV.newLine();
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("No se pudo escribir ProrratasGen.csv! Error: " + e.getMessage());
+                e.printStackTrace(System.out);
+                return;
+            } finally {
+                if (writerCSV != null) {
+                    try {
+                        writerCSV.close();
+                    } catch (IOException e) {
+                        System.out.println("No se pudo cerrar conexion con PeajesIny.csv. Error: " + e.getMessage());
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+            
+            //Escribe prorratas consumo:
+            String prorrataCCSV = DirBaseSalida + SLASH + "ProrratasConsumo" + AnoAEvaluar + ".csv";
+            writerCSV = null;
+            try {
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(prorrataCCSV), StandardCharsets.ISO_8859_1));
+                String sLineText;
+                writerCSV.write("Línea,Zona,Cliente,Mes,ProrrataConsumo");
+                writerCSV.newLine();
+                for (int m = 0; m < NUMERO_MESES; m++) {
+                    for (int c = 0; c < numCli; c++) {
+//                    float[] prorrMesLinConsumo = new float[numLinTx];
+                        for (int l = 0; l < numLinTx; l++) {
+//                        prorrMesLinConsumo[l] += prorrMesTroncC[l][c][m] * FactorC[l][m];
+                            sLineText = "";
+                            sLineText += nomLinTx[l] + ",";
+                            sLineText += zona[l] + ",";
+                            sLineText += nomCli[c] + ",";
+                            sLineText += MESES[m] + ",";
+                            sLineText += prorrMesTroncC[l][c][m] * FactorC[l][m];;
+                            writerCSV.write(sLineText);
+                            writerCSV.newLine();
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("No se pudo escribir ProrratasConsumo.csv! Error: " + e.getMessage());
+                e.printStackTrace(System.out);
+                return;
+            } finally {
+                if (writerCSV != null) {
+                    try {
+                        writerCSV.close();
+                    } catch (IOException e) {
+                        System.out.println("No se pudo cerrar conexion con ProrratasConsumo.csv. Error: " + e.getMessage());
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+            
+            //Escribe generacion mensual:
+            String genCSV = DirBaseSalida + SLASH + "GMes" + AnoAEvaluar + ".csv";
+            writerCSV = null;
+            try {
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(genCSV), StandardCharsets.ISO_8859_1));
+                String sLineText;
+                writerCSV.write("Central,Mes,Generación[GWh]");
+                writerCSV.newLine();
+                float[][] generacionMes = new float[numCen][NUMERO_MESES];
+                for (int e = 0; e < etapasPeriodo; e++) {
+//                    mes = (int) Math.floor((double) e / (NumeroEtapasAno / NUMERO_MESES));
+                    mes = paramEtapa[e];
+                    for (int g = 0; g < numGen; g++) {
+                        for (int h = 0; h < numHid; h++) {
+                            generacionMes[paramGener[g][1]][mes] += Gx[g][e][h] * duracionEta[e] / numHid / 1000;
+                        }
+                    }
+                }
+                for (int m=0; m<NUMERO_MESES; m++){
+                    for (int c = 0; c < numCen; c++) {
+                        sLineText = "";
+                            sLineText += nombreCentrales[c] + ",";
+                            sLineText += MESES[m] + ",";
+                            sLineText += generacionMes[c][m];
+                            writerCSV.write(sLineText);
+                            writerCSV.newLine();
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("No se pudo escribir GMes.csv! Error: " + e.getMessage());
+                e.printStackTrace(System.out);
+                return;
+            } finally {
+                if (writerCSV != null) {
+                    try {
+                        writerCSV.close();
+                    } catch (IOException e) {
+                        System.out.println("No se pudo cerrar conexion con GMes.csv. Error: " + e.getMessage());
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+            
+            //Escribe consumo mensual:
+            String consumoCSV = DirBaseSalida + SLASH + "CMes" + AnoAEvaluar + ".csv";
+            writerCSV = null;
+            try {
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(consumoCSV), StandardCharsets.ISO_8859_1));
+                String sLineText;
+                writerCSV.write("Cliente,Mes,Consumo[MWh]");
+                writerCSV.newLine();
+                for (int m = 0; m < NUMERO_MESES; m++) {
+                    if (USE_CONSUMO_CLIENTES_CLAVE) {
+                        for (int c = 0; c < numClaves; c++) {
+                            sLineText = "";
+                            sLineText += nombreClaves[c] + ",";
+                            sLineText += MESES[m] + ",";
+                            sLineText += ConsClaveMes[c][m];
+                            writerCSV.write(sLineText);
+                            writerCSV.newLine();
+                        }
+                    } else {
+                        for (int c = 0; c < numCli; c++) {
+                            sLineText = "";
+                            sLineText += nomCli[c] + ",";
+                            sLineText += MESES[m] + ",";
+                            sLineText += CMes[c][m];
+                            writerCSV.write(sLineText);
+                            writerCSV.newLine();
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("No se pudo escribir CMes.csv! Error: " + e.getMessage());
+                e.printStackTrace(System.out);
+                return;
+            } finally {
+                if (writerCSV != null) {
+                    try {
+                        writerCSV.close();
+                    } catch (IOException e) {
+                        System.out.println("No se pudo cerrar conexion con CMes.csv. Error: " + e.getMessage());
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+        }
+        long tFinalEscrituraCSV = System.currentTimeMillis();
+        long tInicioEscritura = System.currentTimeMillis();
+        
+        //ESCRITURA DE RESULTADOS A ARCHIVO EXCEL:
+        String sEscribeXLS = PeajesCDEC.getOptionValue("Imprime prorratas a Excel", PeajesConstant.DataType.BOOLEAN);
+        boolean bEscribeXLS = Boolean.parseBoolean(sEscribeXLS);
+        
+        if (bEscribeXLS) {
+            // Procesa salida prorratas de generacion
+            double[][][] prorrMesLinG = new double[numLinTx][numCen][NUMERO_MESES];
+            double[][] generacionMes = new double[numCen][NUMERO_MESES];
+            for (int m = 0; m < NUMERO_MESES; m++) {
+                for (int c = 0; c < numCen; c++) {
+                    generacionMes[c][m] = 0;
+                    for (int l = 0; l < numLinTx; l++) {
+                        prorrMesLinG[l][c][m] = 0;
+                    }
+                }
+            }
+            for (int l = 0; l < numLinTx; l++) {
+                for (int m = 0; m < NUMERO_MESES; m++) {
+                    for (int g = 0; g < numGen; g++) {
+                        if (sumPorrMesG[g] != 0) {
+                            if (paramGener[g][1] == -1) {
+                                System.out.println("Generador " + g + " no asignado en 'centrales'");
+                            }
+                            prorrMesLinG[l][paramGener[g][1]][m] += prorrMesTroncG[l][g][m] * FactorG[l][m];
+                        }
+                    }
+                }
+            }
+            for (int g = 0; g < numGen; g++) {
+                if (sumPorrMesG[g] != 0) {
+                    for (int e = 0; e < numEtapas; e++) {
+                        for (int h = 0; h < numHid; h++) {
+                            //System.out.println(Gx[g][e][h]);
+                            generacionMes[paramGener[g][1]][paramEtapa[e]]
+                                    += Gx[g][e][h] * duracionEta[e] / numHid / 1000;
+                            //System.out.println(generacionMes[paramGener[g][1]][paramEtapa[e]]);
+                        }
+                    }
+                }
+            }
 
-        /*
+            // Procesa salida final de prorratas de consumo
+            double[][][] prorrMesLinC = new double[numLinTx][numCli][NUMERO_MESES];
+            for (int l = 0; l < numLinTx; l++) {
+                for (int c = 0; c < numCli; c++) {
+                    for (int m = 0; m < NUMERO_MESES; m++) {
+                        prorrMesLinC[l][c][m]
+                                += prorrMesTroncC[l][c][m] * FactorC[l][m];
+                    }
+                }
+            }
+            String[] nombreEtapas = new String[numEtapas];
+            String[] nombreHid = new String[numHid];
+            for (int a = 0; a < 1; a++) {
+                for (int e = etapaPeriodoIni; e < etapaPeriodoFin; e++) {
+                    nombreEtapas[e - etapaPeriodoIni] = "";
+                    nombreEtapas[e - etapaPeriodoIni] += (e - etapaPeriodoIni + 1);
+                }
+                for (int h = 0; h < numHid; h++) {
+                    nombreHid[h] = "";
+                    nombreHid[h] += (h + 1);
+                }
+            }
+
+            /*
          * Escritura de Resultados
          * =======================
-         */
-        String libroSalidaXLS = DirBaseSalida + SLASH + "Prorrata" + AnoAEvaluar + ".xlsx";
-//        Escribe.crearLibro(libroSalidaXLS);
-        XSSFWorkbook wb_salida = Escribe.crearLibroVacio (libroSalidaXLS);
+             */
+            String libroSalidaXLS = DirBaseSalida + SLASH + "Prorrata" + AnoAEvaluar + ".xlsx";
+            if (!USE_MEMORY_WRITER) {
+                Escribe.crearLibro(libroSalidaXLS);
+                Escribe.creaH3F_3d_double(
+                        "Prorratas de Generación", prorrMesLinG,
+                        "Línea", nomLinTx,
+                        "Central", nombreCentrales,
+                        "Zona", zona,
+                        "Mes", MESES,
+                        libroSalidaXLS, "ProrrGMes", "0.000%;[Red]-0.000%;\"-\"");
+//                Escribe.creaH3F_3d_double(
+//                        "Prorratas de Consumo", prorrMesLinC,
+//                        "Línea", nomLinTx,
+//                        "Cliente", nomCli,
+//                        "Zona", zona,
+//                        "Mes", MESES,
+//                        libroSalidaXLS, "ProrrCMes", "0.000%;[Red]-0.000%;\"-\"");
+//                Escribe.creaH1F_2d_double(
+//                        "Prorratas por Línea", prorrataLinea,
+//                        "Línea", nomLinTx,
+//                        "Mes", MESES,
+//                        libroSalidaXLS, "ProrrLin", "0.000%;[Red]-0.000%;\"-\"");
+//                System.out.println("Acaba de crear la hoja xls ProrrLin");
+//                Escribe.creaH1F_2d_double(
+//                        "Generación [GWh]", generacionMes,
+//                        "Central", nombreCentrales,
+//                        "Mes", MESES,
+//                        libroSalidaXLS, "GMes", "0.0;[Red]-0.0;\"-\"");
+//                Escribe.creaH1F_2d_float(
+//                        "Consumo [MWh]", ConsClaveMes,
+//                        "Cliente", nombreClaves,
+//                        "Mes", MESES,
+//                        libroSalidaXLS, "CMes", "0.0;[Red]-0.0;\"-\"");
+//                Escribe.creaH1F_2d_double(
+//                        "Detalle de prorratas de Generación", Calc.transponer(prorrAnoTroncG),
+//                        "Central", nomGen,
+//                        "Línea", nomLinTx,
+//                        libroSalidaXLS, "ProrrG", "0.000%");
+//                Escribe.creaH1F_2d_double(
+//                        "Detalle de prorratas de Consumo", Calc.transponer(prorrAnoTroncC),
+//                        "Clave", nomCli,
+//                        "Linea", nomLinTx,
+//                        libroSalidaXLS, "ProrrC", "0.000%");
+//                Escribe.creaH1FT_2d_float(
+//                        "Consumo [MWh]", CMes, ECUCli,
+//                        "Cliente", nomCli,
+//                        "Mes", MESES, EnergiaCU, "CU",
+//                        libroSalidaXLS, "CMesCli", "0.0;[Red]-0.0;\"-\"");
+//                Escribe.crea_verifProrrPeaj(prorrataLineaTron,
+//                        nomLinTron,
+//                        rutaLibroEnt, "verProrr", "0.000%;[Red]-0.000%;\"-\"", 12);
+
+            } else {
+                XSSFWorkbook wb_salida = Escribe.crearLibroVacio(libroSalidaXLS);
+                Escribe.creaH3F_3d_double(
+                        "Prorratas de Generación", prorrMesLinG,
+                        "Línea", nomLinTx,
+                        "Central", nombreCentrales,
+                        "Zona", zona,
+                        "Mes", MESES,
+                        wb_salida, "ProrrGMes", "0.000%;[Red]-0.000%;\"-\"");
+                System.out.println("Acaba de crear la hoja xls ProrrGMes");
+                Escribe.creaH3F_3d_double(
+                        "Prorratas de Consumo", prorrMesLinC,
+                        "Línea", nomLinTx,
+                        "Cliente", nomCli,
+                        "Zona", zona,
+                        "Mes", MESES,
+                        wb_salida, "ProrrCMes", "0.000%;[Red]-0.000%;\"-\"");
+                System.out.println("Acaba de crear la hoja xls ProrrCMes");
+                Escribe.creaH1F_2d_double(
+                        "Prorratas por Línea", prorrataLinea,
+                        "Línea", nomLinTx,
+                        "Mes", MESES,
+                        wb_salida, "ProrrLin", "0.000%;[Red]-0.000%;\"-\"");
+                System.out.println("Acaba de crear la hoja xls ProrrLin");
+                Escribe.creaH1F_2d_double(
+                        "Generación [GWh]", generacionMes,
+                        "Central", nombreCentrales,
+                        "Mes", MESES,
+                        wb_salida, "GMes", "0.0;[Red]-0.0;\"-\"");
+                System.out.println("Acaba de crear la hoja xls GMes");
+                Escribe.creaH1F_2d_float(
+                        "Consumo [MWh]", ConsClaveMes,
+                        "Cliente", nombreClaves,
+                        "Mes", MESES,
+                        wb_salida, "CMes", "0.0;[Red]-0.0;\"-\"");
+                System.out.println("Acaba de crear la hoja xls CMes");
+                Escribe.creaH1F_2d_double(
+                        "Detalle de prorratas de Generación", Calc.transponer(prorrAnoTroncG),
+                        "Central", nomGen,
+                        "Línea", nomLinTx,
+                        wb_salida, "ProrrG", "0.000%");
+                System.out.println("Acaba de crear la hoja xls ProrrG");
+                Escribe.creaH1F_2d_double(
+                        "Detalle de prorratas de Consumo", Calc.transponer(prorrAnoTroncC),
+                        "Clave", nomCli,
+                        "Linea", nomLinTx,
+                        wb_salida, "ProrrC", "0.000%");
+                System.out.println("Acaba de crear la hoja xls ProrrC");
+                Escribe.creaH1FT_2d_float(
+                        "Consumo [MWh]", CMes, ECUCli,
+                        "Cliente", nomCli,
+                        "Mes", MESES, EnergiaCU, "CU",
+                        wb_salida, "CMesCli", "0.0;[Red]-0.0;\"-\"");
+                System.out.println("Acaba de crear la hoja xls CMesCli");
+                //ACTUALIZA PLANILLA ENT CON VERIFICACION DE PRORRATAS:
+                Escribe.crea_verifProrrPeaj(prorrataLineaTron,
+                        nomLinTron,
+                        wb_Ent, "verProrr", "0.000%;[Red]-0.000%;\"-\"", 12);
+                System.out.println("Acaba de actualiza planilla Ent hoja xls verProrr");
+
+                // Graba y cierra conexion:
+                Escribe.guardaLibroDisco(wb_Ent, rutaLibroEnt);
+                Escribe.guardaLibroDisco(wb_salida, libroSalidaXLS);
+                wb_Ent.close();
+                wb_salida.close();
+            }
+        }
         
-        Escribe.creaH3F_3d_double(
-                "Prorratas de Generación", prorrMesLinG,
-                "Línea", nomLinTx,
-                "Central", nombreCentrales,
-                "Zona", zona,
-                "Mes", MESES,
-                wb_salida, "ProrrGMes", "0.000%;[Red]-0.000%;\"-\"");
-        System.out.println("Acaba de crear la hoja xls ProrrGMes");
-        Escribe.creaH3F_3d_double(
-                "Prorratas de Consumo", prorrMesLinC,
-                "Línea", nomLinTx,
-                "Cliente", nomCli,
-                "Zona", zona,
-                "Mes", MESES,
-                wb_salida, "ProrrCMes", "0.000%;[Red]-0.000%;\"-\"");
-        System.out.println("Acaba de crear la hoja xls ProrrCMes");
-        Escribe.creaH1F_2d_double(
-                "Prorratas por Línea", prorrataLinea,
-                "Línea", nomLinTx,
-                "Mes", MESES,
-                wb_salida, "ProrrLin", "0.000%;[Red]-0.000%;\"-\"");
-        System.out.println("Acaba de crear la hoja xls ProrrLin");
-        Escribe.creaH1F_2d_double(
-                "Generación [GWh]", generacionMes,
-                "Central", nombreCentrales,
-                "Mes", MESES,
-                wb_salida, "GMes", "0.0;[Red]-0.0;\"-\"");
-        System.out.println("Acaba de crear la hoja xls GMes");
-        Escribe.creaH1F_2d_float(
-                "Consumo [MWh]", ConsClaveMes,
-                "Cliente", nombreClaves,
-                "Mes", MESES,
-                wb_salida, "CMes", "0.0;[Red]-0.0;\"-\"");
-        System.out.println("Acaba de crear la hoja xls CMes");
-        Escribe.creaH1F_2d_double(
-                "Detalle de prorratas de Generación", Calc.transponer(prorrAnoTroncG),
-                "Central", nomGen,
-                "Línea", nomLinTx,
-                wb_salida, "ProrrG", "0.000%");
-        System.out.println("Acaba de crear la hoja xls ProrrG");
-        Escribe.creaH1F_2d_double(
-                "Detalle de prorratas de Consumo", Calc.transponer(prorrAnoTroncC),
-                "Clave", nomCli,
-                "Linea", nomLinTx,
-                wb_salida, "ProrrC", "0.000%");
-        System.out.println("Acaba de crear la hoja xls ProrrC");
-        Escribe.creaH1FT_2d_float(
-                "Consumo [MWh]", CMes, ECUCli,
-                "Cliente", nomCli,
-                "Mes", MESES, EnergiaCU, "CU",
-                wb_salida, "CMesCli", "0.0;[Red]-0.0;\"-\"");
-        System.out.println("Acaba de crear la hoja xls CMesCli");
-        Escribe.crea_verifProrrPeaj(prorrataLineaTron,
-                nomLinTron,
-                wb_Ent, "verProrr", "0.000%;[Red]-0.000%;\"-\"", 12);
-        System.out.println("Acaba de actualiza planilla Ent hoja xls verProrr");
-        
-        // Graba y cierra conexion:
-        Escribe.guardaLibroDisco(wb_Ent, rutaLibroEnt);
-        Escribe.guardaLibroDisco(wb_salida, libroSalidaXLS);
-        wb_Ent.close();
-        wb_salida.close();
-         
         guardandoDatos=false;
         long tFinalEscritura = System.currentTimeMillis();
-        System.out.println("Tiempo Adquisición de datos     : "+dosDecimales.format((tFinalLectura-tInicioLectura)/1000.0)+" s");
-        System.out.println("Tiempo Calculos                 : "+dosDecimales.format((tFinalCalculo-tInicioCalculo)/1000.0)+" s");
-        System.out.println("Tiempo Iteraciones              : "+dosDecimales.format((tfinIteraciones-tInicioCalculo)/1000.0)+" s");
-        System.out.println("Tiempo Escritura de Resultados  : "+dosDecimales.format((tFinalEscritura-tInicioEscritura)/1000.0)+" s");
-        System.out.println("Tiempo total                    : "+dosDecimales.format((tFinalEscritura-tInicioLectura)/1000.0)+" s");
+        
+        System.out.println("Tiempo Adquisición de datos     : "+dosDecimales.format((tFinalLectura-tInicioLectura)/1000.0)+" seg");
+        System.out.println("Tiempo Calculos                 : "+dosDecimales.format((tFinalCalculo-tInicioCalculo)/1000.0)+" seg");
+        System.out.println("Tiempo Iteraciones              : "+dosDecimales.format((tfinIteraciones-tInicioCalculo)/1000.0)+" seg");
+        if (bEscribeCSV) {
+            System.out.println("Tiempo Escritura de Resultados  : "+dosDecimales.format((tFinalEscrituraCSV-tInicioEscrituraCSV)/1000.0)+" seg");
+        }
+        if (bEscribeXLS) {
+            System.out.println("Tiempo Escritura de Resultados  : "+dosDecimales.format((tFinalEscritura-tInicioEscritura)/1000.0)+" seg");
+        }
+        System.out.println("Tiempo total                    : "+dosDecimales.format((tFinalEscritura-tInicioLectura)/1000.0)+" seg");
 
         completo=true;
     }
