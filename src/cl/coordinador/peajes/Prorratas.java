@@ -15,6 +15,7 @@
  */
 package cl.coordinador.peajes;
 
+import cl.coordinador.peajes.PeajesConstant.HorizonteCalculo;
 import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
 import static cl.coordinador.peajes.PeajesConstant.MESES;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
@@ -61,11 +62,11 @@ public class Prorratas {
     private static final boolean USE_CONSUMO_CLIENTES_CLAVE = false;
     private static final boolean USE_FACTORY = false; //Temp switch for the thread factory
     private static final boolean USE_MEMORY_READER = true; //switch para usar nuevo API lectura poi
-    private static final boolean USE_MEMORY_WRITER = false; //switch para usar nuevo API escritura poi
+    private static final boolean USE_MEMORY_WRITER = true; //switch para usar nuevo API escritura poi
     
     private static int etapa;
     private static int etapaFinalizada;
-    private static int numEtapas=0;
+    private static int numEtapasProrr = 0;
     private static String nombreSlack;
     private static boolean cargandoInfo=false;
     private static boolean calculandoFlujos=false;
@@ -88,7 +89,23 @@ public class Prorratas {
     private static float[][] ConsumosClaves; //consumos reales en planilla Ent
     private static int[][] datosClaves;  //datos de consumos en planilla Ent
     
+    @Deprecated
     public static void CalculaProrratas(File DirEntrada, File DirSalida, int AnoAEvaluar, int tipoCalc, int AnoBase,
+            int NumeroHidrologias ,int NumeroEtapasAno, int NumeroSlack,int ValorOffset,boolean ActClientes) throws IOException, FileNotFoundException {
+        calculaProrratas(HorizonteCalculo.Anual, DirEntrada, DirSalida, AnoAEvaluar, 0, AnoBase, NumeroHidrologias , NumeroEtapasAno, NumeroSlack, ValorOffset, ActClientes);
+    }
+    
+    public static void calculaProrratasMensuales (File DirEntrada, File DirSalida, int AnoAEvaluar, int MesAEvaluar, int AnoBase,
+            int NumeroHidrologias ,int NumeroEtapasAno, int NumeroSlack,int ValorOffset,boolean ActClientes) throws IOException, FileNotFoundException {
+        calculaProrratas(HorizonteCalculo.Mensual, DirEntrada, DirSalida, AnoAEvaluar, MesAEvaluar, AnoBase, NumeroHidrologias , NumeroEtapasAno, NumeroSlack, ValorOffset, ActClientes);
+    }
+    
+    public static void calculaProrratasAnuales (File DirEntrada, File DirSalida, int AnoAEvaluar, int AnoBase,
+            int NumeroHidrologias ,int NumeroEtapasAno, int NumeroSlack,int ValorOffset,boolean ActClientes) throws IOException, FileNotFoundException {
+        calculaProrratas(HorizonteCalculo.Anual, DirEntrada, DirSalida, AnoAEvaluar, 0, AnoBase, NumeroHidrologias , NumeroEtapasAno, NumeroSlack, ValorOffset, ActClientes);
+    }
+    
+    private static void calculaProrratas(HorizonteCalculo horizonte, File DirEntrada, File DirSalida, int AnoAEvaluar, int MesAEvaluar, int AnoBase,
             int NumeroHidrologias ,int NumeroEtapasAno, int NumeroSlack,int ValorOffset,boolean ActClientes) throws IOException, FileNotFoundException {
         
         int numGen; //Numero de generadores en planilla centralesPLP (rango 'plpcnfce') de archivo Ent
@@ -104,7 +121,7 @@ public class Prorratas {
 	//indices de etapas relevantes para escritura de resultados
         final int etapaPeriodoIni=NumeroEtapasAno*(AnoAEvaluar-AnoBase)+offset;//(tipoCalc==0?offset:144*(Ano-AnoIni)+offset);
         final int etapaPeriodoFin=NumeroEtapasAno*(AnoAEvaluar-AnoBase+1)+offset;//(tipoCalc==0?offset+144:144*(Ano-AnoIni+1)+offset);
-        numEtapas=etapaPeriodoFin-etapaPeriodoIni;
+        int numEtapas=etapaPeriodoFin-etapaPeriodoIni;
         String [] TxtTemp1; //almacenamiento temporal de texto 1
         String[] TxtTemp2; //almacenamiento temporal de texto 2
         String[] TxtTemp3; //almacenamiento temporal de texto 3
@@ -115,7 +132,7 @@ public class Prorratas {
         String rutaLibroEnt = DirBaseEntrada + SLASH + "Ent" + AnoAEvaluar + ".xlsx";
         String[] EnergiaCU={"CUE2","CUE30","EUnit"};
         org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
-
+        
         /**************
          * lee de Meses
          **************/
@@ -886,11 +903,46 @@ public class Prorratas {
         /*INICIO ITERACIONES (PARALELIZAR EL SIGUIENTE FOR)*/
         /**********LAS ITERACIONES SON POR ETAPA************/
         /***************************************************/
+        //Averiguemos cuales etapas debemos calcular:
+        
+        int etapaIniProrr = 0;
+        int mesIniProrr = 0;
+        int etapaFinProrr = 0;
+        int mesFinProrr = 0;
+        numEtapasProrr = 0;
+        int numMesesProrr = 0;
+        if (horizonte == HorizonteCalculo.Anual) { //Todo el periodo
+            etapaIniProrr = 0;
+            etapaFinProrr = numEtapas - 1;
+            numEtapasProrr = numEtapas;
+            mesIniProrr = 0;
+            mesFinProrr = NUMERO_MESES -1;
+            numMesesProrr = NUMERO_MESES;
+        } else {
+            assert (MesAEvaluar < NUMERO_MESES) : "Nunca aceptes meses no comprendidos entre 0-11! Modificaste la interfaz?";
+            assert (MesAEvaluar >= 0) : "Nunca aceptes meses no comprendidos entre 0-11 ! Modificaste la interfaz?";
+            boolean isFirst = true;
+            for (int e = 0; e < numEtapas; e++) {
+                int mes = paramEtapa[e];
+                if (mes == MesAEvaluar) {
+                    if (isFirst) {
+                        isFirst = false;
+                        etapaIniProrr = e;
+                    }
+                    etapaFinProrr = e;
+                    numEtapasProrr++;
+                }
+            }
+            mesIniProrr = MesAEvaluar;
+            mesFinProrr = MesAEvaluar;
+            numMesesProrr = 1;
+        }
+        etapaFinalizada = 0;
         
         //Lee opciones especificas del executor:
         String sMaxThreads = PeajesCDEC.getOptionValue("Max Threads", PeajesConstant.DataType.INTEGER);
         assert(sMaxThreads != null): "Como puede ser nulo esta importante llave? Cambiaste archivo config?";
-        int nMaxThreads = Math.max(Math.min(numEtapas, Integer.parseInt(sMaxThreads)), 1);
+        int nMaxThreads = Math.max(Math.min(numEtapasProrr, Integer.parseInt(sMaxThreads)), 1);
         
         String sTimeOut = PeajesCDEC.getOptionValue("Thread timeout (en minutos)", PeajesConstant.DataType.INTEGER);
         assert(sMaxThreads != null): "Como puede ser nulo 'Thread timeout'? Cambiaste archivo config?";
@@ -911,7 +963,7 @@ public class Prorratas {
                 useDisk = false;
                 break;
         }
-        System.out.println("Usando executor: Total etapas=" + numEtapas + ". Threads Paralelo=" + nMaxThreads + ". Uso Memoria=" + !useDisk);
+        System.out.println("Usando executor: Total etapas=" + numEtapasProrr + ". Threads Paralelo=" + nMaxThreads + ". Uso Memoria=" + !useDisk);
         ExecutorService exeService;
         if (USE_FACTORY) {
             if (nMaxThreads > 1) {
@@ -924,8 +976,9 @@ public class Prorratas {
         }
         
         long initExecutorTime = System.currentTimeMillis();
-        etapaFinalizada = 0;
-        for(etapa=0;etapa<numEtapas;etapa++) {
+        
+        //<-INICIO DE CICLO "FOR" POR ETAPA:
+        for(etapa=etapaIniProrr;etapa<=etapaFinProrr;etapa++) {
 //            System.out.println("etapa : "+etapa);
             float[][] paramLinEta = new float[numLin][10];
             for (int l = 0; l < numLin; l++) {
@@ -1142,8 +1195,12 @@ public class Prorratas {
         boolean bEscribeCSV = Boolean.parseBoolean(sEscribeCSV);
         
         if (bEscribeCSV) {
-            
-            String prorrataGCSV = DirBaseSalida + SLASH + "ProrratasGen" + AnoAEvaluar + ".csv";
+            String prorrataGCSV;
+            if (horizonte == HorizonteCalculo.Anual) {
+                prorrataGCSV = DirBaseSalida + SLASH + "ProrratasGen" + AnoAEvaluar + ".csv";
+            } else {
+                prorrataGCSV = DirBaseSalida + SLASH + "ProrratasGen" + AnoAEvaluar + MESES[MesAEvaluar] + ".csv";
+            }
             BufferedWriter writerCSV = null;
             try {
                 writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(prorrataGCSV), StandardCharsets.ISO_8859_1));
@@ -1151,7 +1208,7 @@ public class Prorratas {
                 writerCSV.write("Línea,Zona,Central/Cliente,Mes,ProrrataGen");
                 writerCSV.newLine();
                 //Escribe prorratas generacion (por central):
-                for (int m = 0; m < NUMERO_MESES; m++) {
+                for (int m = mesIniProrr; m <= mesFinProrr; m++) {
                     float[][] prorrMesLinCentral = new float[numLinTx][numCen];
                     for (int g = 0; g < numGen; g++) {
                         for (int l = 0; l < numLinTx; l++) {
@@ -1189,14 +1246,19 @@ public class Prorratas {
             }
             
             //Escribe prorratas consumo:
-            String prorrataCCSV = DirBaseSalida + SLASH + "ProrratasConsumo" + AnoAEvaluar + ".csv";
+            String prorrataCCSV;
+            if (horizonte == HorizonteCalculo.Anual) {
+                prorrataCCSV = DirBaseSalida + SLASH + "ProrratasConsumo" + AnoAEvaluar + ".csv";
+            } else {
+                prorrataCCSV = DirBaseSalida + SLASH + "ProrratasConsumo" + AnoAEvaluar + MESES[MesAEvaluar] + ".csv";
+            }
             writerCSV = null;
             try {
                 writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(prorrataCCSV), StandardCharsets.ISO_8859_1));
                 String sLineText;
                 writerCSV.write("Línea,Zona,Cliente,Mes,ProrrataConsumo");
                 writerCSV.newLine();
-                for (int m = 0; m < NUMERO_MESES; m++) {
+                for (int m = mesIniProrr; m <= mesFinProrr; m++) {
                     for (int c = 0; c < numCli; c++) {
 //                    float[] prorrMesLinConsumo = new float[numLinTx];
                         for (int l = 0; l < numLinTx; l++) {
@@ -1707,11 +1769,10 @@ public class Prorratas {
 	
     public static float obtenerProgreso(){
         float progreso;
-        if (numEtapas==0)
+        if (numEtapasProrr==0)
             progreso=0;
         else
-//            progreso=(float)(etapa+1)/(numEtapas);
-            progreso=(float)(etapaFinalizada)/(numEtapas);
+            progreso=(float)(etapaFinalizada)/(numEtapasProrr);
         return progreso;
     }
 
@@ -1734,7 +1795,8 @@ public class Prorratas {
     public static boolean terminado(){
             return completo;
     }
-
+    
+    @Deprecated
     public static void Comenzar(final File DirIn, final File DirOut, final int AnoAEvaluar, final int tipoCalculo, final int AnoBase,
             final int NumHidro, final int NumEtapasAno, final int NumSlack, final int Offset, final boolean Cli) {
         javax.swing.SwingWorker worker = new javax.swing.SwingWorker() {
@@ -1754,6 +1816,50 @@ public class Prorratas {
         worker.execute();
 
     }
+    
+    //Lazy implementation!!! TODO: Extend swingworker to properly execute Prorratas!
+    public static void calcular(final HorizonteCalculo horizonte, final File DirIn, final File DirOut, final int AnoAEvaluar, final int MesAEvaluar, final int AnoBase,
+            final int NumHidro, final int NumEtapasAno, final int NumSlack, final int Offset, final boolean Cli) {
+        
+        javax.swing.SwingWorker worker = new javax.swing.SwingWorker<Boolean, Void>() {
+
+            @Override
+            public Boolean doInBackground() {
+                try {
+                    switch (horizonte) {
+                        case Anual:
+                            calculaProrratasAnuales  (DirIn, DirOut, AnoAEvaluar,              AnoBase, NumHidro, NumEtapasAno, NumSlack, Offset, Cli);
+                            break;
+                        case Mensual:
+                            calculaProrratasMensuales(DirIn, DirOut, AnoAEvaluar, MesAEvaluar, AnoBase, NumHidro, NumEtapasAno, NumSlack, Offset, Cli);
+                            break;
+                    }
+                    return true;
+                } catch (IOException e) {
+                    System.out.println(e);
+                } catch (Exception e) {
+                    e.printStackTrace(System.out);
+                }
+                return false;
+            }
+
+            @Override
+            public void done() {
+                try {
+                    boolean exitoso = get(); //TODO: Improve implementation!
+                } catch (ExecutionException e) {
+                    e.printStackTrace(System.out);
+                } catch (InterruptedException e) {
+                    e.printStackTrace(System.out);
+                }
+                completo = true; //TODO: Improve implementation!
+            }
+            
+        };
+        worker.execute();
+        
+    }
+    
 }
 
 class ProrratasExe implements Runnable {

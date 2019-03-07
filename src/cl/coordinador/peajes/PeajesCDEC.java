@@ -1363,10 +1363,12 @@ public class PeajesCDEC extends javax.swing.JFrame {
         }
         int numHidro=Integer.parseInt((String) cuadroSeleccionHidro.getSelectedItem());
         boolean clientes = (ActClientes.isEnabled() && ActClientes.isSelected());
-        Prorratas.Comenzar(nombreDirEnt,nombreDirSal,anoAEvaluar,tipoCalcSeleccionado,
-                anoBase,numHidro,numEtapasAno,numSlack,offset,clientes);
+        int nMesAEvaluar = Mes.getSelectedIndex();
+        PeajesConstant.HorizonteCalculo horizonte = PeajesConstant.HorizonteCalculo.Anual; //TEMP!!!!
+//        Prorratas.Comenzar(nombreDirEnt,nombreDirSal,anoAEvaluar,tipoCalcSeleccionado,
+//                anoBase,numHidro,numEtapasAno,numSlack,offset,clientes);
 //        try {
-//            Prorratas.CalculaProrratas(nombreDirEnt, nombreDirSal, anoAEvaluar, tipoCalcSeleccionado, anoBase, numHidro, numEtapasAno, numSlack, offset, clientes);
+            Prorratas.calcular(horizonte, nombreDirEnt, nombreDirSal, anoAEvaluar, nMesAEvaluar, anoBase, numHidro, numEtapasAno, numSlack, offset, clientes);
 //        } catch (IOException e) {
 //            e.printStackTrace(System.out);
 //        }

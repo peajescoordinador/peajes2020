@@ -116,4 +116,20 @@ public class PeajesConstant {
         Max;
     }
     
+    /**
+     * Horizontes de calculos para liquidaciones: Mensual o Anual
+     */
+    public enum HorizonteCalculo {
+
+        /**
+         * Mensual
+         */
+        Mensual,
+
+        /**
+         * Anual
+         */
+        Anual
+    }
+    
 }
