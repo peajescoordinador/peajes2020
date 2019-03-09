@@ -223,6 +223,8 @@ public class Calc {
             File f_bin = PeajesCDEC.createTempFile("~GGDF", ".bin");
             DataOutputStream out = new DataOutputStream(new FileOutputStream(f_bin));
             ////OPTION BYTE ARRAY:
+//            int nContZero = 0;
+//            int nContTotal = 0;
             for (int h = 0; h < numHid; h++) {
                 int nCont = 0;
                 float[] f = new float[numLineas * numBarras];
@@ -231,13 +233,19 @@ public class Calc {
                         if ((int) datosLineas[l][5] == 1) {
                             f[nCont] = (A[b][l] + Dref[l][h]);
                         }
+//                        if (f[nCont] <= 1e-5) {
+//                            nContZero++;
+//                        }
                         nCont++;
+//                        nContTotal++;
                     }
                 }
                 byte[] bArray = GGDF.encode(f);
                 out.write(bArray, 0, bArray.length);
             }
             out.close();
+//            double perct = (double) nContZero / (double) nContTotal;
+//            System.out.println("Zeros GGDF " + nContZero + " of " + nContTotal + " (" + perct * 100 + "%)");
 //            System.out.println("Finished writing bin file" + f_bin.getName() + " Time: " + ((System.currentTimeMillis() - initTime) / 1000) + "[sec]");
             return new GGDF(f_bin, numBarras, numLineas, numHid);
         }
@@ -471,30 +479,79 @@ public class Calc {
         int sentidoFlujoLinea;
 
         float[][] Prorratas = new float[numLineas][numGeneradores];
-        float[][] genEquivTotal = new float[numLineas][numHid];
-        float[][][] genEquiv = new float[numGeneradores][numLineas][numHid];
+//        float[][] genEquivTotal = new float[numLineas][numHid];
+//        float[][][] genEquiv = new float[numGeneradores][numLineas][numHid];
 
-        for (int i = 0; i < numGeneradores; i++) {
-            for (int j = 0; j < numLineas; j++) {
-                Prorratas[j][i] = 0;
-                for (int k = 0; k < numHid; k++) {
-                    genEquiv[i][j][k] = 0;
-                }
-            }
-        }
-        for (int l = 0; l < numLineas; l++) {
-            for (int h = 0; h < numHid; h++) {
-                genEquivTotal[l][h] = 0;
-            }
-        }
+        //METODO MATRICIAL:
+//        for (int i = 0; i < numGeneradores; i++) {
+//            for (int j = 0; j < numLineas; j++) {
+//                Prorratas[j][i] = 0;
+//                for (int k = 0; k < numHid; k++) {
+//                    genEquiv[i][j][k] = 0;
+//                }
+//            }
+//        }
+//        for (int l = 0; l < numLineas; l++) {
+//            for (int h = 0; h < numHid; h++) {
+//                genEquivTotal[l][h] = 0;
+//            }
+//        }
+//        for (int h = 0; h < numHid; h++) {
+//            for (int l = 0; l < numLineas; l++) {
+//                float[] D_h_l = D.get(h, l);
+//                if ((int) datosLineas[l][5] == 1) {				// si la linea en servicio
+//                    if ((int) datosLineas[l][6] == 1) {			// si la linea es troncal
+//                        if (flujoDC[l][h] != 0) {
+//                            areaTroncal = (int) datosLineas[l][7];		// AIC=>0, Norte=>1, Sur=>-1
+//                            sentidoFlujoLinea = (int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
+//                            for (int g = 0; g < numGeneradores; g++) {
+//                                barraGx = datosGener[g][0];
+//                                // si la barra de generacion está en la misma area troncal que la linea, o la línea está en el AIC
+//                                if (paramBarTroncal[barraGx][1] == areaTroncal || areaTroncal == 0) {
+//                                    float D_h_l_b = D_h_l[barraGx];
+//                                    // si está fuera del AIC y el flujo apunta a ella  y la barra está en el extremo contrario al AIC de la linea
+//                                    if (areaTroncal != 0 && (flujoDC[l][h] * sentidoFlujoLinea) > 0 && orientBarTroncal[barraGx][l] == areaTroncal) {
+//                                        if (Math.signum(flujoDC[l][h]) == Math.signum(D_h_l_b)) {	//si esta aguas arriba del flujo
+//                                            genEquiv[g][l][h] = (float) (Gx[g][e][h] * Math.abs(D_h_l_b));
+//                                            //System.out.println("Prorratas "+Gx[g][e][h]);
+//                                            genEquivTotal[l][h] += genEquiv[g][l][h];
+//                                        }
+//                                    } // si está en AIC y flujo tiene = signo que GGDF
+//                                    else if (areaTroncal == 0 && (flujoDC[l][h] * D_h_l_b) > 0) {
+//                                        genEquiv[g][l][h] = (float) (Gx[g][e][h] * D_h_l_b);
+//                                        genEquivTotal[l][h] += genEquiv[g][l][h];
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        for (int h = 0; h < numHid; h++) {
+//            for (int l = 0; l < numLineas; l++) {
+//                for (int g = 0; g < numGeneradores; g++) {
+//                    if ((int) datosLineas[l][6] == 1 && datosLineas[l][5] == 1) {
+//                        if (genEquivTotal[l][h] != 0) {
+//                            Prorratas[l][g] += (genEquiv[g][l][h] / genEquivTotal[l][h]) / (float) numHid;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        
+        //METODO CONSTANTE:
         for (int h = 0; h < numHid; h++) {
             for (int l = 0; l < numLineas; l++) {
                 float[] D_h_l = D.get(h, l);
+                float genEquivTotal_l_h = 0;
                 if ((int) datosLineas[l][5] == 1) {				// si la linea en servicio
                     if ((int) datosLineas[l][6] == 1) {			// si la linea es troncal
                         if (flujoDC[l][h] != 0) {
                             areaTroncal = (int) datosLineas[l][7];		// AIC=>0, Norte=>1, Sur=>-1
                             sentidoFlujoLinea = (int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
+                            //Calculo de genEquivTotal:
                             for (int g = 0; g < numGeneradores; g++) {
                                 barraGx = datosGener[g][0];
                                 // si la barra de generacion está en la misma area troncal que la linea, o la línea está en el AIC
@@ -503,14 +560,34 @@ public class Calc {
                                     // si está fuera del AIC y el flujo apunta a ella  y la barra está en el extremo contrario al AIC de la linea
                                     if (areaTroncal != 0 && (flujoDC[l][h] * sentidoFlujoLinea) > 0 && orientBarTroncal[barraGx][l] == areaTroncal) {
                                         if (Math.signum(flujoDC[l][h]) == Math.signum(D_h_l_b)) {	//si esta aguas arriba del flujo
-                                            genEquiv[g][l][h] = (float) (Gx[g][e][h] * Math.abs(D_h_l_b));
-                                            //System.out.println("Prorratas "+Gx[g][e][h]);
-                                            genEquivTotal[l][h] += genEquiv[g][l][h];
+                                            genEquivTotal_l_h += (float) (Gx[g][e][h] * Math.abs(D_h_l_b));
                                         }
                                     } // si está en AIC y flujo tiene = signo que GGDF
                                     else if (areaTroncal == 0 && (flujoDC[l][h] * D_h_l_b) > 0) {
-                                        genEquiv[g][l][h] = (float) (Gx[g][e][h] * D_h_l_b);
-                                        genEquivTotal[l][h] += genEquiv[g][l][h];
+                                        genEquivTotal_l_h += (float) (Gx[g][e][h] * D_h_l_b);
+                                    }
+                                }
+                            }
+                            //Calculo de prorrata:
+                            for (int g = 0; g < numGeneradores; g++) {
+                                if ((int) datosLineas[l][6] == 1 && datosLineas[l][5] == 1) {
+                                    barraGx = datosGener[g][0];
+                                    float genEquiv_g_l_h = 0;
+                                    // si la barra de generacion está en la misma area troncal que la linea, o la línea está en el AIC
+                                    if (paramBarTroncal[barraGx][1] == areaTroncal || areaTroncal == 0) {
+                                        float D_h_l_b = D_h_l[barraGx];
+                                        // si está fuera del AIC y el flujo apunta a ella  y la barra está en el extremo contrario al AIC de la linea
+                                        if (areaTroncal != 0 && (flujoDC[l][h] * sentidoFlujoLinea) > 0 && orientBarTroncal[barraGx][l] == areaTroncal) {
+                                            if (Math.signum(flujoDC[l][h]) == Math.signum(D_h_l_b)) {	//si esta aguas arriba del flujo
+                                                genEquiv_g_l_h = (float) (Gx[g][e][h] * Math.abs(D_h_l_b));
+                                            }
+                                        } // si está en AIC y flujo tiene = signo que GGDF
+                                        else if (areaTroncal == 0 && (flujoDC[l][h] * D_h_l_b) > 0) {
+                                            genEquiv_g_l_h = (float) (Gx[g][e][h] * D_h_l_b);
+                                        }
+                                    }
+                                    if (genEquivTotal_l_h != 0) {
+                                        Prorratas[l][g] += (genEquiv_g_l_h / genEquivTotal_l_h) / (float) numHid;
                                     }
                                 }
                             }
@@ -519,19 +596,74 @@ public class Calc {
                 }
             }
         }
+        return Prorratas;
+    }
+    
+    static void calculaProrrGx(float flujoDC[][], GGDF D, float Gx[][][], int datosGener[][],
+            float datosLineas[][], int paramBarTroncal[][], int orientBarTroncal[][], int e, float[][][] prorrGx) throws IOException {
+        int numHid = flujoDC[0].length;
+        int numLineas = flujoDC.length;
+        int numGeneradores = Gx.length;
+        int barraGx;
+        int areaTroncal;
+        int sentidoFlujoLinea;
 
+        //METODO CONSTANTE:
         for (int h = 0; h < numHid; h++) {
             for (int l = 0; l < numLineas; l++) {
-                for (int g = 0; g < numGeneradores; g++) {
-                    if ((int) datosLineas[l][6] == 1 && datosLineas[l][5] == 1) {
-                        if (genEquivTotal[l][h] != 0) {
-                            Prorratas[l][g] += (genEquiv[g][l][h] / genEquivTotal[l][h]) / (float) numHid;
+                float[] D_h_l = D.get(h, l);
+                float genEquivTotal_l_h = 0;
+                if ((int) datosLineas[l][5] == 1) {				// si la linea en servicio
+                    if ((int) datosLineas[l][6] == 1) {			// si la linea es troncal
+                        if (flujoDC[l][h] != 0) {
+                            areaTroncal = (int) datosLineas[l][7];		// AIC=>0, Norte=>1, Sur=>-1
+                            sentidoFlujoLinea = (int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
+                            //Calculo de genEquivTotal:
+                            for (int g = 0; g < numGeneradores; g++) {
+                                barraGx = datosGener[g][0];
+                                // si la barra de generacion está en la misma area troncal que la linea, o la línea está en el AIC
+                                if (paramBarTroncal[barraGx][1] == areaTroncal || areaTroncal == 0) {
+                                    float D_h_l_b = D_h_l[barraGx];
+                                    // si está fuera del AIC y el flujo apunta a ella  y la barra está en el extremo contrario al AIC de la linea
+                                    if (areaTroncal != 0 && (flujoDC[l][h] * sentidoFlujoLinea) > 0 && orientBarTroncal[barraGx][l] == areaTroncal) {
+                                        if (Math.signum(flujoDC[l][h]) == Math.signum(D_h_l_b)) {	//si esta aguas arriba del flujo
+                                            genEquivTotal_l_h += (float) (Gx[g][e][h] * Math.abs(D_h_l_b));
+                                        }
+                                    } // si está en AIC y flujo tiene = signo que GGDF
+                                    else if (areaTroncal == 0 && (flujoDC[l][h] * D_h_l_b) > 0) {
+                                        genEquivTotal_l_h += (float) (Gx[g][e][h] * D_h_l_b);
+                                    }
+                                }
+                            }
+                            //Calculo de prorrata:
+                            for (int g = 0; g < numGeneradores; g++) {
+                                if ((int) datosLineas[l][6] == 1 && datosLineas[l][5] == 1) {
+                                    barraGx = datosGener[g][0];
+                                    float genEquiv_g_l_h = 0;
+                                    // si la barra de generacion está en la misma area troncal que la linea, o la línea está en el AIC
+                                    if (paramBarTroncal[barraGx][1] == areaTroncal || areaTroncal == 0) {
+                                        float D_h_l_b = D_h_l[barraGx];
+                                        // si está fuera del AIC y el flujo apunta a ella  y la barra está en el extremo contrario al AIC de la linea
+                                        if (areaTroncal != 0 && (flujoDC[l][h] * sentidoFlujoLinea) > 0 && orientBarTroncal[barraGx][l] == areaTroncal) {
+                                            if (Math.signum(flujoDC[l][h]) == Math.signum(D_h_l_b)) {	//si esta aguas arriba del flujo
+                                                genEquiv_g_l_h = (float) (Gx[g][e][h] * Math.abs(D_h_l_b));
+                                            }
+                                        } // si está en AIC y flujo tiene = signo que GGDF
+                                        else if (areaTroncal == 0 && (flujoDC[l][h] * D_h_l_b) > 0) {
+                                            genEquiv_g_l_h = (float) (Gx[g][e][h] * D_h_l_b);
+                                        }
+                                    }
+                                    if (genEquivTotal_l_h != 0) {
+//                                        Prorratas[l][g] += (genEquiv_g_l_h / genEquivTotal_l_h) / (float) numHid;
+                                        prorrGx[l][g][e] += (genEquiv_g_l_h / genEquivTotal_l_h) / (float) numHid;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-        return Prorratas;
     }
     
     //----------------------------------
@@ -652,6 +784,8 @@ public class Calc {
             File f_bin = PeajesCDEC.createTempFile("~GLDF", ".bin");
             DataOutputStream out = new DataOutputStream(new FileOutputStream(f_bin));
             ////OPTION BYTE ARRAY:
+//            int nContZero = 0;
+//            int nContTotal = 0;
             for (int h = 0; h < numHid; h++) {
                 int nCont = 0;
                 float[] f = new float[numLineas * numBarras];
@@ -660,14 +794,20 @@ public class Calc {
                         if ((int) datosLineas[l][5] == 1) {
                             f[nCont] = -(A[b][l] + Eref[l][h]);
                         }
+//                        if (f[nCont] <= 0) {
+//                            nContZero++;
+//                        }
                         nCont++;
+//                        nContTotal++;
                     }
                 }
                 byte[] bArray = GGDF.encode(f);
                 out.write(bArray, 0, bArray.length);
             }
             out.close();
-//        System.out.println("Finished writing bin file" + f_bin.getName() + " Time: " + ((System.currentTimeMillis() - initTime) / 1000) + "[sec]");
+//            double perct = (double) nContZero / (double) nContTotal;
+//            System.out.println("Zeros GLDF " + nContZero + " of " + nContTotal + " (" + perct * 100 + "%)");
+//            System.out.println("Finished writing bin file" + f_bin.getName() + " Time: " + ((System.currentTimeMillis() - initTime) / 1000) + "[sec]");
             return new GGDF(f_bin, numBarras, numLineas, numHid);
         }
     }
@@ -778,17 +918,17 @@ public class Calc {
         int numBarras = Consumos.length;
         int numLineas = flujoDC.length;
         float[] consumoModif = new float[numBarras];
-        float[] ConsEquivTotal = new float[numLineas];
-        float[][] ConsEquiv = new float[numBarras][numLineas];
+//        float[] ConsEquivTotal = new float[numLineas];
+//        float[][] ConsEquiv = new float[numBarras][numLineas];
 
-        for (int l = 0; l < numLineas; l++) {
-            ConsEquivTotal[l] = 0;
-        }
+//        for (int l = 0; l < numLineas; l++) {
+//            ConsEquivTotal[l] = 0;
+//        }
         for (int b = 0; b < numBarras; b++) {
             consumoModif[b] = Consumos[b][h];
-            for (int l = 0; l < numLineas; l++) {
-                ConsEquiv[b][l] = 0;
-            }
+//            for (int l = 0; l < numLineas; l++) {
+//                ConsEquiv[b][l] = 0;
+//            }
         }
 
         //OPTION VALUE-BY-VALUE:
@@ -807,28 +947,50 @@ public class Calc {
 //        }
 
         //OPTION BYTE ARRAY:
-        int nCont = 0;
-        float[] E_h = E.get(h);
+//        int nCont = 0;
+//        float[] E_h = E.get(h);
+//        for (int l = 0; l < numLineas; l++) {
+//            for (int b = 0; b < numBarras; b++) {
+//                if ((int) datosLineas[l][5] == 1) { // si la linea está en servicio
+//                    if (flujoDC[l] != 0) {
+//                        float E_h_l_b = E_h[nCont];
+//                        if (Math.signum(flujoDC[l]) == Math.signum(E_h_l_b)) { //si está aguas abajo del flujo
+//                            ConsEquiv[b][l] = (float) (Math.abs(E_h_l_b)) * Consumos[b][h];
+//                            ConsEquivTotal[l] += ConsEquiv[b][l];
+//                        }
+//                    }
+//                }
+//                nCont++;
+//            }
+//        }
+//        
+//        for (int l = 0; l < numLineas; l++) {
+//            for (int b = 0; b < numBarras; b++) {
+//                if (datosLineas[l][5] == 1) {
+//                    if (ConsEquivTotal[l] != 0) {
+//                        consumoModif[b] += (ConsEquiv[b][l] / ConsEquivTotal[l]) * perdidas[l];
+//                    }
+//                }
+//            }
+//        }
+        
+        //OPTION BYTE ARRAY 2:
         for (int l = 0; l < numLineas; l++) {
+            float[] E_l_h = E.get(h, l);
+            float ConsEquivTotal_Linea = 0;
             for (int b = 0; b < numBarras; b++) {
-                if ((int) datosLineas[l][5] == 1) { // si la linea está en servicio
-                    if (flujoDC[l] != 0) {
-                        float E_h_l_b = E_h[nCont];
-                        if (Math.signum(flujoDC[l]) == Math.signum(E_h_l_b)) { //si está aguas abajo del flujo
-                            ConsEquiv[b][l] = (float) (Math.abs(E_h_l_b)) * Consumos[b][h];
-                            ConsEquivTotal[l] += ConsEquiv[b][l];
-                        }
+                if (flujoDC[l] != 0) {
+                    if (Math.signum(flujoDC[l]) == Math.signum(E_l_h[b])) { //si está aguas abajo del flujo
+                        ConsEquivTotal_Linea += (float) (Math.abs(E_l_h[b])) * Consumos[b][h];
                     }
                 }
-                nCont++;
             }
-        }
-        
-        for (int l = 0; l < numLineas; l++) {
             for (int b = 0; b < numBarras; b++) {
                 if (datosLineas[l][5] == 1) {
-                    if (ConsEquivTotal[l] != 0) {
-                        consumoModif[b] += (ConsEquiv[b][l] / ConsEquivTotal[l]) * perdidas[l];
+                    if (ConsEquivTotal_Linea != 0) {
+                        if (Math.signum(flujoDC[l]) == Math.signum(E_l_h[b])) { //si está aguas abajo del flujo
+                            consumoModif[b] += ((float) (Math.abs(E_l_h[b])) * Consumos[b][h] / ConsEquivTotal_Linea) * perdidas[l];
+                        }
                     }
                 }
             }
@@ -994,24 +1156,24 @@ public class Calc {
         int barraCx2 = 0;
         int sicosing = 0;
         float[][] Prorratas = new float[numLineas][numClientes];
-        float[][] ConsEquivTotal = new float[numLineas][numHid];
-        float[][][] ConsEquiv = new float[numClientes][numLineas][numHid];
+//        float[][] ConsEquivTotal = new float[numLineas][numHid];
+//        float[][][] ConsEquiv = new float[numClientes][numLineas][numHid];
 
-        for (int i = 0; i < numClientes; i++) {
-            for (int j = 0; j < numLineas; j++) {
-                Prorratas[j][i] = 0;
-                for (int k = 0; k < numHid; k++) {
-                    ConsEquiv[i][j][k] = 0;
-                }
-            }
-        }
-        for (int l = 0; l < numLineas; l++) {
-            for (int h = 0; h < numHid; h++) {
-                ConsEquivTotal[l][h] = 0;
-            }
-        }
+//        for (int i = 0; i < numClientes; i++) {
+//            for (int j = 0; j < numLineas; j++) {
+//                Prorratas[j][i] = 0;
+//                for (int k = 0; k < numHid; k++) {
+//                    ConsEquiv[i][j][k] = 0;
+//                }
+//            }
+//        }
+//        for (int l = 0; l < numLineas; l++) {
+//            for (int h = 0; h < numHid; h++) {
+//                ConsEquivTotal[l][h] = 0;
+//            }
+//        }
         
-        //OPTION VALUE-BY-VALUE:
+        //OPCION VALUE-BY-VALUE MATRICIAL:
 //        for (int h = 0; h < numHid; h++) {
 //            for (int l = 0; l < numLineas; l++) {
 //                if ((int) datosLineas[l][5] == 1) {						// si la linea está en servicio
@@ -1046,31 +1208,117 @@ public class Calc {
 //            }
 //        }
         
-        //OPTION BYTE ARRAY:
+//        //OPCION BYTE ARRAY MATRICIAL:
+//        for (int h = 0; h < numHid; h++) {
+//            for (int l = 0; l < numLineas; l++) {
+//                float[] E_h_l= E.get(h, l);
+//                if ((int) datosLineas[l][5] == 1) {						// si la linea está en servicio
+//                    if ((int) datosLineas[l][6] == 1) {					// si la línea es troncal
+//                        if (flujoDC[l][h] != 0) {
+//                            areaTroncal = (int) datosLineas[l][7];			// AIC=>0, Norte=>1, Sur=>-1
+//                            sentidoFlujoLinea = (int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
+//                            sicosing = (int) datosLineas[l][9];
+//                            for (int c = 0; c < numClientes; c++) {
+//                                barraCx = datosClientes[c][0];
+//                                float E_b_l_h = E_h_l[barraCx]; //TODO: revise!
+//                                // si la barra de consumo está en la misma area troncal que la linea o en el AIC
+//                                if (paramBarTroncal[barraCx][1] == areaTroncal || areaTroncal == 0) {
+//                                    // si está fuera del AIC y flujo alejandose y la barra está en el extremo contrario al AIC de la linea
+//                                    if (areaTroncal != 0 && flujoDC[l][h] * sentidoFlujoLinea < 0 && orientBarTroncal[barraCx][l] == areaTroncal) {
+//                                        if (Math.signum(flujoDC[l][h]) == Math.signum(E_b_l_h)) {	//si está aguas abajo del flujo
+//                                            ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                            ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+//                                        }
+//                                    } // si está en AIC y flujo tiene = signo que GLDF
+//                                    else if (areaTroncal == 0 && (flujoDC[l][h] * E_b_l_h) > 0) {
+//                                        ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                        ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        for (int h = 0; h < numHid; h++) {
+//            for (int l = 0; l < numLineas; l++) {
+//                for (int c = 0; c < numClientes; c++) {
+//                    //System.out.println(h+" "+l+" "+c);
+//                    barraCx = datosClientes[c][0];
+//                    if ((int) datosLineas[l][6] == 1 && datosLineas[l][5] == 1) {
+//                        if (ConsEquivTotal[l][h] != 0) {
+//                            if (datosClientes[c][3] == 1 && paramBarTroncal[barraCx][2] != datosLineas[l][9]) {
+//
+//                                Prorratas[l][c] = 0;
+//                            } else {
+//                                Prorratas[l][c] += (ConsEquiv[c][l][h] / ConsEquivTotal[l][h]) / (float) numHid;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        
+        //OPCION BYTE ARRAY CONSTANTES:
         for (int h = 0; h < numHid; h++) {
             for (int l = 0; l < numLineas; l++) {
-                float[] E_h_l= E.get(h, l);
-                if ((int) datosLineas[l][5] == 1) {						// si la linea está en servicio
+                float[] E_h_l = E.get(h, l);
+                float ConsEquivTotal_h_l = 0;
+                if ((int) datosLineas[l][5] == 1) {					// si la linea está en servicio
                     if ((int) datosLineas[l][6] == 1) {					// si la línea es troncal
-                        if (flujoDC[l][h] != 0) {
+                        if (flujoDC[l][h] != 0) {                                       // si el flujo es distinto de cero
                             areaTroncal = (int) datosLineas[l][7];			// AIC=>0, Norte=>1, Sur=>-1
                             sentidoFlujoLinea = (int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
                             sicosing = (int) datosLineas[l][9];
+                            //Calculo de ConsEquivTotal:
                             for (int c = 0; c < numClientes; c++) {
                                 barraCx = datosClientes[c][0];
-                                float E_b_l_h = E_h_l[barraCx]; //TODO: revise!
+                                float E_b_l_h = E_h_l[barraCx];
                                 // si la barra de consumo está en la misma area troncal que la linea o en el AIC
                                 if (paramBarTroncal[barraCx][1] == areaTroncal || areaTroncal == 0) {
                                     // si está fuera del AIC y flujo alejandose y la barra está en el extremo contrario al AIC de la linea
                                     if (areaTroncal != 0 && flujoDC[l][h] * sentidoFlujoLinea < 0 && orientBarTroncal[barraCx][l] == areaTroncal) {
                                         if (Math.signum(flujoDC[l][h]) == Math.signum(E_b_l_h)) {	//si está aguas abajo del flujo
-                                            ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
-                                            ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+//                                            ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                            ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+                                            ConsEquivTotal_h_l += (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
                                         }
                                     } // si está en AIC y flujo tiene = signo que GLDF
                                     else if (areaTroncal == 0 && (flujoDC[l][h] * E_b_l_h) > 0) {
-                                        ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
-                                        ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+//                                        ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                        ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+                                        ConsEquivTotal_h_l += (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+                                    }
+                                }
+                            }
+                            for (int c = 0; c < numClientes; c++) {
+                                //System.out.println(h+" "+l+" "+c);
+                                barraCx = datosClientes[c][0];
+                                float E_b_l_h = E_h_l[barraCx];
+                                float ConsEquiv_c_l_h = 0;
+                                // si la barra de consumo está en la misma area troncal que la linea o en el AIC
+                                if (paramBarTroncal[barraCx][1] == areaTroncal || areaTroncal == 0) {
+                                    // si está fuera del AIC y flujo alejandose y la barra está en el extremo contrario al AIC de la linea
+                                    if (areaTroncal != 0 && flujoDC[l][h] * sentidoFlujoLinea < 0 && orientBarTroncal[barraCx][l] == areaTroncal) {
+                                        if (Math.signum(flujoDC[l][h]) == Math.signum(E_b_l_h)) {	//si está aguas abajo del flujo
+//                                            ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                            ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+                                            ConsEquiv_c_l_h = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+                                        }
+                                    } // si está en AIC y flujo tiene = signo que GLDF
+                                    else if (areaTroncal == 0 && (flujoDC[l][h] * E_b_l_h) > 0) {
+//                                        ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                        ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+                                        ConsEquiv_c_l_h = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+                                    }
+                                }
+                                if (ConsEquivTotal_h_l != 0) {
+                                    if (datosClientes[c][3] == 1 && paramBarTroncal[barraCx][2] != datosLineas[l][9]) {
+                                        Prorratas[l][c] = 0;
+                                    } else {
+                                        Prorratas[l][c] += (ConsEquiv_c_l_h / ConsEquivTotal_h_l) / (float) numHid;
                                     }
                                 }
                             }
@@ -1079,26 +1327,88 @@ public class Calc {
                 }
             }
         }
-
+        return Prorratas;
+    }
+    
+    static void calculaProrrCons(float flujoDC[][], GGDF E, float Consumos[][], int datosClientes[][],
+            float datosLineas[][], int paramBarTroncal[][], int orientBarTroncal[][], int e, float[][][] prorrCx) throws IOException {
+        int numHid = flujoDC[0].length;
+        int numLineas = flujoDC.length;
+        int numClientes = Consumos.length;
+        int areaTroncal = 0;
+        int sentidoFlujoLinea;
+        int barraCx = 0;
+        int barraCx2 = 0;
+        int sicosing = 0;
+        
+        //OPCION BYTE ARRAY CONSTANTES:
         for (int h = 0; h < numHid; h++) {
             for (int l = 0; l < numLineas; l++) {
-                for (int c = 0; c < numClientes; c++) {
-                    //System.out.println(h+" "+l+" "+c);
-                    barraCx = datosClientes[c][0];
-                    if ((int) datosLineas[l][6] == 1 && datosLineas[l][5] == 1) {
-                        if (ConsEquivTotal[l][h] != 0) {
-                            if (datosClientes[c][3] == 1 && paramBarTroncal[barraCx][2] != datosLineas[l][9]) {
-
-                                Prorratas[l][c] = 0;
-                            } else {
-                                Prorratas[l][c] += (ConsEquiv[c][l][h] / ConsEquivTotal[l][h]) / (float) numHid;
+                float[] E_h_l = E.get(h, l);
+                float ConsEquivTotal_h_l = 0;
+                if ((int) datosLineas[l][5] == 1) {					// si la linea está en servicio
+                    if ((int) datosLineas[l][6] == 1) {					// si la línea es troncal
+                        if (flujoDC[l][h] != 0) {
+                            areaTroncal = (int) datosLineas[l][7];			// AIC=>0, Norte=>1, Sur=>-1
+                            sentidoFlujoLinea = (int) datosLineas[l][8]; 	// 1 si linea apunta (nombre) al AIC, -1 en caso contrario.
+                            sicosing = (int) datosLineas[l][9];
+                            //Calculo de ConsEquivTotal:
+                            for (int c = 0; c < numClientes; c++) {
+                                barraCx = datosClientes[c][0];
+                                float E_b_l_h = E_h_l[barraCx];
+                                // si la barra de consumo está en la misma area troncal que la linea o en el AIC
+                                if (paramBarTroncal[barraCx][1] == areaTroncal || areaTroncal == 0) {
+                                    // si está fuera del AIC y flujo alejandose y la barra está en el extremo contrario al AIC de la linea
+                                    if (areaTroncal != 0 && flujoDC[l][h] * sentidoFlujoLinea < 0 && orientBarTroncal[barraCx][l] == areaTroncal) {
+                                        if (Math.signum(flujoDC[l][h]) == Math.signum(E_b_l_h)) {	//si está aguas abajo del flujo
+//                                            ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                            ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+                                            ConsEquivTotal_h_l += (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+                                        }
+                                    } // si está en AIC y flujo tiene = signo que GLDF
+                                    else if (areaTroncal == 0 && (flujoDC[l][h] * E_b_l_h) > 0) {
+//                                        ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                        ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+                                        ConsEquivTotal_h_l += (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+                                    }
+                                }
+                            }
+                            for (int c = 0; c < numClientes; c++) {
+                                //System.out.println(h+" "+l+" "+c);
+                                barraCx = datosClientes[c][0];
+                                float E_b_l_h = E_h_l[barraCx];
+                                float ConsEquiv_c_l_h = 0;
+                                // si la barra de consumo está en la misma area troncal que la linea o en el AIC
+                                if (paramBarTroncal[barraCx][1] == areaTroncal || areaTroncal == 0) {
+                                    // si está fuera del AIC y flujo alejandose y la barra está en el extremo contrario al AIC de la linea
+                                    if (areaTroncal != 0 && flujoDC[l][h] * sentidoFlujoLinea < 0 && orientBarTroncal[barraCx][l] == areaTroncal) {
+                                        if (Math.signum(flujoDC[l][h]) == Math.signum(E_b_l_h)) {	//si está aguas abajo del flujo
+//                                            ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                            ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+                                            ConsEquiv_c_l_h = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+                                        }
+                                    } // si está en AIC y flujo tiene = signo que GLDF
+                                    else if (areaTroncal == 0 && (flujoDC[l][h] * E_b_l_h) > 0) {
+//                                        ConsEquiv[c][l][h] = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+//                                        ConsEquivTotal[l][h] += ConsEquiv[c][l][h];
+                                        ConsEquiv_c_l_h = (float) (Math.abs(E_b_l_h)) * Consumos[c][e];
+                                    }
+                                }
+                                if (ConsEquivTotal_h_l != 0) {
+                                    if (datosClientes[c][3] == 1 && paramBarTroncal[barraCx][2] != datosLineas[l][9]) {
+//                                        Prorratas[l][c] = 0;
+                                        prorrCx[l][datosClientes[c][2]][e] = 0;
+                                    } else {
+//                                        Prorratas[l][c] += (ConsEquiv_c_l_h / ConsEquivTotal_h_l) / (float) numHid;
+                                        prorrCx[l][datosClientes[c][2]][e] += (ConsEquiv_c_l_h / ConsEquivTotal_h_l) / (float) numHid;
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        return Prorratas;
     }
     
     //----------------------------------

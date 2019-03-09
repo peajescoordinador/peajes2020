@@ -1600,8 +1600,8 @@ public class Prorratas {
 //        float[][][] GGDFEtapa; //Movido a objeto
         GGDF GGDFEtapa = null;
         
-        float[][] prorrEtaGx;
-        float[][] prorrEtaCons;
+//        float[][] prorrEtaGx; //Se escribe directo al arreglo de prorratas
+//        float[][] prorrEtaCons; //Se escribe directo al arreglo de prorratas
         
         float[]GxEtaHid = new float[numHid];
         for (int h = 0; h < numHid; h++) {
@@ -1643,14 +1643,14 @@ public class Prorratas {
             GLDFEtapa=Calc.calculaGLDF(GSDF,GLDFref,paramLinEta, useDisk);
             // Calcula Flujo DC y asignacion de perdidas
             // -----------------------------------------
-            float[] R=new float[numLin];                   // resistencias en p.u
-            float[] perdI2R=new float[numLin];             // perdidas de cada linea segun I*I*R
-            float[] perdidas=new float[numLin];            // perdidas de cada linea segun diferencia entre Gx y Demanda
-            float[] perdMayor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
-            float[] perdMenor110=new float[numLin];        // perdidas de cada linea segun diferencia entre Gx y Demanda
-            float[] perdRealesSistema=new float[numHid];   // perdidas del sistema
-            float[] perdI2RSistMayor110=new float[numHid]; // perdidas de todas las lineas de tension > 110kV
-            float[] perdI2RSistMenor110=new float[numHid]; // perdidas de todas las lineas de tension <= 110kV
+            float[] R=new float[numLin];                    // resistencias en p.u
+            float[] perdI2R=new float[numLin];              // perdidas de cada linea segun I*I*R
+            float[] perdidas=new float[numLin];             // perdidas de cada linea segun diferencia entre Gx y Demanda
+            float[] perdMayor110;                           // perdidas de cada linea segun diferencia entre Gx y Demanda
+            float[] perdMenor110;                           // perdidas de cada linea segun diferencia entre Gx y Demanda
+            float[] perdRealesSistema=new float[numHid];    // perdidas del sistema
+            float[] perdI2RSistMayor110=new float[numHid];  // perdidas de todas las lineas de tension > 110kV
+            float[] perdI2RSistMenor110=new float[numHid];  // perdidas de todas las lineas de tension <= 110kV
             float conSist;
             float[][] conAjustado=new float[numBarras][numHid];
             float[] genSist=new float[numHid];
@@ -1746,16 +1746,18 @@ public class Prorratas {
             */
     //        prorrEtaGx=Calc.CalculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal,
     //                orientBarTroncal, etapa, centralesFlujo, lineasFlujo,GSDF,GGDFref );
-            prorrEtaGx=Calc.calculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
-            prorrEtaCons=Calc.calculaProrrCons(flujoDCEtapa, GLDFEtapa, ConsumosClaves, datosClaves, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
-            for (int l = 0; l < numLin; l++) {
-                for (int g = 0; g < numGen; g++) {
-                    prorrGx[l][g][etapa] = prorrEtaGx[l][g];
-                }
-                for (int c = 0; c < numClaves; c++) {
-                    prorrCx[l][datosClaves[c][2]][etapa] += prorrEtaCons[l][c];
-                }
-            }
+//            prorrEtaGx=Calc.calculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
+            Calc.calculaProrrGx(flujoDCEtapa, GGDFEtapa, Gx, paramGener, paramLinEta, paramBarTroncal, orientBarTroncal, etapa, prorrGx);
+//            prorrEtaCons=Calc.calculaProrrCons(flujoDCEtapa, GLDFEtapa, ConsumosClaves, datosClaves, paramLinEta, paramBarTroncal, orientBarTroncal, etapa);
+            Calc.calculaProrrCons(flujoDCEtapa, GLDFEtapa, ConsumosClaves, datosClaves, paramLinEta, paramBarTroncal, orientBarTroncal, etapa, prorrCx);
+//            for (int l = 0; l < numLin; l++) {
+//                for (int g = 0; g < numGen; g++) {
+//                    prorrGx[l][g][etapa] = prorrEtaGx[l][g];
+//                }
+//                for (int c = 0; c < numClaves; c++) {
+//                    prorrCx[l][datosClaves[c][2]][etapa] += prorrEtaCons[l][c];
+//                }
+//            }
         } finally {
             if (GGDFEtapa != null) {
                 GGDFEtapa.close();
