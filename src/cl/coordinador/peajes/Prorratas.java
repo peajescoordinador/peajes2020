@@ -19,6 +19,10 @@ import cl.coordinador.peajes.PeajesConstant.HorizonteCalculo;
 import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
 import static cl.coordinador.peajes.PeajesConstant.MESES;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
+import static cl.coordinador.peajes.PeajesConstant.PREFIJO_CMES;
+import static cl.coordinador.peajes.PeajesConstant.PREFIJO_GMES;
+import static cl.coordinador.peajes.PeajesConstant.PREFIJO_PRORRATACONSUMO;
+import static cl.coordinador.peajes.PeajesConstant.PREFIJO_PRORRATAGEN;
 import static cl.coordinador.peajes.PeajesConstant.SLASH;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -1197,13 +1201,13 @@ public class Prorratas {
         if (bEscribeCSV) {
             String prorrataGCSV;
             if (horizonte == HorizonteCalculo.Anual) {
-                prorrataGCSV = DirBaseSalida + SLASH + "ProrratasGen" + AnoAEvaluar + ".csv";
+                prorrataGCSV = DirBaseSalida + SLASH + PREFIJO_PRORRATAGEN + AnoAEvaluar + ".csv";
             } else {
-                prorrataGCSV = DirBaseSalida + SLASH + "ProrratasGen" + AnoAEvaluar + MESES[MesAEvaluar] + ".csv";
+                prorrataGCSV = DirBaseSalida + SLASH + PREFIJO_PRORRATAGEN + AnoAEvaluar + MESES[MesAEvaluar] + ".csv";
             }
             BufferedWriter writerCSV = null;
             try {
-                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(prorrataGCSV), StandardCharsets.ISO_8859_1));
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(prorrataGCSV), PeajesConstant.CSV_ENCODING));
                 String sLineText;
                 writerCSV.write("Línea,Zona,Central/Cliente,Mes,ProrrataGen");
                 writerCSV.newLine();
@@ -1248,13 +1252,13 @@ public class Prorratas {
             //Escribe prorratas consumo:
             String prorrataCCSV;
             if (horizonte == HorizonteCalculo.Anual) {
-                prorrataCCSV = DirBaseSalida + SLASH + "ProrratasConsumo" + AnoAEvaluar + ".csv";
+                prorrataCCSV = DirBaseSalida + SLASH + PREFIJO_PRORRATACONSUMO + AnoAEvaluar + ".csv";
             } else {
-                prorrataCCSV = DirBaseSalida + SLASH + "ProrratasConsumo" + AnoAEvaluar + MESES[MesAEvaluar] + ".csv";
+                prorrataCCSV = DirBaseSalida + SLASH + PREFIJO_PRORRATACONSUMO + AnoAEvaluar + MESES[MesAEvaluar] + ".csv";
             }
             writerCSV = null;
             try {
-                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(prorrataCCSV), StandardCharsets.ISO_8859_1));
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(prorrataCCSV), PeajesConstant.CSV_ENCODING));
                 String sLineText;
                 writerCSV.write("Línea,Zona,Cliente,Mes,ProrrataConsumo");
                 writerCSV.newLine();
@@ -1290,10 +1294,10 @@ public class Prorratas {
             }
             
             //Escribe generacion mensual:
-            String genCSV = DirBaseSalida + SLASH + "GMes" + AnoAEvaluar + ".csv";
+            String genCSV = DirBaseSalida + SLASH + PREFIJO_GMES + AnoAEvaluar + ".csv";
             writerCSV = null;
             try {
-                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(genCSV), StandardCharsets.ISO_8859_1));
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(genCSV), PeajesConstant.CSV_ENCODING));
                 String sLineText;
                 writerCSV.write("Central,Mes,Generación[GWh]");
                 writerCSV.newLine();
@@ -1333,10 +1337,10 @@ public class Prorratas {
             }
             
             //Escribe consumo mensual:
-            String consumoCSV = DirBaseSalida + SLASH + "CMes" + AnoAEvaluar + ".csv";
+            String consumoCSV = DirBaseSalida + SLASH + PREFIJO_CMES + AnoAEvaluar + ".csv";
             writerCSV = null;
             try {
-                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(consumoCSV), StandardCharsets.ISO_8859_1));
+                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(consumoCSV), PeajesConstant.CSV_ENCODING));
                 String sLineText;
                 writerCSV.write("Cliente,Mes,Consumo[MWh]");
                 writerCSV.newLine();

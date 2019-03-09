@@ -16,11 +16,14 @@
 package cl.coordinador.peajes;
 
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import java.util.Properties;
@@ -804,6 +807,62 @@ public class Lee {
         return k;
     }
     
+    static public int leeProrratasCSV(String libroEntrada, double[][][] prorrataMes, PeajesConstant.HorizonteCalculo horizonte) throws java.io.IOException {
+
+        int numLineas = prorrataMes.length;
+        int numCentrales = prorrataMes[0].length;
+        int numMeses;
+        switch (horizonte) {
+            case Anual:
+                numMeses = prorrataMes[0][0].length;
+                break;
+            case Mensual:
+                numMeses = 1;
+                break;
+            default:
+                assert(false): "Porque hay otro horizonte?";
+                numMeses = prorrataMes[0][0].length;
+        }
+        
+        BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(libroEntrada), PeajesConstant.CSV_ENCODING));
+        String line;
+        String[] sValues;
+        int cont = 0;
+        try {
+            if ((line = input.readLine()) != null) {
+                sValues = line.split(",");
+                if (sValues.length != 5) {
+                    throw new IOException("Error archivo de prorratas linea " + cont+1 + ". Se esperan 5 columnas pero se encontraron " + sValues.length + " . Chequee que la codificación usada sea " + PeajesConstant.CSV_ENCODING.displayName());
+                }
+                for (int m = 0; m < numMeses; m++) {
+                    for (int l = 0; l < numLineas; l++) {
+                        for (int c = 0; c < numCentrales; c++) {
+                            if ((line = input.readLine()) != null) {
+                                sValues = line.split(",");
+                                if (sValues.length != 5) {
+                                    throw new IOException("Error archivo de prorratas linea " + cont + ". Se esperan 5 columnas pero se encontraron " + sValues.length + " . Chequee que la codificación usada sea " + PeajesConstant.CSV_ENCODING.displayName());
+                                }
+                                prorrataMes[l][c][m] = Float.parseFloat(sValues[4]);
+                                cont++;
+                            } else {
+                                throw new IOException("Error archivo de prorratas. Se esperan '" + (numLineas * numCentrales * numMeses) + "' filas (datos) pero se encontraron '" + cont + "'. Asegurese que el archivo de prorratas en carpeta de salida corresponde con planilla ENT en carperta de entrada");
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new IOException(e);
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+            }
+        }
+        return cont;
+    }
+    
     static void leeProrratasC(String libroEntrada, double[][][] prorrataMesC) {
         try {
             //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
@@ -873,6 +932,60 @@ public class Lee {
         return nValues;
     }
     
+    static public int leeGeneracionMesCSV(String libroEntrada, double[][] GenMes, PeajesConstant.HorizonteCalculo horizonte) throws java.io.IOException {
+        int numCentrales = GenMes.length;
+        int numMeses;
+        switch (horizonte) {
+            case Anual:
+                numMeses = GenMes[0].length;
+                break;
+            case Mensual:
+                numMeses = 1;
+                break;
+            default:
+                assert (false) : "Porque hay otro horizonte?";
+                numMeses = GenMes[0].length;
+        }
+        
+        BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(libroEntrada), PeajesConstant.CSV_ENCODING));
+        String line;
+        String[] sValues;
+        int cont = 0;
+        try {
+            if ((line = input.readLine()) != null) {
+                sValues = line.split(",");
+                if (sValues.length != 3) {
+                    throw new IOException("Error archivo de prorratas. Se esperan 3 columnas pero se encontraron " + sValues.length + " . Chequee que la codificación usada sea " + PeajesConstant.CSV_ENCODING.displayName());
+                }
+                for (int m = 0; m < numMeses; m++) {
+                    for (int c = 0; c < numCentrales; c++) {
+                        
+                        if ((line = input.readLine()) != null) {
+                            sValues = line.split(",");
+                            if (sValues.length != 3) {
+                                throw new IOException("Error archivo de prorratas. Se esperan 3 columnas pero se encontraron " + sValues.length + " . Chequee que la codificación usada sea " + PeajesConstant.CSV_ENCODING.displayName());
+                            }
+                            GenMes[c][m] = Float.parseFloat(sValues[2]);
+                            cont++;
+                        } else {
+                            throw new IOException("Error archivo de prorratas. Se esperan '" + (numCentrales * numMeses) + "' filas (datos) pero se encontraron '" + cont + "'. Asegurese que el archivo de prorratas en carpeta de salida corresponde con planilla ENT en carperta de entrada");
+                        }
+                        
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new IOException(e);
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+            }
+        }
+        return cont;
+    }
+    
     static void leeConsumoMes(String libroEntrada, double[][] CMes, double[][][] CU) {//agregado para ajuste
         try {
             //POIFSFileSystem fs = new //POIFSFileSystem(new FileInputStream( libroEntrada ));
@@ -929,6 +1042,60 @@ public class Lee {
         }
 
         return cuenta;
+    }
+    
+    static public int leeConsumoMesCSV(String libroEntrada, double[][] CMes, PeajesConstant.HorizonteCalculo horizonte) throws java.io.IOException {
+        int numCli = CMes.length;
+        int numMeses;
+        switch (horizonte) {
+            case Anual:
+                numMeses = CMes[0].length;
+                break;
+            case Mensual:
+                numMeses = 1;
+                break;
+            default:
+                assert (false) : "Porque hay otro horizonte?";
+                numMeses = CMes[0].length;
+        }
+        
+        BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(libroEntrada), StandardCharsets.ISO_8859_1));
+        String line;
+        String[] sValues;
+        int cont = 0;
+        try {
+            if ((line = input.readLine()) != null) {
+                sValues = line.split(",");
+                if (sValues.length != 3) {
+                    throw new IOException("Error archivo de prorratas. Se esperan 3 columnas pero se encontraron " + sValues.length + " . Chequee que la codificación usada sea " + PeajesConstant.CSV_ENCODING.displayName());
+                }
+                for (int m = 0; m < numMeses; m++) {
+                    for (int c = 0; c < numCli; c++) {
+                        
+                        if ((line = input.readLine()) != null) {
+                            sValues = line.split(",");
+                            if (sValues.length != 3) {
+                                throw new IOException("Error archivo de Consumos. Se esperan 3 columnas pero se encontraron " + sValues.length + " . Chequee que la codificación usada sea " + PeajesConstant.CSV_ENCODING.displayName());
+                            }
+                            CMes[c][m] = Float.parseFloat(sValues[2]);
+                            cont++;
+                        } else {
+                            throw new IOException("Error archivo de Consumos. Se esperan '" + (numCli * numMeses) + "' filas (datos) pero se encontraron '" + cont + "'. Asegurese que el archivo de prorratas en carpeta de salida corresponde con planilla ENT en carperta de entrada");
+                        }
+                        
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new IOException(e);
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+            }
+        }
+        return cont;
     }
    
     @Deprecated

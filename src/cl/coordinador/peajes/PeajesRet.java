@@ -478,30 +478,83 @@ public class PeajesRet {
                 proEfirme[j][k]=prorrataEfirmeAux[k][j];
 
         // Libro Prorrata
-        String libroEntradaP = DirBaseSal + SLASH + "Prorrata" + Ano + ".xlsx";
-        XSSFWorkbook wb_Prorratas;
-        try {
-            wb_Prorratas = new XSSFWorkbook(new java.io.FileInputStream( libroEntradaP ));
-        } catch (IOException e) {
-            System.out.println("No se pudo conectar con planilla prorratas " + libroEntradaP);
-            System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
-            return;
-        }
+        
 
           /***************
-         * Lee Inyeccion Centrales
+         * Lee Prorratas, Inyeccion Centrales y Consumos Mensuales
          ***************/
+        prorrMesC = new double[numLinTx][numCli][NUMERO_MESES];//las prorratas se encuentran en el orden nomLinTx (rgistros unicos hoja lintron)
+        prorrMesCTot = new double[numLinTx][NUMERO_MESES];
         double[][] GenerMensual = new double[numCen][NUMERO_MESES];
         double[] GeneTotMesProm= new double[NUMERO_MESES];
         double[][] GenPromMesCen= new double[numCen][NUMERO_MESES];
         double[] GenAnoxCen= new double[numCen];
         int [][] MesesAct=new int[numCen][NUMERO_MESES];
         int [] numMesesAct=new int[numCen];
-        if (USE_MEMORY_READER) {
-            Lee.leeGeneracionMes(wb_Prorratas,GenerMensual);
+        double[][] CMesCli = new double[numCli][NUMERO_MESES];
+        double[][][] CUE = new double[numCli][3][NUMERO_MESES];
+        double[] ECUAnual = new double[2];
+        
+        //Lee prorratas desde csv (defecto):
+        long tInicioLecturaProrratas = System.currentTimeMillis();
+        File f_prorratasCCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_PRORRATACONSUMO + Ano + ".csv");
+        File f_GMesCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_GMES + Ano + ".csv");
+        File f_CMesCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_CMES + Ano + ".csv");
+        
+        if (f_prorratasCCSV.exists() && f_GMesCSV.exists() && f_CMesCSV.exists()) {
+            System.out.println("Leyendo archivos csv de prorratas, generacion y consumo mensual..");
+            try {
+                int nReadP = Lee.leeProrratasCSV(f_prorratasCCSV.getAbsolutePath(), prorrMesC, PeajesConstant.HorizonteCalculo.Anual);
+            } catch (IOException e) {
+                System.out.println("No se pudo conectar con archivo prorratas " + f_prorratasCCSV.getAbsolutePath());
+                System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
+                return;
+            }
+            try {
+                int nReadCx = Lee.leeGeneracionMesCSV(f_GMesCSV.getAbsolutePath(), GenerMensual, PeajesConstant.HorizonteCalculo.Anual);
+            } catch (IOException e) {
+                System.out.println("No se pudo conectar con archivo generacion mensual " + f_GMesCSV.getAbsolutePath());
+                System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
+                return;
+            }
+            try {
+                int nReadCx = Lee.leeConsumoMesCSV(f_CMesCSV.getAbsolutePath(), CMesCli, PeajesConstant.HorizonteCalculo.Anual);
+            } catch (IOException e) {
+                System.out.println("No se pudo conectar con archivo consumo mensual " + f_CMesCSV.getAbsolutePath());
+                System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
+                return;
+            }
         } else {
-            Lee.leeGeneracionMes(libroEntradaP,GenerMensual);
+            // Si no, intenta buscar libro Prorrata:
+            System.out.println("Leyendo prorratas, generacion y consumo mensual desde Excel..");
+            String libroEntradaP = DirBaseSal + SLASH + "Prorrata" + Ano + ".xlsx";
+            XSSFWorkbook wb_Prorratas;
+            try {
+                wb_Prorratas = new XSSFWorkbook(new java.io.FileInputStream(libroEntradaP));
+                if (USE_MEMORY_READER) {
+                    Lee.leeProrratasConsumoExcel(wb_Prorratas, prorrMesC);
+                } else {
+                    Lee.leeProrratasC(libroEntradaP, prorrMesC);
+                }
+                if (USE_MEMORY_READER) {
+                    Lee.leeGeneracionMes(wb_Prorratas, GenerMensual);
+                } else {
+                    Lee.leeGeneracionMes(libroEntradaP, GenerMensual);
+                }
+                if (USE_MEMORY_READER) {
+                    Lee.leeConsumoMes(wb_Prorratas, CMesCli, CUE);
+                } else {
+                    Lee.leeConsumoMes(libroEntradaP, CMesCli, CUE);
+                }
+                wb_Prorratas.close();
+            } catch (IOException e) {
+                System.out.println("No se pudo conectar con planilla prorratas " + libroEntradaP);
+                System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
+                return;
+            }
         }
+        long tFinLecturaProrratas = System.currentTimeMillis();
+        System.out.println("Finalizado lectura prorratas. Tiempo: " + (tFinLecturaProrratas - tInicioLecturaProrratas) / 1000 + " seg"); //TEMP!
         
         for (int i=0;i<numCen;i++){
             for(int m=0; m<NUMERO_MESES;m++){
@@ -520,40 +573,6 @@ public class PeajesRet {
                     GeneTotMesProm[m]+= GenPromMesCen[i][m];
                 }
             }
-        }
-         /***************
-         * Lee Consumo Mensuales por Cliente
-         ***************/
-        double[][] CMesCli = new double[numCli][NUMERO_MESES];
-        double[][][] CUE = new double[numCli][3][NUMERO_MESES];
-        double[] ECUAnual = new double[2];
-        
-        
-        //System.out.println( numCli);
-        if (USE_MEMORY_READER) {
-            Lee.leeConsumoMes(wb_Prorratas,CMesCli,CUE);
-        } else {
-            Lee.leeConsumoMes(libroEntradaP,CMesCli,CUE);
-        }
-        
-
-       /* for(int i=0;i<numCli;i++){
-            ECUAnual[0]+=CUE[i][0];
-            ECUAnual[1]+=CUE[i][1];
-        }
-        * 
-        */
-
-
-        /**************************
-         * lee Prorratas de Consumo
-         **************************/
-        prorrMesC = new double[numLinTx][numCli][NUMERO_MESES];//las prorratas se encuentran en el orden nomLinTx (rgistros unicos hoja lintron)
-        prorrMesCTot = new double[numLinTx][NUMERO_MESES];
-        if (USE_MEMORY_READER) {
-            Lee.leeProrratasConsumoExcel(wb_Prorratas, prorrMesC);
-        } else {
-            Lee.leeProrratasC(libroEntradaP, prorrMesC);
         }
         
         for (int l = 0 ; l < numLinTx; l++){
@@ -1623,7 +1642,6 @@ public class PeajesRet {
                     Escribe.guardaLibroDisco(wb_Ent, libroEntrada);
                     wb_Peajes.close();
                     wb_Ent.close();
-                    wb_Prorratas.close();
                     wb_salida.close();
                 } catch (IOException e) {
                     System.out.println("Error al escribir resultados de pagos retiros a archivo " + libroSalidaCXLS);

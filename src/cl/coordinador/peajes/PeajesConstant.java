@@ -71,6 +71,28 @@ public class PeajesConstant {
      * propiedades de configuracion
      */
     protected static final String KEY_SEPARATOR = "::";
+    
+    /**
+     * PREFIJO ARCHIVO PRORRATA GENERACION
+     */
+    public static final String PREFIJO_PRORRATAGEN = "ProrrataGen";
+    /**
+     * PREFIJO ARCHIVO PRORRATA CONSUMO
+     */
+    public static final String PREFIJO_PRORRATACONSUMO = "ProrrataConsumo";
+    /**
+     * PREFIJO ARCHIVO GENERACION MENSUAL
+     */
+    public static final String PREFIJO_GMES = "GMes";
+    /**
+     * PREFIJO ARCHIVO CONSUMO MENSUAL
+     */
+    public static final String PREFIJO_CMES = "CMes";
+    
+    /**
+     * Codificacion empleada para la creacion y lectura de archivos csv
+     */
+    public static final java.nio.charset.Charset CSV_ENCODING = java.nio.charset.StandardCharsets.ISO_8859_1;
 
     /**
      * Tipo de datos para usar en el archivo de configuracion
