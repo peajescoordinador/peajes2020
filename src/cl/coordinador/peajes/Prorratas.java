@@ -1221,8 +1221,8 @@ public class Prorratas {
                             }
                         }
                     }
-                    for (int l = 0; l < numLinTx; l++) {
-                        for (int c = 0; c < numCen; c++) {
+                    for (int c = 0; c < numCen; c++) {
+                        for (int l = 0; l < numLinTx; l++) {
                             sLineText = "";
                             sLineText += nomLinTx[l] + ",";
                             sLineText += zona[l] + ",";

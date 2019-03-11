@@ -835,8 +835,8 @@ public class Lee {
                     throw new IOException("Error archivo de prorratas linea " + cont+1 + ". Se esperan 5 columnas pero se encontraron " + sValues.length + " . Chequee que la codificación usada sea " + PeajesConstant.CSV_ENCODING.displayName());
                 }
                 for (int m = 0; m < numMeses; m++) {
-                    for (int l = 0; l < numLineas; l++) {
-                        for (int c = 0; c < numCentrales; c++) {
+                    for (int c = 0; c < numCentrales; c++) {
+                        for (int l = 0; l < numLineas; l++) {
                             if ((line = input.readLine()) != null) {
                                 sValues = line.split(",");
                                 if (sValues.length != 5) {
