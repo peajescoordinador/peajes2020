@@ -19,6 +19,7 @@ import static cl.coordinador.peajes.PeajesConstant.SLASH;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,14 +37,9 @@ import java.util.Properties;
  */
 public class PeajesCDEC extends javax.swing.JFrame {
     
-    private File nombreDirEnt;
-    private File nombreDirSal;
     private File nombreDirLiq;
     private File nombreDirReliq;
-    private int tipoCalcSeleccionado;
     private boolean LiquidacionReliquidacion;
-    private int anoAEvaluar;
-    private String mesAEvaluar;
     private long tInicio;
     private Time tiempo=new Time(0);
     private Timer timer;
@@ -67,6 +63,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnHorizonteLiquida = new javax.swing.ButtonGroup();
         textoCalculo = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -81,30 +78,28 @@ public class PeajesCDEC extends javax.swing.JFrame {
         botonDirectorioEntrada = new javax.swing.JButton();
         botonDirectorioSalida = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        cuadroSeleccionTipoCalculo = new javax.swing.JComboBox();
+        cuadroSeleccionAgnoBase = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         cuadroAnoBase = new javax.swing.JComboBox();
-        cuadroSeleccionTipoCalculo1 = new javax.swing.JComboBox();
+        cuadroSeleccionTipoCalculo = new javax.swing.JComboBox();
         jPanel4 = new javax.swing.JPanel();
         progreso = new javax.swing.JProgressBar();
-        botonCalcular = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         etiquetaTiempo = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        botonCalcular1 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jLabel13 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        ActClientes = new javax.swing.JCheckBox();
-        jLabel12 = new javax.swing.JLabel();
-        Mes = new javax.swing.JComboBox();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
+        btnLiquidaAnual = new javax.swing.JRadioButton();
+        btnLiquidaMensual = new javax.swing.JRadioButton();
+        jPanel7 = new javax.swing.JPanel();
+        btnCalcularProrrAnual = new javax.swing.JButton();
+        btnPagoRetAnual = new javax.swing.JButton();
+        btnCuadroAnual = new javax.swing.JButton();
+        btnPagoInyAnual = new javax.swing.JButton();
+        lblMesLiquida = new javax.swing.JLabel();
+        Mes = new javax.swing.JComboBox();
+        lblFechaPago = new javax.swing.JLabel();
+        txtFechaPago = new javax.swing.JTextField();
+        btnCalcularPeaje = new javax.swing.JButton();
+        ActClientes = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jSplitPane4 = new javax.swing.JSplitPane();
         jLabel8 = new javax.swing.JLabel();
@@ -118,7 +113,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jSplitPane3 = new javax.swing.JSplitPane();
         jLabel7 = new javax.swing.JLabel();
         cuadroSeleccionOffset = new javax.swing.JTextField();
-        jPanel6 = new javax.swing.JPanel();
+        pnlReliquidacion = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         DirectorioLiquidacion = new javax.swing.JTextField();
@@ -139,7 +134,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
         menuOpciones = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -212,11 +206,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
         campoDirectorioEntrada.setMaximumSize(new java.awt.Dimension(386, 18));
         campoDirectorioEntrada.setMinimumSize(new java.awt.Dimension(386, 18));
         campoDirectorioEntrada.setPreferredSize(new java.awt.Dimension(386, 18));
-        campoDirectorioEntrada.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoDirectorioEntradaActionPerformed(evt);
-            }
-        });
 
         campoDirectorioSalida.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         campoDirectorioSalida.setMaximumSize(new java.awt.Dimension(386, 18));
@@ -246,14 +235,13 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel10)
-                    .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(543, 543, 543))
             .add(jPanel2Layout.createSequentialGroup()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel10)
+                            .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                     .add(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jLabel2))
@@ -293,11 +281,11 @@ public class PeajesCDEC extends javax.swing.JFrame {
         jPanel3.setMinimumSize(new java.awt.Dimension(530, 44));
         jPanel3.setPreferredSize(new java.awt.Dimension(530, 44));
 
-        cuadroSeleccionTipoCalculo.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        cuadroSeleccionTipoCalculo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Año a Evaluar = Año Base", "Año a Evaluar != Año Base" }));
-        cuadroSeleccionTipoCalculo.addActionListener(new java.awt.event.ActionListener() {
+        cuadroSeleccionAgnoBase.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        cuadroSeleccionAgnoBase.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Año a Evaluar = Año Base", "Año a Evaluar != Año Base" }));
+        cuadroSeleccionAgnoBase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cuadroSeleccionTipoCalculoAccion(evt);
+                cuadroSeleccionAgnoBaseAccion(evt);
             }
         });
 
@@ -312,11 +300,11 @@ public class PeajesCDEC extends javax.swing.JFrame {
         cuadroAnoBase.setMinimumSize(new java.awt.Dimension(70, 19));
         cuadroAnoBase.setPreferredSize(new java.awt.Dimension(70, 19));
 
-        cuadroSeleccionTipoCalculo1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        cuadroSeleccionTipoCalculo1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cálculo de Liquidación", "Cálculo de Reliquidación" }));
-        cuadroSeleccionTipoCalculo1.addActionListener(new java.awt.event.ActionListener() {
+        cuadroSeleccionTipoCalculo.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        cuadroSeleccionTipoCalculo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cálculo de Liquidación", "Cálculo de Reliquidación" }));
+        cuadroSeleccionTipoCalculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cuadroSeleccionTipoCalculo1Accion(evt);
+                cuadroSeleccionTipoCalculoAccion(evt);
             }
         });
 
@@ -326,9 +314,9 @@ public class PeajesCDEC extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
                 .add(12, 12, 12)
+                .add(cuadroSeleccionAgnoBase, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(48, 48, 48)
                 .add(cuadroSeleccionTipoCalculo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(cuadroSeleccionTipoCalculo1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(32, 32, 32)
                 .add(jLabel4)
                 .add(18, 18, 18)
@@ -340,28 +328,20 @@ public class PeajesCDEC extends javax.swing.JFrame {
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cuadroSeleccionTipoCalculo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(cuadroSeleccionAgnoBase, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(cuadroAnoBase, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 21, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(cuadroSeleccionTipoCalculo1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(cuadroSeleccionTipoCalculo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel4.setMaximumSize(new java.awt.Dimension(530, 76));
-        jPanel4.setMinimumSize(new java.awt.Dimension(530, 76));
-        jPanel4.setPreferredSize(new java.awt.Dimension(530, 76));
+        jPanel4.setMaximumSize(null);
+        jPanel4.setName(""); // NOI18N
+        jPanel4.setPreferredSize(new java.awt.Dimension(530, 180));
 
         progreso.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         progreso.setPreferredSize(new java.awt.Dimension(430, 15));
-
-        botonCalcular.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        botonCalcular.setText("Calcular Prorratas");
-        botonCalcular.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                calcular(evt);
-            }
-        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jLabel9.setText("Tiempo de ejecución:");
@@ -371,186 +351,188 @@ public class PeajesCDEC extends javax.swing.JFrame {
         etiquetaTiempo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         etiquetaTiempo.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jButton1.setText(" Pagos Generación");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel21.setText("Liquidación:");
+
+        btnHorizonteLiquida.add(btnLiquidaAnual);
+        btnLiquidaAnual.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnLiquidaAnual.setSelected(true);
+        btnLiquidaAnual.setText("Anual");
+        btnLiquidaAnual.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                btnLiquidaAnualItemStateChanged(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jButton2.setText("Liq. Mensual Inyección");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        btnHorizonteLiquida.add(btnLiquidaMensual);
+        btnLiquidaMensual.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnLiquidaMensual.setText("Mensual");
+        btnLiquidaMensual.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                btnLiquidaMensualItemStateChanged(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jButton3.setText("Pagos  Retiro");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnCalcularProrrAnual.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnCalcularProrrAnual.setText("Calcular Prorratas");
+        btnCalcularProrrAnual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                calcular(evt);
             }
         });
 
-        botonCalcular1.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        botonCalcular1.setText("Calcular Peajes");
-        botonCalcular1.addActionListener(new java.awt.event.ActionListener() {
+        btnPagoRetAnual.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnPagoRetAnual.setText("Pagos  Retiro");
+        btnPagoRetAnual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonCalcular1calcular(evt);
+                btnPagoRetAnualActionPerformed(evt);
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jButton4.setText("Liq.  Mensual Retiro");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnCuadroAnual.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnCuadroAnual.setText("Esc. Cuadro Resumen");
+        btnCuadroAnual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnCuadroAnualActionPerformed(evt);
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jButton5.setText("Escribir Liq. Mes");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnPagoInyAnual.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnPagoInyAnual.setText(" Pagos Generación");
+        btnPagoInyAnual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnPagoInyAnualActionPerformed(evt);
             }
         });
 
-        jButton6.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jButton6.setText("Esc. Cuadro Anual");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
+        lblMesLiquida.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblMesLiquida.setText("Mes a liquidar");
+        lblMesLiquida.setEnabled(false);
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jLabel13.setText("Fecha Pago");
+        Mes.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        Mes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" }));
+        Mes.setEnabled(false);
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jTextField1.setText(" dd/mm/aaaa");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        lblFechaPago.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblFechaPago.setText("Fecha Pago");
+        lblFechaPago.setEnabled(false);
+
+        txtFechaPago.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        txtFechaPago.setText(" dd/mm/aaaa");
+        txtFechaPago.setEnabled(false);
+
+        btnCalcularPeaje.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnCalcularPeaje.setText("Calcular Peajes");
+        btnCalcularPeaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                btnCalcularPeajecalcular(evt);
             }
         });
 
         ActClientes.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         ActClientes.setText("Actualizar Clientes");
-        ActClientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ActClientesActionPerformed(evt);
-            }
-        });
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jLabel12.setText("Mes a liquidar");
-
-        Mes.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        Mes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" }));
-        Mes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MesActionPerformed(evt);
-            }
-        });
-
-        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel19.setText("Pagos Mensuales:");
-
-        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel20.setText("Pagos Anuales:");
-
-        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel21.setText("Liquidación");
+        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
+                .add(28, 28, 28)
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                        .add(jPanel7Layout.createSequentialGroup()
+                            .add(lblMesLiquida)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(Mes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(jPanel7Layout.createSequentialGroup()
+                            .add(lblFechaPago)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                            .add(txtFechaPago)))
+                    .add(ActClientes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 131, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(100, 100, 100)
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(btnPagoInyAnual, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                    .add(btnCalcularProrrAnual, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel7Layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(btnCuadroAnual, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 127, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .add(11, 11, 11)
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(btnCalcularPeaje, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                            .add(btnPagoRetAnual, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .add(30, 30, 30))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7Layout.createSequentialGroup()
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel7Layout.createSequentialGroup()
+                        .add(11, 11, 11)
+                        .add(btnCalcularPeaje))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(ActClientes)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel7Layout.createSequentialGroup()
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(btnCalcularProrrAnual)
+                            .add(btnPagoRetAnual))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(btnCuadroAnual)
+                            .add(btnPagoInyAnual)))
+                    .add(jPanel7Layout.createSequentialGroup()
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(lblMesLiquida)
+                            .add(Mes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(lblFechaPago)
+                            .add(txtFechaPago, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel4Layout.createSequentialGroup()
+                        .add(jLabel21)
+                        .add(33, 33, 33)
+                        .add(btnLiquidaAnual)
+                        .add(5, 5, 5)
+                        .add(btnLiquidaMensual))
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 105, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(progreso, 0, 0, Short.MAX_VALUE)
-                        .add(18, 18, 18)
-                        .add(etiquetaTiempo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(13, 13, 13))
-                    .add(jPanel4Layout.createSequentialGroup()
-                        .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(jPanel4Layout.createSequentialGroup()
-                                .add(jLabel19)
-                                .add(18, 18, 18)
-                                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                    .add(jPanel4Layout.createSequentialGroup()
-                                        .add(jLabel12)
-                                        .add(18, 18, 18)
-                                        .add(Mes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .add(18, 18, 18)
-                                        .add(jButton2))
-                                    .add(jPanel4Layout.createSequentialGroup()
-                                        .add(jLabel13)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                        .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                        .add(jButton5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .add(jPanel4Layout.createSequentialGroup()
-                                .add(ActClientes)
-                                .add(18, 18, 18)
-                                .add(botonCalcular1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 127, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(jPanel4Layout.createSequentialGroup()
-                                    .add(jLabel20)
-                                    .add(53, 53, 53)
-                                    .add(jButton3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 107, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                    .add(jButton1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .add(jLabel21)))
-                        .add(18, 18, 18)
-                        .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jButton6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(jButton4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(botonCalcular, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .add(43, 43, 43)
+                        .add(progreso, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 230, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(12, 12, 12)
+                        .add(etiquetaTiempo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .add(0, 0, 0)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel21)
-                    .add(botonCalcular)
-                    .add(botonCalcular1)
-                    .add(ActClientes))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 29, Short.MAX_VALUE)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(jButton3)
-                        .add(jButton1)
-                        .add(jButton6))
-                    .add(jLabel20))
-                .add(29, 29, 29)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE, false)
-                    .add(jButton2)
-                    .add(jButton4)
-                    .add(jLabel12)
-                    .add(jLabel19)
-                    .add(Mes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(btnLiquidaAnual)
+                    .add(btnLiquidaMensual))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel13)
-                    .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButton5))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel7, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel9)
-                    .add(etiquetaTiempo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(progreso, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .add(progreso, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(etiquetaTiempo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -571,11 +553,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
         cuadroSeleccionSlack.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         cuadroSeleccionSlack.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         cuadroSeleccionSlack.setText("173");
-        cuadroSeleccionSlack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cuadroSeleccionSlackActionPerformed(evt);
-            }
-        });
         jSplitPane4.setRightComponent(cuadroSeleccionSlack);
 
         jSplitPane1.setDividerLocation(170);
@@ -596,11 +573,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
         cuadroSeleccionHidro.setMaximumSize(new java.awt.Dimension(65, 8));
         cuadroSeleccionHidro.setMinimumSize(new java.awt.Dimension(65, 8));
         cuadroSeleccionHidro.setPreferredSize(new java.awt.Dimension(65, 8));
-        cuadroSeleccionHidro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cuadroSeleccionHidroActionPerformed(evt);
-            }
-        });
         jSplitPane1.setRightComponent(cuadroSeleccionHidro);
 
         jSplitPane2.setDividerLocation(170);
@@ -616,11 +588,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
         cuadroSeleccionNEtapas.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         cuadroSeleccionNEtapas.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         cuadroSeleccionNEtapas.setText("240");
-        cuadroSeleccionNEtapas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cuadroSeleccionNEtapasActionPerformed(evt);
-            }
-        });
         jSplitPane2.setRightComponent(cuadroSeleccionNEtapas);
 
         jSplitPane3.setDividerLocation(170);
@@ -636,11 +603,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
         cuadroSeleccionOffset.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         cuadroSeleccionOffset.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         cuadroSeleccionOffset.setText("15");
-        cuadroSeleccionOffset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cuadroSeleccionOffsetActionPerformed(evt);
-            }
-        });
         jSplitPane3.setRightComponent(cuadroSeleccionOffset);
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
@@ -674,10 +636,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel6.setMaximumSize(new java.awt.Dimension(530, 138));
-        jPanel6.setMinimumSize(new java.awt.Dimension(530, 138));
-        jPanel6.setPreferredSize(new java.awt.Dimension(600, 137));
+        pnlReliquidacion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlReliquidacion.setMaximumSize(new java.awt.Dimension(530, 138));
+        pnlReliquidacion.setMinimumSize(new java.awt.Dimension(530, 138));
+        pnlReliquidacion.setPreferredSize(new java.awt.Dimension(600, 137));
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel14.setText("Reliquidación por IT");
@@ -689,11 +651,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
         DirectorioLiquidacion.setMaximumSize(new java.awt.Dimension(386, 18));
         DirectorioLiquidacion.setMinimumSize(new java.awt.Dimension(386, 18));
         DirectorioLiquidacion.setPreferredSize(new java.awt.Dimension(386, 18));
-        DirectorioLiquidacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DirectorioLiquidacionActionPerformed(evt);
-            }
-        });
 
         DirectorioReliquidacion.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         DirectorioReliquidacion.setMaximumSize(new java.awt.Dimension(386, 18));
@@ -729,11 +686,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
 
         Mes1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         Mes1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" }));
-        Mes1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Mes1ActionPerformed(evt);
-            }
-        });
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel17.setText("Mes a Reliiquidar");
@@ -743,11 +695,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
 
         FecPago.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         FecPago.setText(" dd/mm/aaaa");
-        FecPago.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FecPagoActionPerformed(evt);
-            }
-        });
 
         botonEscReliq.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
         botonEscReliq.setText("Escribir Archivos");
@@ -757,14 +704,14 @@ public class PeajesCDEC extends javax.swing.JFrame {
             }
         });
 
-        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel6Layout.createSequentialGroup()
+        org.jdesktop.layout.GroupLayout pnlReliquidacionLayout = new org.jdesktop.layout.GroupLayout(pnlReliquidacion);
+        pnlReliquidacion.setLayout(pnlReliquidacionLayout);
+        pnlReliquidacionLayout.setHorizontalGroup(
+            pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(pnlReliquidacionLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel6Layout.createSequentialGroup()
+                .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(pnlReliquidacionLayout.createSequentialGroup()
                         .add(jLabel14)
                         .add(18, 18, 18)
                         .add(jLabel17)
@@ -774,34 +721,34 @@ public class PeajesCDEC extends javax.swing.JFrame {
                         .add(jLabel18)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(FecPago, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
-                            .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, pnlReliquidacionLayout.createSequentialGroup()
+                            .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                 .add(jLabel15)
                                 .add(jLabel16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                             .add(323, 323, 323))
-                        .add(jPanel6Layout.createSequentialGroup()
+                        .add(pnlReliquidacionLayout.createSequentialGroup()
                             .add(21, 21, 21)
-                            .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(jPanel6Layout.createSequentialGroup()
+                            .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(pnlReliquidacionLayout.createSequentialGroup()
                                     .add(botonCalcularReliq)
                                     .add(28, 28, 28)
                                     .add(botonEscReliq))
-                                .add(jPanel6Layout.createSequentialGroup()
-                                    .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                .add(pnlReliquidacionLayout.createSequentialGroup()
+                                    .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                                         .add(DirectorioLiquidacion, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
                                         .add(DirectorioReliquidacion, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                    .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                         .add(botonDirectorioLiq)
                                         .add(Directorio)))))))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel6Layout.createSequentialGroup()
+        pnlReliquidacionLayout.setVerticalGroup(
+            pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(pnlReliquidacionLayout.createSequentialGroup()
                 .add(6, 6, 6)
-                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel14)
                     .add(jLabel17)
                     .add(Mes1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -810,20 +757,20 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel15)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(DirectorioLiquidacion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(botonDirectorioLiq))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel16)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(DirectorioReliquidacion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(Directorio))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(pnlReliquidacionLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(botonEscReliq)
                     .add(botonCalcularReliq))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenu1.setText("File");
@@ -867,17 +814,17 @@ public class PeajesCDEC extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
-                    .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
-                    .add(jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
+                    .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                    .add(pnlReliquidacion, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
                     .add(textoCalculo, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(jLabel11)
                         .add(18, 18, 18)
                         .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 194, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, Short.MAX_VALUE)))
+                        .add(0, 0, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -896,19 +843,20 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 193, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                .add(pnlReliquidacion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 157, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(textoCalculo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 30, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void calcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcular
-        calcular();
+//        calcular();
+        calcularProrratas();
 }//GEN-LAST:event_calcular
 
     private void abrirDirectorioEnt(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirDirectorioEnt
@@ -920,121 +868,57 @@ public class PeajesCDEC extends javax.swing.JFrame {
 }//GEN-LAST:event_abrirDirectorioSal
 
     private void cuadroAnoAEvaluarAccion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroAnoAEvaluarAccion
-        seleccionaNumHid();
+//        seleccionaNumHid();
     }//GEN-LAST:event_cuadroAnoAEvaluarAccion
 
-    private void cuadroSeleccionTipoCalculoAccion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroSeleccionTipoCalculoAccion
+    private void cuadroSeleccionAgnoBaseAccion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroSeleccionAgnoBaseAccion
         habilitarAnoABase();
-    }//GEN-LAST:event_cuadroSeleccionTipoCalculoAccion
+    }//GEN-LAST:event_cuadroSeleccionAgnoBaseAccion
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnPagoInyAnualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoInyAnualActionPerformed
         calcularPeajesIny();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnPagoInyAnualActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnPagoRetAnualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoRetAnualActionPerformed
         calcularPeajesRet();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnPagoRetAnualActionPerformed
 
-    private void botonCalcular1calcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCalcular1calcular
+    private void btnCalcularPeajecalcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularPeajecalcular
         calcularPeajes();
-    }//GEN-LAST:event_botonCalcular1calcular
+    }//GEN-LAST:event_btnCalcularPeajecalcular
 
-    private void MesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MesActionPerformed
-         // TODO add your handling code here:
-    }//GEN-LAST:event_MesActionPerformed
-
-    private void cuadroSeleccionHidroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroSeleccionHidroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cuadroSeleccionHidroActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    CalculaLiquiMesIny();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       CalculaLiquiMesRet();
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        EscribeLiquiMes();
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        EscribeLiquiAno();
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void cuadroSeleccionNEtapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroSeleccionNEtapasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cuadroSeleccionNEtapasActionPerformed
-
-    private void cuadroSeleccionOffsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroSeleccionOffsetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cuadroSeleccionOffsetActionPerformed
-
-    private void cuadroSeleccionSlackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroSeleccionSlackActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cuadroSeleccionSlackActionPerformed
-
-    private void ActClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActClientesActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_ActClientesActionPerformed
+    private void btnCuadroAnualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuadroAnualActionPerformed
+//        EscribeLiquiAno();
+        escribeCuadroResumen();
+    }//GEN-LAST:event_btnCuadroAnualActionPerformed
 
     private void botonDirectorioLiqabrirDirectorioEnt(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDirectorioLiqabrirDirectorioEnt
-        // TODO add your handling code here:
         abrirDirectorioEntAccionRel();
     }//GEN-LAST:event_botonDirectorioLiqabrirDirectorioEnt
 
     private void DirectorioabrirDirectorioSal(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DirectorioabrirDirectorioSal
-        // TODO add your handling code here:
         abrirDirectorioSalAccionRel();
     }//GEN-LAST:event_DirectorioabrirDirectorioSal
 
     private void botonCalcularReliqcalcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCalcularReliqcalcular
-        // TODO add your handling code here:
         calcularReliquidacion();
     }//GEN-LAST:event_botonCalcularReliqcalcular
 
-    private void Mes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Mes1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Mes1ActionPerformed
-
-    private void FecPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FecPagoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FecPagoActionPerformed
-
     private void botonEscReliqcalcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEscReliqcalcular
-        // TODO add your handling code here:
         EscReliquidacion();
     }//GEN-LAST:event_botonEscReliqcalcular
 
-    private void cuadroSeleccionTipoCalculo1Accion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroSeleccionTipoCalculo1Accion
-        // TODO add your handling code here:
-        seleccionTipoLiquidacion();
-    }//GEN-LAST:event_cuadroSeleccionTipoCalculo1Accion
+    private void cuadroSeleccionTipoCalculoAccion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroSeleccionTipoCalculoAccion
+//        seleccionTipoLiquidacion();
+    }//GEN-LAST:event_cuadroSeleccionTipoCalculoAccion
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
         leePropiedades();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
         EscribrePropiedades();
-        
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void campoDirectorioEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoDirectorioEntradaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoDirectorioEntradaActionPerformed
-
-    private void DirectorioLiquidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DirectorioLiquidacionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DirectorioLiquidacionActionPerformed
 
     private void menuOpcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcionesActionPerformed
         showOptionWindow();
@@ -1043,6 +927,22 @@ public class PeajesCDEC extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         salirPeajes();
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnLiquidaMensualItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_btnLiquidaMensualItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setActivaMes(true);
+        } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            // Nothing
+        }
+    }//GEN-LAST:event_btnLiquidaMensualItemStateChanged
+
+    private void btnLiquidaAnualItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_btnLiquidaAnualItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setActivaMes(false);
+        }  else if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            // Nothing
+        }
+    }//GEN-LAST:event_btnLiquidaAnualItemStateChanged
 
     public static void main(String args[]) {
                
@@ -1214,43 +1114,39 @@ public class PeajesCDEC extends javax.swing.JFrame {
     private javax.swing.JTextField FecPago;
     private javax.swing.JComboBox Mes;
     private javax.swing.JComboBox Mes1;
-    private javax.swing.JButton botonCalcular;
-    private javax.swing.JButton botonCalcular1;
     private javax.swing.JButton botonCalcularReliq;
     private javax.swing.JButton botonDirectorioEntrada;
     private javax.swing.JButton botonDirectorioLiq;
     private javax.swing.JButton botonDirectorioSalida;
     private javax.swing.JButton botonEscReliq;
+    private javax.swing.JButton btnCalcularPeaje;
+    private javax.swing.JButton btnCalcularProrrAnual;
+    private javax.swing.JButton btnCuadroAnual;
+    private javax.swing.ButtonGroup btnHorizonteLiquida;
+    private javax.swing.JRadioButton btnLiquidaAnual;
+    private javax.swing.JRadioButton btnLiquidaMensual;
+    private javax.swing.JButton btnPagoInyAnual;
+    private javax.swing.JButton btnPagoRetAnual;
     private javax.swing.JTextField campoDirectorioEntrada;
     private javax.swing.JTextField campoDirectorioSalida;
     private javax.swing.JComboBox cuadroAnoAEvaluar;
     private javax.swing.JComboBox cuadroAnoBase;
+    private javax.swing.JComboBox cuadroSeleccionAgnoBase;
     private javax.swing.JComboBox cuadroSeleccionHidro;
     private javax.swing.JTextField cuadroSeleccionNEtapas;
     private javax.swing.JTextField cuadroSeleccionOffset;
     private javax.swing.JTextField cuadroSeleccionSlack;
     private javax.swing.JComboBox cuadroSeleccionTipoCalculo;
-    private javax.swing.JComboBox cuadroSeleccionTipoCalculo1;
     private javax.swing.JLabel etiquetaTiempo;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1268,15 +1164,18 @@ public class PeajesCDEC extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JSplitPane jSplitPane4;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblFechaPago;
+    private javax.swing.JLabel lblMesLiquida;
     private javax.swing.JMenuItem menuOpciones;
+    private javax.swing.JPanel pnlReliquidacion;
     private javax.swing.JProgressBar progreso;
     private javax.swing.JLabel textoCalculo;
+    private javax.swing.JTextField txtFechaPago;
     // End of variables declaration//GEN-END:variables
 
     private void abrirDirectorioEntAccion() {
@@ -1299,8 +1198,8 @@ public class PeajesCDEC extends javax.swing.JFrame {
         selectorDirEnt.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorDirEnt.showOpenDialog(this);
         if(resultado==JFileChooser.CANCEL_OPTION) return;
-        nombreDirEnt = selectorDirEnt.getSelectedFile();
-        campoDirectorioEntrada.setText(nombreDirEnt.getPath());
+//        nombreDirEnt = selectorDirEnt.getSelectedFile();
+        campoDirectorioEntrada.setText(selectorDirEnt.getSelectedFile().getPath());
     }
 
     private void abrirDirectorioSalAccion() {
@@ -1322,148 +1221,429 @@ public class PeajesCDEC extends javax.swing.JFrame {
         selectorDirSal.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorDirSal.showOpenDialog(this);
         if(resultado==JFileChooser.CANCEL_OPTION) return;
-        nombreDirSal = selectorDirSal.getSelectedFile();
-        campoDirectorioSalida.setText(nombreDirSal.getPath());
+//        nombreDirSal = selectorDirSal.getSelectedFile();
+        campoDirectorioSalida.setText(selectorDirSal.getSelectedFile().getPath());
     }
 
-    private void seleccionaNumHid() {
-        anoAEvaluar = Integer.parseInt((String) cuadroAnoAEvaluar.getSelectedItem());
-        int nHydroMin = Integer.parseInt(cuadroSeleccionHidro.getItemAt(0).toString());
-        int nHydro = (anoAEvaluar-1962)-nHydroMin+1;
-        if (0 <= nHydro && nHydro < cuadroSeleccionHidro.getItemCount()) {
-            cuadroSeleccionHidro.setSelectedIndex(nHydro);
+//    private void seleccionaNumHid() {
+//        anoAEvaluar = Integer.parseInt((String) cuadroAnoAEvaluar.getSelectedItem());
+//        int nHydroMin = Integer.parseInt(cuadroSeleccionHidro.getItemAt(0).toString());
+//        int nHydro = (anoAEvaluar-1962)-nHydroMin+1;
+//        if (0 <= nHydro && nHydro < cuadroSeleccionHidro.getItemCount()) {
+//            cuadroSeleccionHidro.setSelectedIndex(nHydro);
+//        }
+//    }
+//
+    private void habilitarAnoABase() {
+        int nTipoCalcSeleccionado = (cuadroSeleccionAgnoBase.getSelectedItem().equals("Año a Evaluar = Año Base") ? 0 : 1);
+        if (nTipoCalcSeleccionado == 0) {
+            cuadroAnoBase.setEnabled(false);
+        } else {
+            cuadroAnoBase.setEnabled(true);
         }
     }
-
-    private void habilitarAnoABase() {
-        tipoCalcSeleccionado=(cuadroSeleccionTipoCalculo.getSelectedItem().equals("Año a Evaluar = Año Base")?0:1);
-        if(tipoCalcSeleccionado==0) cuadroAnoBase.setEnabled(false);
-        else cuadroAnoBase.setEnabled(true);
-    }
-    
-    private void seleccionTipoLiquidacion() {
-        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("Cálculo de Liquidación")?true:false);
-        if(LiquidacionReliquidacion) System.out.println("Seleccionado Cálculo de Liquidación");
-        else System.out.println("Seleccionado Cálculo de Reliquidación");
-    } 
+//    
+//    private void seleccionTipoLiquidacion() {
+//        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("Cálculo de Liquidación")?true:false);
+//        if(LiquidacionReliquidacion) System.out.println("Seleccionado Cálculo de Liquidación");
+//        else System.out.println("Seleccionado Cálculo de Reliquidación");
+//    } 
     
 
-    private void calcular() {
-        botonCalcular.setEnabled(false);
-        timer.start();
+//    private void calcular() {
+//        btnCalcularProrrAnual.setEnabled(false);
+//        timer.start();
+//        int numEtapasAno = Integer.parseInt(cuadroSeleccionNEtapas.getText());
+//        int offset = Integer.parseInt(cuadroSeleccionOffset.getText());
+//        int numSlack = Integer.parseInt(cuadroSeleccionSlack.getText());
+//        int anoBase;
+//        if (tipoCalcSeleccionado==0) {
+//            anoBase=anoAEvaluar;
+//        }
+//        else {
+//            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+//        }
+//        int numHidro=Integer.parseInt((String) cuadroSeleccionHidro.getSelectedItem());
+//        boolean clientes = (ActClientes.isEnabled() && ActClientes.isSelected());
+//        int nMesAEvaluar = Mes.getSelectedIndex();
+//        PeajesConstant.HorizonteCalculo horizonte = PeajesConstant.HorizonteCalculo.Anual; //TEMP!!!!
+////        Prorratas.Comenzar(nombreDirEnt,nombreDirSal,anoAEvaluar,tipoCalcSeleccionado,
+////                anoBase,numHidro,numEtapasAno,numSlack,offset,clientes);
+////        try {
+//            Prorratas.calcular(horizonte, nombreDirEnt, nombreDirSal, anoAEvaluar, nMesAEvaluar, anoBase, numHidro, numEtapasAno, numSlack, offset, clientes);
+////        } catch (IOException e) {
+////            e.printStackTrace(System.out);
+////        }
+//        tInicio=System.currentTimeMillis();
+//    }
+    
+    private void calcularProrratas () {
+        
+        File f_DirectorioEntrada = new File(getSelectedDirectorioEntrada());
+        File f_DirectorioSalida = new File(getSelectedDirectorioSalida());
+        int anoAEvaluar = getSelectedAnoAEvaluar();
+        int anoBase = getSelectedAnoBase();
+        int nHidro = getSelectedHidrologia();
         int numEtapasAno = Integer.parseInt(cuadroSeleccionNEtapas.getText());
+        int nMesAEvaluar = getSelectedMes();
         int offset = Integer.parseInt(cuadroSeleccionOffset.getText());
         int numSlack = Integer.parseInt(cuadroSeleccionSlack.getText());
-        int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
-        }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
-        }
-        int numHidro=Integer.parseInt((String) cuadroSeleccionHidro.getSelectedItem());
         boolean clientes = (ActClientes.isEnabled() && ActClientes.isSelected());
-        int nMesAEvaluar = Mes.getSelectedIndex();
-        PeajesConstant.HorizonteCalculo horizonte = PeajesConstant.HorizonteCalculo.Anual; //TEMP!!!!
-//        Prorratas.Comenzar(nombreDirEnt,nombreDirSal,anoAEvaluar,tipoCalcSeleccionado,
-//                anoBase,numHidro,numEtapasAno,numSlack,offset,clientes);
-//        try {
-            Prorratas.calcular(horizonte, nombreDirEnt, nombreDirSal, anoAEvaluar, nMesAEvaluar, anoBase, numHidro, numEtapasAno, numSlack, offset, clientes);
-//        } catch (IOException e) {
-//            e.printStackTrace(System.out);
-//        }
-        tInicio=System.currentTimeMillis();
+        PeajesConstant.HorizonteCalculo horizon = getSelectedHorizon();
+        
+        if (continueToProrrata ()) {
+            Prorratas.calcular(horizon, f_DirectorioEntrada, f_DirectorioSalida, anoAEvaluar, nMesAEvaluar, anoBase, nHidro, numEtapasAno, numSlack, offset, clientes);
+        }
+        
     }
 
     private void calcularPeajes() {
-        int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
+//        int anoBase;
+//        if (tipoCalcSeleccionado==0) {
+//            anoBase=anoAEvaluar;
+//        }
+//        else {
+//            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+//        }
+        File f_DirectorioEntrada = new File(getSelectedDirectorioEntrada());
+        File f_DirectorioSalida = new File(getSelectedDirectorioSalida());
+        if (continueToPeajes ()) {
+            Peajes.calculaPeajes(f_DirectorioEntrada, f_DirectorioSalida, getSelectedAnoAEvaluar());
         }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
-        }
-        Peajes.calculaPeajes(nombreDirEnt, nombreDirSal, anoAEvaluar);
     }
     
     private void calcularPeajesIny() {
-        int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
+//        int anoBase;
+//        if (tipoCalcSeleccionado==0) {
+//            anoBase=anoAEvaluar;
+//        }
+//        else {
+//            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+//        }
+//        seleccionTipoLiquidacion();
+//        //System.out.println(LiquidacionReliquidacion);
+//        PeajesIny.calculaPeajesIny(nombreDirEnt, nombreDirSal, anoAEvaluar, LiquidacionReliquidacion);
+//        tInicio=System.currentTimeMillis();
+        boolean bLiquidacionReliquidacion = cuadroSeleccionTipoCalculo.getSelectedIndex() == 0;
+        File f_DirectorioEntrada = new File(getSelectedDirectorioEntrada());
+        File f_DirectorioSalida = new File(getSelectedDirectorioSalida());
+        
+        PeajesConstant.HorizonteCalculo horizon = getSelectedHorizon();
+        if (continueToPagosInyRet()) {
+            PeajesIny.calculaPeajesIny(f_DirectorioEntrada, f_DirectorioSalida, getSelectedAnoAEvaluar(), bLiquidacionReliquidacion);
         }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+        //TODO: Fix this API!
+        if (horizon == PeajesConstant.HorizonteCalculo.Mensual) {
+            PeajesIny.LiquiMesIny(Mes.getSelectedItem().toString(), getSelectedAnoAEvaluar());
         }
-        seleccionTipoLiquidacion();
-        //System.out.println(LiquidacionReliquidacion);
-        PeajesIny.calculaPeajesIny(nombreDirEnt, nombreDirSal, anoAEvaluar,LiquidacionReliquidacion);
-        tInicio=System.currentTimeMillis();
     }
-    private void CalculaLiquiMesIny() {
-        int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
-        }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
-        }
-        LiquidacionReliquidacion = true;
-        PeajesIny.calculaPeajesIny(nombreDirEnt, nombreDirSal, anoAEvaluar,LiquidacionReliquidacion);
-        mesAEvaluar = (String) Mes.getSelectedItem();
-        PeajesIny.LiquiMesIny(mesAEvaluar,anoAEvaluar);
-
-    }
+    
+//    private void CalculaLiquiMesIny() {
+//        int anoBase;
+//        if (tipoCalcSeleccionado==0) {
+//            anoBase=anoAEvaluar;
+//        }
+//        else {
+//            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+//        }
+//        LiquidacionReliquidacion = true;
+//        PeajesIny.calculaPeajesIny(nombreDirEnt, nombreDirSal, anoAEvaluar,LiquidacionReliquidacion);
+//        mesAEvaluar = (String) Mes.getSelectedItem();
+//        PeajesIny.LiquiMesIny(mesAEvaluar,anoAEvaluar);
+//
+//    }
+    
     private void calcularPeajesRet() {
-        int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
-        }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
-        }
-        seleccionTipoLiquidacion();
-        PeajesRet.calculaPeajesRet(nombreDirEnt, nombreDirSal,anoAEvaluar,LiquidacionReliquidacion);
-    }
-    private void CalculaLiquiMesRet() {
-        int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
-        }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
-        }
-        LiquidacionReliquidacion = true;
-        PeajesRet.calculaPeajesRet(nombreDirEnt, nombreDirSal, anoAEvaluar,LiquidacionReliquidacion);
-        mesAEvaluar = (String) Mes.getSelectedItem();
-        PeajesRet.LiquiMesRet(mesAEvaluar,anoBase);
-    }
-    private void EscribeLiquiMes() {
-        int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
-        }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
-        }
-        mesAEvaluar = (String) Mes.getSelectedItem();
-        String fechaPag= (String) jTextField1.getText();
-       EscribeArchivosFinales.EscribeLiqMes(mesAEvaluar,anoAEvaluar,nombreDirSal,nombreDirEnt, fechaPag);
-       }
-    private void EscribeLiquiAno() {
-        int anoBase;
-        if (tipoCalcSeleccionado==0) {
-            anoBase=anoAEvaluar;
-        }
-        else {
-            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
-        }
-        mesAEvaluar = (String) Mes.getSelectedItem();
-        EscribeArchivosFinales.EscribeLiqAno(mesAEvaluar,anoAEvaluar,nombreDirSal);
+//        int anoBase;
+//        if (tipoCalcSeleccionado==0) {
+//            anoBase=anoAEvaluar;
+//        }
+//        else {
+//            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+//        }
+//        seleccionTipoLiquidacion();
+//        PeajesRet.calculaPeajesRet(nombreDirEnt, nombreDirSal,anoAEvaluar,LiquidacionReliquidacion);
 
+        boolean bLiquidacionReliquidacion = cuadroSeleccionTipoCalculo.getSelectedIndex() == 0;
+        File f_DirectorioEntrada = new File(getSelectedDirectorioEntrada());
+        File f_DirectorioSalida = new File(getSelectedDirectorioSalida());
+        
+        PeajesConstant.HorizonteCalculo horizon = getSelectedHorizon();
+        if (continueToPagosInyRet()) { //TODO: Custom made!
+            PeajesRet.calculaPeajesRet(f_DirectorioEntrada, f_DirectorioSalida, getSelectedAnoAEvaluar(), bLiquidacionReliquidacion);
+        }
+        //TODO: Fix this API!
+        if (horizon == PeajesConstant.HorizonteCalculo.Mensual) {
+            PeajesRet.LiquiMesRet(Mes.getSelectedItem().toString(), getSelectedAnoAEvaluar());
+        }
+    }
+    
+//    private void CalculaLiquiMesRet() {
+//        int anoBase;
+//        if (tipoCalcSeleccionado==0) {
+//            anoBase=anoAEvaluar;
+//        }
+//        else {
+//            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+//        }
+//        LiquidacionReliquidacion = true;
+//        PeajesRet.calculaPeajesRet(nombreDirEnt, nombreDirSal, anoAEvaluar,LiquidacionReliquidacion);
+//        mesAEvaluar = (String) Mes.getSelectedItem();
+//        PeajesRet.LiquiMesRet(mesAEvaluar,anoBase);
+//    }
+//    private void EscribeLiquiMes() {
+//        int anoBase;
+//        if (tipoCalcSeleccionado==0) {
+//            anoBase=anoAEvaluar;
+//        }
+//        else {
+//            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+//        }
+//        mesAEvaluar = (String) Mes.getSelectedItem();
+//        String fechaPag= (String) txtFechaPago.getText();
+//       EscribeArchivosFinales.EscribeLiqMes(mesAEvaluar,anoAEvaluar,nombreDirSal,nombreDirEnt, fechaPag);
+//       }
+//    private void EscribeLiquiAno() {
+//        int anoBase;
+//        if (tipoCalcSeleccionado==0) {
+//            anoBase=anoAEvaluar;
+//        }
+//        else {
+//            anoBase=Integer.parseInt((String) cuadroAnoBase.getSelectedItem());
+//        }
+//        mesAEvaluar = (String) Mes.getSelectedItem();
+//        EscribeArchivosFinales.EscribeLiqAno(mesAEvaluar,anoAEvaluar,nombreDirSal);
+//
+//    }
+    
+    private void escribeCuadroResumen() {
+        
+        File f_DirectorioEntrada = new File(getSelectedDirectorioEntrada());
+        File f_DirectorioSalida = new File(getSelectedDirectorioSalida());
+        String fechaPago = (String) txtFechaPago.getText();
+        
+        if (continueToCuadros()) {
+            PeajesConstant.HorizonteCalculo horizon = getSelectedHorizon();
+            if (horizon == PeajesConstant.HorizonteCalculo.Anual) {
+                EscribeArchivosFinales.EscribeLiqAno(Mes.getSelectedItem().toString(), getSelectedAnoAEvaluar(), f_DirectorioSalida);
+            } else {
+                EscribeArchivosFinales.EscribeLiqMes(Mes.getSelectedItem().toString(), getSelectedAnoAEvaluar(), f_DirectorioSalida, f_DirectorioEntrada, fechaPago);
+            }
+        }
+        
+    }
+    
+    //VALIDACIONES:
+    
+    /**
+     * Chequea que existan:
+     * <li>Planilla Ent</li>
+     * <li>Archivos plp: plpcen y plplin</li>
+     * <li>Exista directorio de salida</li>
+     * <li>Advierte que prorratas a Excel es demandante</li>
+     *
+     * @return true si pasa todas las validaciones
+     */
+    private boolean continueToProrrata() {
+        if (!existsEnt()) {
+            JOptionPane.showMessageDialog(this, "No se encontró la planilla ENT para el año " + getSelectedAnoAEvaluar() + " en la ruta " + getSelectedDirectorioEntrada(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        String sProrrExcel = getOptionValue("Imprime prorratas a Excel", PeajesConstant.DataType.BOOLEAN);
+        if (Boolean.parseBoolean(sProrrExcel)) {
+            int yesno = JOptionPane.showConfirmDialog(this, "ADVERTENCIA: Escribir prorratas a Excel puede requerir vastos recursos y tiempo computacional \n¿Está seguro desea continuar? Para modificar ir a File->Configuración", "Prorratas a Excel", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (yesno == JOptionPane.NO_OPTION) {
+                return false;
+            }
+        }
+        File f_plpcen = new File(getSelectedDirectorioEntrada() + SLASH + "plpcen.csv");
+        if (!f_plpcen.exists()) {
+            JOptionPane.showMessageDialog(this, "No se encontró archivo plpcen.csv en directorio " + getSelectedDirectorioEntrada() + "\nDebe copiar archivos plp al directorio", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        File f_plplin = new File(getSelectedDirectorioEntrada() + SLASH + "plplin.csv");
+        if (!f_plplin.exists()) {
+            JOptionPane.showMessageDialog(this, "No se encontró archivo plplin.csv en directorio " + getSelectedDirectorioEntrada() + "\nDebe copiar archivos plp al directorio", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        File f_Salida = new File(getSelectedDirectorioSalida());
+        if (!f_Salida.exists()) {
+            JOptionPane.showMessageDialog(this, "No existe directorio de salida: " + getSelectedDirectorioEntrada() + "\nDebe ingresar una ruta valida", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
-      //Calculo de Reliquidacipn
+    /**
+     * Chequea que existan:
+     * <li>Planilla Ent</li>
+     * <li>Exista directorio de salida</li>
+     *
+     * @return true si aprueba todas las validaciones
+     */
+    private boolean continueToPeajes() {
+        if (!existsEnt()) {
+            JOptionPane.showMessageDialog(this, "No se encontró la planilla ENT para el año " + getSelectedAnoAEvaluar() + " en la ruta " + getSelectedDirectorioEntrada(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        File f_Salida = new File(getSelectedDirectorioSalida());
+        if (!f_Salida.exists()) {
+            JOptionPane.showMessageDialog(this, "No existe directorio de salida: " + getSelectedDirectorioSalida() + "\nDebe ingresar una ruta valida", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Chequea que existan:
+     * <li>Planilla Ent</li>
+     * <li>Exista directorio de salida</li>
+     * <li>Exista planilla Peaje directorio de salida</li>
+     * <li>Exista archivo csv o planilla excel prorratas en directorio de salida</li>
+     * 
+     * @return true si aprueba todas las validaciones
+     */
+    private boolean continueToPagosInyRet () {
+        
+        //Chequeamos exista planillas ent, peajes, y prorratas
+        if (!existsEnt()) {
+            JOptionPane.showMessageDialog(this, "No se encontró la planilla ENT para el año " + getSelectedAnoAEvaluar() + " en la ruta " + getSelectedDirectorioEntrada(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        File f_Salida = new File(getSelectedDirectorioSalida());
+        if (!f_Salida.exists()) {
+            JOptionPane.showMessageDialog(this, "No existe directorio de salida: " + getSelectedDirectorioSalida() + "\nDebe ingresar una ruta valida", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        int nAnoAEvaluar = getSelectedAnoAEvaluar();
+        String sPeajesPath = getSelectedDirectorioSalida() + SLASH + "Peaje" + nAnoAEvaluar + ".xlsx";
+        File f_Peajes = new File (sPeajesPath);
+        if (!f_Peajes.exists()) {
+            JOptionPane.showMessageDialog(this, "No se encontró la planilla 'Peaje" + nAnoAEvaluar + ".xlsx' en el directorio de salida: " + getSelectedDirectorioEntrada() + "\nEjecute el cálculo de Peajes antes de continuar", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!existsProrrata()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron datos de Prorratas en el directorio de salida: " + getSelectedDirectorioSalida() + "\nEjecute el cálculo de Prorratas antes de continuar", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        String sPagosExcel = getOptionValue("Imprime pagos a Excel", PeajesConstant.DataType.BOOLEAN);
+        if (Boolean.parseBoolean(sPagosExcel)) {
+            int yesno = JOptionPane.showConfirmDialog(this, "ADVERTENCIA: Escribir pagos a Excel puede requerir vastos recursos y tiempo computacional \n¿Está seguro desea continuar? Para modificar ir a File->Configuración", "Pagos a Excel", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (yesno == JOptionPane.NO_OPTION) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Chequea que existan:
+     * <li>Directorio de salida exista</li>
+     * <li>algunos arreglos necesarios para realizar el resumen:
+     * PeajesIny.PagoAnualEmpGO y PeajesRet.TotAnualPjeRetEmpO</li>
+     *
+     * @return true si aprueba todas las validaciones
+     */
+    private boolean continueToCuadros () {
+        File f_Salida = new File(getSelectedDirectorioSalida());
+        if (!f_Salida.exists()) {
+            JOptionPane.showMessageDialog(this, "No existe directorio de salida: " + getSelectedDirectorioSalida() + "\nDebe ingresar una ruta valida", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (PeajesIny.PagoAnualEmpGO == null) {
+            JOptionPane.showMessageDialog(this, "Debe Ejecutar cálculo de pagos de inyección (botón Pagos Generación) antes de escribir cuadro resumen", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (PeajesRet.TotAnualPjeRetEmpO == null) {
+            JOptionPane.showMessageDialog(this, "Debe Ejecutar cálculo de pagos de retiro (botón Pagos Retiro) antes de escribir cuadro resumen", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean existsEnt () {
+        String sAnoEvaluar = cuadroAnoAEvaluar.getSelectedItem().toString();
+        String sDirectorioEnt = campoDirectorioEntrada.getText();
+        String sEntPath = sDirectorioEnt + SLASH + "Ent" + sAnoEvaluar + ".xlsx";
+        File f_Ent = new File (sEntPath);
+        return f_Ent.exists();
+    }
+    
+    private boolean existsProrrata () {
+        //Chequeamos que el archivo prorratas exista, dependiendo del horizonte:
+        File f_ProrrCSV;
+        File f_ProrrExcel;
+        int nAnoAEvaluar = getSelectedAnoAEvaluar();
+        int nMesAEvaluar = getSelectedMes();
+        switch (getSelectedHorizon()){
+            case Anual:
+                f_ProrrCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + ".csv");
+                break;
+            case Mensual:
+                f_ProrrCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + String.valueOf(nMesAEvaluar) + ".csv");
+                break;
+            default:
+                f_ProrrCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + ".csv");
+                break;
+        }
+        f_ProrrExcel = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + ".xlsx");
+        return (f_ProrrCSV.exists() || f_ProrrExcel.exists());
+    }
+    
+    private String getSelectedDirectorioEntrada () {
+        return campoDirectorioEntrada.getText();
+    }
+    
+    private String getSelectedDirectorioSalida () {
+        return campoDirectorioSalida.getText();
+    }
+    
+    private int getSelectedHidrologia () {
+        String sHidro = cuadroSeleccionHidro.getSelectedItem().toString();
+        return Integer.parseInt(sHidro);
+    }
+    
+    private int getSelectedAnoAEvaluar () {
+        String sAnoEvaluar = cuadroAnoAEvaluar.getSelectedItem().toString();
+        return Integer.parseInt(sAnoEvaluar);
+    }
+    
+    private int getSelectedAnoBase() {
+        if (cuadroSeleccionAgnoBase.getSelectedIndex() == 0) {
+            return getSelectedAnoAEvaluar();
+        } else {
+            String sAnoBase = cuadroAnoBase.getSelectedItem().toString();
+            return Integer.parseInt(sAnoBase);
+        }
+    }
+    
+    private int getSelectedMes() {
+        return Mes.getSelectedIndex();
+    }
+    
+    private PeajesConstant.HorizonteCalculo getSelectedHorizon() {
+        if (btnLiquidaAnual.isSelected()) {
+            return PeajesConstant.HorizonteCalculo.Anual;
+        } else {
+            return PeajesConstant.HorizonteCalculo.Mensual;
+        }
+    }
+    
+    private void setActivaMes(boolean activa) {
+        txtFechaPago.setEnabled(activa);
+        lblMesLiquida.setEnabled(activa);
+        lblFechaPago.setEnabled(activa);
+        Mes.setEnabled(activa);
+    }
+            
 
+      //Calculo de Reliquidacion
+    private File nombreDirEnt;
+    private File nombreDirSal;
+    private int anoAEvaluar;
+    private String mesAEvaluar;
+    private int tipoCalcSeleccionado;
+    
     private void abrirDirectorioEntAccionRel() {
         String nombreOs = System.getProperty("os.name");
         File directorio0;
@@ -1564,13 +1744,18 @@ public class PeajesCDEC extends javax.swing.JFrame {
  
     private void leePropiedades() {
         propiedades = new Properties();
-        if (nombreDirEnt == null) {
+//        if (nombreDirEnt == null) {
+//            abrirDirectorioEntAccion();
+//        }
+//        if (nombreDirEnt == null) {
+//            return;
+//        }
+//        String DirBaseEntrada = nombreDirEnt.toString();
+        String DirBaseEntrada = campoDirectorioEntrada.getText();
+        if (DirBaseEntrada.isEmpty()) {
             abrirDirectorioEntAccion();
         }
-        if (nombreDirEnt == null) {
-            return;
-        }
-        String DirBaseEntrada = nombreDirEnt.toString();
+        DirBaseEntrada = campoDirectorioEntrada.getText();
         String ArchivoConfiguracion = DirBaseEntrada + SLASH + "config.properties";
         System.out.println("Cargando archivo desde " + ArchivoConfiguracion);
         try {
@@ -1585,7 +1770,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         }
         //cuadroSeleccionHidro.setSelectedIndex((anoAEvaluar-1962)-40+1);
         propiedades.list(System.out);
-        jTextField1.setText(propiedades.getProperty("fecha_pago_liq"));
+        txtFechaPago.setText(propiedades.getProperty("fecha_pago_liq"));
         FecPago.setText(propiedades.getProperty("fecha_pago_reliq"));
         cuadroSeleccionHidro.setSelectedItem(Integer.parseInt(propiedades.getProperty("num_hidro")));
         Mes.setSelectedItem(propiedades.getProperty("mes_evaluar_liq"));
@@ -1596,7 +1781,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         cuadroAnoAEvaluar.setSelectedItem(propiedades.getProperty("a_evaluar"));
 
         LiquidacionReliquidacion = Boolean.parseBoolean(propiedades.getProperty("liquidacionreliquidacion"));
-        cuadroSeleccionTipoCalculo1.setSelectedIndex(LiquidacionReliquidacion ? 0 : 1);
+        cuadroSeleccionTipoCalculo.setSelectedIndex(LiquidacionReliquidacion ? 0 : 1);
         nombreDirEnt = new File(propiedades.getProperty("dir_entrada"));
         campoDirectorioEntrada.setText(nombreDirEnt.getPath());
         nombreDirSal = new File(propiedades.getProperty("dir_salida"));
@@ -1604,7 +1789,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
 
         tipoCalcSeleccionado = Integer.parseInt(propiedades.getProperty("tipo_calculo_seleccionado"));// propiedades.setProperty("tipo_calculo_seleccionado", Integer.toString(tipoCalcSeleccionado));
 
-        cuadroSeleccionTipoCalculo.setSelectedIndex(tipoCalcSeleccionado);
+        cuadroSeleccionAgnoBase.setSelectedIndex(tipoCalcSeleccionado);
         if (tipoCalcSeleccionado == 0) {
             cuadroAnoBase.setEnabled(false);
         } else {
@@ -1625,7 +1810,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         String ArchivoConfiguracion = DirBaseEntrada + SLASH +  "config.properties";
         System.out.println("Guardando archivo");
         
-        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo1.getSelectedItem().equals("Cálculo de Liquidación"));
+        LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo.getSelectedItem().equals("Cálculo de Liquidación"));
         
         int anoBase;
         if (tipoCalcSeleccionado == 0) {
@@ -1651,7 +1836,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         propiedades.setProperty("mes_evaluar_liq", (String) Mes.getSelectedItem());
         propiedades.setProperty("dir_liqmes",nombreDirLiq == null?"":nombreDirLiq.toString());
         propiedades.setProperty("dir_salida_reliq",nombreDirReliq == null?"":nombreDirReliq.toString());
-        propiedades.setProperty("fecha_pago_liq",(String) jTextField1.getText());
+        propiedades.setProperty("fecha_pago_liq",(String) txtFechaPago.getText());
         propiedades.setProperty("fecha_pago_reliq",(String) FecPago.getText());
         //escribo parametros
         
@@ -1679,9 +1864,12 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 agnos[a - nMinEvalua] = String.valueOf(a);
             }
         }
-        String sAgno = cuadroAnoAEvaluar.getSelectedItem().toString();
+        String sAgnoAEvaluar = cuadroAnoAEvaluar.getSelectedItem().toString();
         cuadroAnoAEvaluar.setModel(new javax.swing.DefaultComboBoxModel(agnos));
-        cuadroAnoAEvaluar.setSelectedItem(sAgno);
+        cuadroAnoAEvaluar.setSelectedItem(sAgnoAEvaluar);
+        String sAgnoBase = cuadroAnoBase.getSelectedItem().toString();
+        cuadroAnoBase.setModel(new javax.swing.DefaultComboBoxModel(agnos));
+        cuadroAnoBase.setSelectedItem(sAgnoBase);
         
         //Hidrologias:
         String[] hydros;
@@ -1709,12 +1897,17 @@ public class PeajesCDEC extends javax.swing.JFrame {
         //Reglas de calculo de peajes:
         String sCuadroSeleccionTipoCalculo1 = getOptionValue("Reglas Reliquidacion", PeajesConstant.DataType.BOOLEAN);
         if (Boolean.parseBoolean(sCuadroSeleccionTipoCalculo1)) {
-            cuadroSeleccionTipoCalculo1.setEnabled(true);
+            cuadroSeleccionTipoCalculo.setEnabled(true);
         } else {
-            cuadroSeleccionTipoCalculo1.setSelectedItem(0);
-            cuadroSeleccionTipoCalculo1.setEnabled(false);
+            cuadroSeleccionTipoCalculo.setSelectedItem(0);
+            cuadroSeleccionTipoCalculo.setEnabled(false);
         }
         
+        //Muestra panel de reliquidacion:
+        String sShowReliq = getOptionValue("Muestra menu re-liquidacion", PeajesConstant.DataType.BOOLEAN);
+        boolean bShowReliq = Boolean.parseBoolean(sShowReliq);
+        pnlReliquidacion.setVisible(bShowReliq);
+        pack();
         this.validate();
     }
     
@@ -1891,7 +2084,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 textoCalculo.setText("Terminado");
                 Toolkit.getDefaultToolkit().beep();
                 timer.stop();
-                botonCalcular.setEnabled(true);
+                btnCalcularProrrAnual.setEnabled(true);
                 progreso.setIndeterminate(false);
                 progreso.setValue(maximum);
             }
