@@ -94,9 +94,11 @@ public class PeajesIny {
     private static boolean calcPagos=false;
     private static boolean EscribirPagos=false;
 
-    public static void calculaPeajesIny(File DirEntrada, File DirSalida,
-            int Ano, boolean LiquidacionReliquidacion) {
-
+    public static void calculaPeajesIny(File DirEntrada, File DirSalida, int Ano, boolean LiquidacionReliquidacion) {
+        calculaPeajesIny(PeajesConstant.HorizonteCalculo.Anual, DirEntrada, DirSalida, Ano, 0, LiquidacionReliquidacion);
+    }
+    
+    public static void calculaPeajesIny(PeajesConstant.HorizonteCalculo horizon, File DirEntrada, File DirSalida, int Ano, int Mes, boolean LiquidacionReliquidacion) {
         String DirBaseEnt = DirEntrada.toString();
         DirBaseSal = DirSalida.toString();
         DecimalFormat DosDecimales=new DecimalFormat("0.00");
@@ -400,21 +402,21 @@ public class PeajesIny {
         if (f_prorratasGCSV.exists() && f_GMesCSV.exists()) {
             System.out.println("Leyendo archivos csv de prorratas y generacion mensual..");
             try {
-                int nReadP = Lee.leeProrratasCSV(f_prorratasGCSV.getAbsolutePath(), prorrMesGenTx, PeajesConstant.HorizonteCalculo.Anual);
+                int nReadP = Lee.leeProrratasCSV(f_prorratasGCSV.getAbsolutePath(), prorrMesGenTx, horizon);
             } catch (IOException e) {
                 System.out.println("No se pudo conectar con archivo prorratas " + f_prorratasGCSV.getAbsolutePath());
                 System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
                 return;
             }
             try {
-                int nReadGx = Lee.leeGeneracionMesCSV(f_GMesCSV.getAbsolutePath(), GenerMensual, PeajesConstant.HorizonteCalculo.Anual);
+                int nReadGx = Lee.leeGeneracionMesCSV(f_GMesCSV.getAbsolutePath(), GenerMensual, horizon);
             } catch (IOException e) {
                 System.out.println("No se pudo conectar con archivo generacion mensual " + f_GMesCSV.getAbsolutePath());
                 System.out.println("Verifique la ruta y vuelva a intentar. Error: " + e.getMessage());
                 return;
             }
         } else {
-            // Si no, intenta buscar libro Prorrata
+            // Si no, intenta buscar libro Prorrata Excel
             System.out.println("Leyendo prorratas y generacion mensual desde Excel..");
             String libroEntradaP = DirBaseSal + SLASH + "Prorrata" + Ano + ".xlsx";
             XSSFWorkbook wb_Prorratas;
@@ -465,21 +467,21 @@ public class PeajesIny {
         }
         
         
-        for (int i=0;i<numCen;i++){
-            for(int m=0; m<NUMERO_MESES;m++){
-            MesesAct[i][m]=0;
-            if(GenerMensual[i][m]!=0){
-               GenAnoxCen[i]+=GenerMensual[i][m];
-               MesesAct[i][m]=1;
-               numMesesAct[i]+=1;
+        for (int i = 0; i < numCen; i++) {
+            for (int m = 0; m < NUMERO_MESES; m++) {
+                MesesAct[i][m] = 0;
+                if (GenerMensual[i][m] != 0) {
+                    GenAnoxCen[i] += GenerMensual[i][m];
+                    MesesAct[i][m] = 1;
+                    numMesesAct[i] += 1;
+                }
             }
-            }
-            for(int m=0; m<NUMERO_MESES;m++){
-            GenPromMesCen[i][m]=0;
-            if(MesesAct[i][m]==1){
-            GenPromMesCen[i][m]=GenAnoxCen[i]/numMesesAct[i];
-            GeneTotMesProm[m]+= GenPromMesCen[i][m];
-            }
+            for (int m = 0; m < NUMERO_MESES; m++) {
+                GenPromMesCen[i][m] = 0;
+                if (MesesAct[i][m] == 1) {
+                    GenPromMesCen[i][m] = GenAnoxCen[i] / numMesesAct[i];
+                    GeneTotMesProm[m] += GenPromMesCen[i][m];
+                }
             }
         }
         
@@ -734,11 +736,8 @@ public class PeajesIny {
         }
         
         
-        try
-	{
-            FileWriter writer = new FileWriter(DirBaseSal + SLASH +"prorratas_pago_iny.csv");
-           
-            
+        try {
+            FileWriter writer = new FileWriter(DirBaseSal + SLASH + "prorratas_pago_iny.csv");
             writer.append("Central");
             writer.append(',');
             writer.append("Linea");
@@ -747,10 +746,9 @@ public class PeajesIny {
             writer.append(',');
             writer.append("Prorrata");
             writer.append('\n');
-            
-            for (int m=0; m<NUMERO_MESES; m++) {
-                for (int i = 0 ; i < numEmpG; i++){
-                    for (int t=0; t<numLinTx; t++) {
+            for (int m = 0; m < NUMERO_MESES; m++) {
+                for (int i = 0; i < numEmpG; i++) {
+                    for (int t = 0; t < numLinTx; t++) {
                         writer.append(nomEmp[i]);
                         writer.append(',');
                         writer.append(nomLineasN[t]);
@@ -764,13 +762,10 @@ public class PeajesIny {
             }
             writer.flush();
             writer.close();
+        } catch (IOException e) {
+            System.out.println("No se pudo escribir con exito prorratas_pago_iny.csv");
+            e.printStackTrace(System.out);
         }
-        
-        catch(IOException e)
-	{
-	     e.printStackTrace();
-             //continue;
-	} 
           
           
         /******************************************
@@ -980,105 +975,28 @@ public class PeajesIny {
         calcPagos=false;
         EscribirPagos=true;
         long tFinalCalculo = System.currentTimeMillis();
-        long tInicioEscritura = System.currentTimeMillis();
 
 
         /*
-         * Escritura de Resultados
+         * Escritura de Resultados Anuales:
          * =======================
          */
+        long tInicioEscritura = System.currentTimeMillis();
         System.out.println("Escribiendo resultados a archivos de salida");
-        String sEscribeXLS = PeajesCDEC.getOptionValue("Imprime pagos a Excel", PeajesConstant.DataType.BOOLEAN);
-        boolean bEscribeXLS = Boolean.parseBoolean(sEscribeXLS);
-        if (bEscribeXLS) {
-            String libroSalidaGXLS = DirBaseSal + SLASH + "PagoIny" + Ano + ".xlsx";
-            if (!USE_MEMORY_WRITER) {
-                Escribe.crearLibro(libroSalidaGXLS);
-                Escribe.creaH2F_3d_long(
-                        "Pago de Peaje por Línea y Central [$]", peajeLinGO,
-                        "Línea", nomLineasN,
-                        "Central", nomGenO,
-                        "Factor de Excención", MGNCO,
-                        "Mes", MESES,
-                        libroSalidaGXLS, "PjeCenLin",
-                        "#,###,##0;[Red]-#,###,##0;\"-\"");
-                /*Escribe.creaH2F_3d_long(
-                "Pago Peaje por Central y Transmisor [$]", peajeCenTxO,
-                "Central", nomGenO,
-                "Transmisor", nombreTx,
-                "Mes", nomMes,
-                libroSalidaGXLS, "PjeCenTx",
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
-        Escribe.creaH1F_2d_long(
-                "Pago Peaje por Central [$]", peajeCenO,
-                "Central", nomGenO,
-                "Mes", nomMes,
-                libroSalidaGXLS, "PjexCen",
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
-        Escribe.creaH2F_3d_long(
-                "Pago Peaje por Empresa y Transmisor [$]", peajeEmpTxO,
-                "Empresa", nomEmpGO,
-                "Transmisor", nombreTx,
-                "Mes", nomMes,
-                libroSalidaGXLS, "PjeEmpTx",
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
-        Escribe.creaH1F_2d_long(
-                "Pago Peaje por Empresa [$]", peajeEmpGO,
-                "Empresa", nomEmpGO,
-                "Mes", nomMes,
-                libroSalidaGXLS, "PjeEmp",
-                "#,###,##0;[Red]-#,###,##0;\"-\"");
-         * 
-                 */
-
-                for (int m = 0; m < NUMERO_MESES; m++) {
-                    Escribe.creaPIny(m,
-                            "Pago Peaje por Empresa y Transmisor [$]", peajeEmpTxO,
-                            AjusMGNCEmpTxO, PagoEmpTxO,
-                            peajeEmpGO, AjusMGNCEmpO, PagoEmpO,
-                            "Empresa", nomEmpGO,
-                            "Transmisor", nombreTx,
-                            libroSalidaGXLS, MESES[m],
-                            "#,###,##0;[Red]-#,###,##0;\"-\"");
-
-                    Escribe.creaDetallePIny(m,
-                            "Detalle de Pagos por Central [$]", peajeGenTxZonaO, peajeCenTxO, ExcenCenO,
-                            AjusMGNCTxO, PagoTotCenTxO,
-                            peajeGenO, ExcTotCenO, AjusMGNCTotO, PagoTotCenO,
-                            CapConjExcep, FCorrec,
-                            "Central", nomGenO,
-                            "Transmisor", nombreTx,
-                            "Factor Excención", MGNCO,
-                            //"PNeta", PotNetaO,
-                            //"Inyeccion Mensual", GenPromMesCenO,
-                            //"Factor",facPagoO ,
-                            libroSalidaGXLS, MESES[m],
-                            "#,###,##0;[Red]-#,###,##0;\"-\"");
-                }
-                Escribe.crea_verificaIny(
-                        "Verifica Pagos de Inyección", libroEntrada,
-                        "Mes", MESES,
-                        "Calculo", PagoInyMes,
-                        "Prorrata Línea", pagoInyMesLin,
-                        "Diferencia",
-                        "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
-                Escribe.crea_verificaCalcPeajes(
-                        "Verifica cálculo de Peajes", libroEntrada,
-                        "Mes", MESES,
-                        "Peajes", PeajeNMes,
-                        "Pago Ret", "Pago Iny", "Diferencia",
-                        "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
-            } else {
-
-                try {
-                    XSSFWorkbook wb_salida = Escribe.crearLibroVacio(libroSalidaGXLS);
+        if (horizon == PeajesConstant.HorizonteCalculo.Anual) {
+            String sEscribeXLS = PeajesCDEC.getOptionValue("Imprime pagos a Excel", PeajesConstant.DataType.BOOLEAN);
+            boolean bEscribeXLS = Boolean.parseBoolean(sEscribeXLS);
+            if (bEscribeXLS) {
+                String libroSalidaGXLS = DirBaseSal + SLASH + "PagoIny" + Ano + ".xlsx";
+                if (!USE_MEMORY_WRITER) {
+                    Escribe.crearLibro(libroSalidaGXLS);
                     Escribe.creaH2F_3d_long(
                             "Pago de Peaje por Línea y Central [$]", peajeLinGO,
                             "Línea", nomLineasN,
                             "Central", nomGenO,
                             "Factor de Excención", MGNCO,
                             "Mes", MESES,
-                            wb_salida, "PjeCenLin",
+                            libroSalidaGXLS, "PjeCenLin",
                             "#,###,##0;[Red]-#,###,##0;\"-\"");
                     for (int m = 0; m < NUMERO_MESES; m++) {
                         Escribe.creaPIny(m,
@@ -1087,8 +1005,9 @@ public class PeajesIny {
                                 peajeEmpGO, AjusMGNCEmpO, PagoEmpO,
                                 "Empresa", nomEmpGO,
                                 "Transmisor", nombreTx,
-                                wb_salida, MESES[m],
+                                libroSalidaGXLS, MESES[m],
                                 "#,###,##0;[Red]-#,###,##0;\"-\"");
+
                         Escribe.creaDetallePIny(m,
                                 "Detalle de Pagos por Central [$]", peajeGenTxZonaO, peajeCenTxO, ExcenCenO,
                                 AjusMGNCTxO, PagoTotCenTxO,
@@ -1100,100 +1019,148 @@ public class PeajesIny {
                                 //"PNeta", PotNetaO,
                                 //"Inyeccion Mensual", GenPromMesCenO,
                                 //"Factor",facPagoO ,
-                                wb_salida, MESES[m],
+                                libroSalidaGXLS, MESES[m],
                                 "#,###,##0;[Red]-#,###,##0;\"-\"");
                     }
                     Escribe.crea_verificaIny(
-                            "Verifica Pagos de Inyección", wb_Ent,
+                            "Verifica Pagos de Inyección", libroEntrada,
                             "Mes", MESES,
                             "Calculo", PagoInyMes,
                             "Prorrata Línea", pagoInyMesLin,
                             "Diferencia",
                             "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
                     Escribe.crea_verificaCalcPeajes(
-                            "Verifica cálculo de Peajes", wb_Ent,
+                            "Verifica cálculo de Peajes", libroEntrada,
                             "Mes", MESES,
                             "Peajes", PeajeNMes,
                             "Pago Ret", "Pago Iny", "Diferencia",
                             "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
-                    Escribe.guardaLibroDisco(wb_salida, libroSalidaGXLS);
-                    Escribe.guardaLibroDisco(wb_Ent, libroEntrada);
-                    wb_Peajes.close();
-                    wb_Ent.close();
-                    wb_salida.close();
-                } catch (IOException e) {
-                    System.out.println("Error al escribir resultados de pagos inyecciones a archivo " + libroSalidaGXLS);
-                    System.out.println(e.getMessage());
-                    e.printStackTrace(System.err);
-                }
+                } else {
 
-            }
-        }
-        long tFinalEscritura = System.currentTimeMillis();
-        
-        //Escribe archivos csv de salida:
-        long tInicioEscrituraCSV = System.currentTimeMillis();
-        String sEscribeCSV = PeajesCDEC.getOptionValue("Imprime pagos a csv", PeajesConstant.DataType.BOOLEAN);
-        boolean bEscribeCSV = Boolean.parseBoolean(sEscribeCSV);
-        if (bEscribeCSV) {
-            String libroSalidaGCSV = DirBaseSal + SLASH + "PagoIny" + Ano + ".csv";
-            BufferedWriter writerCSV = null;
-            try {
-                writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(libroSalidaGCSV), StandardCharsets.ISO_8859_1));
-                String sLineText;
-                //Escribimos el header:
-                writerCSV.write("Tramo,Transmisor,Central,Empresa Generación,Mes,Factor de Excención,Pago de Peaje [$]");
-                writerCSV.newLine();
-                //Escribimos los datos:
-                for (int l = 0; l < numLinTx; l++) {
-                    String[] sTramoTransmisor = nomLineasN[l].split("#");
-                    assert (sTramoTransmisor.length == 2) : "Como se formaron estos nombres?";
-                    for (int g = 0; g < numCen; g++) {
-                        String[] sEmpresaGen = nomGenO[g].split("#");
-                        assert (sEmpresaGen.length == 2) : "Como se formaron estos nombres?";
+                    try {
+                        XSSFWorkbook wb_salida = Escribe.crearLibroVacio(libroSalidaGXLS);
+                        Escribe.creaH2F_3d_long(
+                                "Pago de Peaje por Línea y Central [$]", peajeLinGO,
+                                "Línea", nomLineasN,
+                                "Central", nomGenO,
+                                "Factor de Excención", MGNCO,
+                                "Mes", MESES,
+                                wb_salida, "PjeCenLin",
+                                "#,###,##0;[Red]-#,###,##0;\"-\"");
                         for (int m = 0; m < NUMERO_MESES; m++) {
-                            sLineText = "";
-                            for (String s : sTramoTransmisor) {
-                                sLineText += s + ",";
+                            Escribe.creaPIny(m,
+                                    "Pago Peaje por Empresa y Transmisor [$]", peajeEmpTxO,
+                                    AjusMGNCEmpTxO, PagoEmpTxO,
+                                    peajeEmpGO, AjusMGNCEmpO, PagoEmpO,
+                                    "Empresa", nomEmpGO,
+                                    "Transmisor", nombreTx,
+                                    wb_salida, MESES[m],
+                                    "#,###,##0;[Red]-#,###,##0;\"-\"");
+                            Escribe.creaDetallePIny(m,
+                                    "Detalle de Pagos por Central [$]", peajeGenTxZonaO, peajeCenTxO, ExcenCenO,
+                                    AjusMGNCTxO, PagoTotCenTxO,
+                                    peajeGenO, ExcTotCenO, AjusMGNCTotO, PagoTotCenO,
+                                    CapConjExcep, FCorrec,
+                                    "Central", nomGenO,
+                                    "Transmisor", nombreTx,
+                                    "Factor Excención", MGNCO,
+                                    //"PNeta", PotNetaO,
+                                    //"Inyeccion Mensual", GenPromMesCenO,
+                                    //"Factor",facPagoO ,
+                                    wb_salida, MESES[m],
+                                    "#,###,##0;[Red]-#,###,##0;\"-\"");
+                        }
+                        Escribe.crea_verificaIny(
+                                "Verifica Pagos de Inyección", wb_Ent,
+                                "Mes", MESES,
+                                "Calculo", PagoInyMes,
+                                "Prorrata Línea", pagoInyMesLin,
+                                "Diferencia",
+                                "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                        Escribe.crea_verificaCalcPeajes(
+                                "Verifica cálculo de Peajes", wb_Ent,
+                                "Mes", MESES,
+                                "Peajes", PeajeNMes,
+                                "Pago Ret", "Pago Iny", "Diferencia",
+                                "verifica", "#,###,##0;[Red]-#,###,##0;\"-\"");
+                        Escribe.guardaLibroDisco(wb_salida, libroSalidaGXLS);
+                        Escribe.guardaLibroDisco(wb_Ent, libroEntrada);
+                        wb_Peajes.close();
+                        wb_Ent.close();
+                        wb_salida.close();
+                    } catch (IOException e) {
+                        System.out.println("Error al escribir resultados de pagos inyecciones a archivo " + libroSalidaGXLS);
+                        System.out.println(e.getMessage());
+                        e.printStackTrace(System.err);
+                    }
+                }
+            }
+
+            //Escribe archivos csv de salida:
+            String sEscribeCSV = PeajesCDEC.getOptionValue("Imprime pagos a csv", PeajesConstant.DataType.BOOLEAN);
+            boolean bEscribeCSV = Boolean.parseBoolean(sEscribeCSV);
+            if (bEscribeCSV) {
+                String libroSalidaGCSV = DirBaseSal + SLASH + "PagoIny" + Ano + ".csv";
+                BufferedWriter writerCSV = null;
+                try {
+                    writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(libroSalidaGCSV), StandardCharsets.ISO_8859_1));
+                    String sLineText;
+                    //Escribimos el header:
+                    writerCSV.write("Tramo,Transmisor,Central,Empresa Generación,Mes,Factor de Excención,Pago de Peaje [$]");
+                    writerCSV.newLine();
+                    //Escribimos los datos:
+                    for (int l = 0; l < numLinTx; l++) {
+                        String[] sTramoTransmisor = nomLineasN[l].split("#");
+                        assert (sTramoTransmisor.length == 2) : "Como se formaron estos nombres?";
+                        for (int g = 0; g < numCen; g++) {
+                            String[] sEmpresaGen = nomGenO[g].split("#");
+                            assert (sEmpresaGen.length == 2) : "Como se formaron estos nombres?";
+                            for (int m = 0; m < NUMERO_MESES; m++) {
+                                sLineText = "";
+                                for (String s : sTramoTransmisor) {
+                                    sLineText += s + ",";
+                                }
+                                sLineText += sEmpresaGen[1] + ",";
+                                sLineText += sEmpresaGen[0] + ",";
+                                sLineText += MESES[m] + ",";
+                                sLineText += MGNCO[g] + ",";
+                                sLineText += peajeLinGO[l][g][m];
+                                writerCSV.write(sLineText);
+                                writerCSV.newLine();
                             }
-                            sLineText += sEmpresaGen[1] + ",";
-                            sLineText += sEmpresaGen[0] + ",";
-                            sLineText += MESES[m] + ",";
-                            sLineText += MGNCO[g] + ",";
-                            sLineText += peajeLinGO[l][g][m];
-                            writerCSV.write(sLineText);
-                            writerCSV.newLine();
+                        }
+                    }
+                    System.out.println("Finalizado escritura de resultados PagoIny.csv");
+                } catch (IOException e) {
+                    System.out.println("WARNING: No se pudo escribir PagoIny.csv. Error: " + e.getMessage());
+                    e.printStackTrace(System.out);
+                } finally {
+                    if (writerCSV != null) {
+                        try {
+                            writerCSV.close();
+                        } catch (IOException e) {
+                            System.out.println("No se pudo cerrar conexion con PagoIny.csv. Error: " + e.getMessage());
+                            e.printStackTrace(System.out);
                         }
                     }
                 }
-                System.out.println("Finalizado escritura de resultados PagoIny.csv");
-            } catch (IOException e) {
-                System.out.println("WARNING: No se pudo escribir PagoIny.csv. Error: " + e.getMessage());
-                e.printStackTrace(System.out);
-            } finally {
-                if (writerCSV != null) {
-                    try {
-                        writerCSV.close();
-                    } catch (IOException e) {
-                        System.out.println("No se pudo cerrar conexion con PagoIny.csv. Error: " + e.getMessage());
-                        e.printStackTrace(System.out);
-                    }
-                }
             }
         }
-        long tFinalEscrituraCSV = System.currentTimeMillis();
         
+        /*
+         * Escritura de Resultados Mensuales:
+         * =======================
+         */
+        if (horizon == PeajesConstant.HorizonteCalculo.Mensual) {
+            LiquiMesIny(MESES[Mes], Ano);
+        }
+        long tFinalEscritura = System.currentTimeMillis();
         EscribirPagos=true;
         
-        System.out.println("Pagos de Inyección Anual Calculados");
+        System.out.println("Pagos de Inyección Calculados");
         System.out.println("Tiempo Adquisicion de datos     : "+DosDecimales.format((tFinalLectura-tInicioLectura)/(1000.0))+" seg");
         System.out.println("Tiempo Cálculo                  : "+DosDecimales.format((tFinalCalculo-tInicioCalculo)/(1000.0))+" seg");
-        if (bEscribeXLS) {
-            System.out.println("Tiempo Escritura de Resultados  : "+DosDecimales.format((tFinalEscritura-tInicioEscritura)/(1000.0))+" seg");
-        }
-        if (bEscribeCSV) {
-            System.out.println("Tiempo Escritura PeajesIny.csv  : "+DosDecimales.format((tFinalEscrituraCSV-tInicioEscrituraCSV)/(1000.0))+" seg");
-        }
+        System.out.println("Tiempo Escritura de Resultados  : "+DosDecimales.format((tFinalEscritura-tInicioEscritura)/(1000.0))+" seg");
         System.out.println();
     }
 

@@ -1281,8 +1281,8 @@ public class PeajesCDEC extends javax.swing.JFrame {
         
         File f_DirectorioEntrada = new File(getSelectedDirectorioEntrada());
         File f_DirectorioSalida = new File(getSelectedDirectorioSalida());
-        int anoAEvaluar = getSelectedAnoAEvaluar();
-        int anoBase = getSelectedAnoBase();
+        int nAnoAEvaluar = getSelectedAnoAEvaluar();
+        int nAnoBase = getSelectedAnoBase();
         int nHidro = getSelectedHidrologia();
         int numEtapasAno = Integer.parseInt(cuadroSeleccionNEtapas.getText());
         int nMesAEvaluar = getSelectedMes();
@@ -1290,9 +1290,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
         int numSlack = Integer.parseInt(cuadroSeleccionSlack.getText());
         boolean clientes = (ActClientes.isEnabled() && ActClientes.isSelected());
         PeajesConstant.HorizonteCalculo horizon = getSelectedHorizon();
-        
+        timer.start();
+        tInicio=System.currentTimeMillis();
         if (continueToProrrata ()) {
-            Prorratas.calcular(horizon, f_DirectorioEntrada, f_DirectorioSalida, anoAEvaluar, nMesAEvaluar, anoBase, nHidro, numEtapasAno, numSlack, offset, clientes);
+            Prorratas.calcular(horizon, f_DirectorioEntrada, f_DirectorioSalida, nAnoAEvaluar, nMesAEvaluar, nAnoBase, nHidro, numEtapasAno, numSlack, offset, clientes);
         }
         
     }
@@ -1327,14 +1328,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
         boolean bLiquidacionReliquidacion = cuadroSeleccionTipoCalculo.getSelectedIndex() == 0;
         File f_DirectorioEntrada = new File(getSelectedDirectorioEntrada());
         File f_DirectorioSalida = new File(getSelectedDirectorioSalida());
-        
+        int nMes = Mes.getSelectedIndex();
         PeajesConstant.HorizonteCalculo horizon = getSelectedHorizon();
         if (continueToPagosInyRet()) {
-            PeajesIny.calculaPeajesIny(f_DirectorioEntrada, f_DirectorioSalida, getSelectedAnoAEvaluar(), bLiquidacionReliquidacion);
-        }
-        //TODO: Fix this API!
-        if (horizon == PeajesConstant.HorizonteCalculo.Mensual) {
-            PeajesIny.LiquiMesIny(Mes.getSelectedItem().toString(), getSelectedAnoAEvaluar());
+            PeajesIny.calculaPeajesIny(horizon, f_DirectorioEntrada, f_DirectorioSalida, getSelectedAnoAEvaluar(), nMes, bLiquidacionReliquidacion);
         }
     }
     
@@ -1367,14 +1364,10 @@ public class PeajesCDEC extends javax.swing.JFrame {
         boolean bLiquidacionReliquidacion = cuadroSeleccionTipoCalculo.getSelectedIndex() == 0;
         File f_DirectorioEntrada = new File(getSelectedDirectorioEntrada());
         File f_DirectorioSalida = new File(getSelectedDirectorioSalida());
-        
+        int nMes = Mes.getSelectedIndex();
         PeajesConstant.HorizonteCalculo horizon = getSelectedHorizon();
-        if (continueToPagosInyRet()) { //TODO: Custom made!
-            PeajesRet.calculaPeajesRet(f_DirectorioEntrada, f_DirectorioSalida, getSelectedAnoAEvaluar(), bLiquidacionReliquidacion);
-        }
-        //TODO: Fix this API!
-        if (horizon == PeajesConstant.HorizonteCalculo.Mensual) {
-            PeajesRet.LiquiMesRet(Mes.getSelectedItem().toString(), getSelectedAnoAEvaluar());
+        if (continueToPagosInyRet()) {
+            PeajesRet.calculaPeajesRet(horizon, f_DirectorioEntrada, f_DirectorioSalida, getSelectedAnoAEvaluar(), nMes, bLiquidacionReliquidacion);
         }
     }
     
@@ -1433,8 +1426,8 @@ public class PeajesCDEC extends javax.swing.JFrame {
         
     }
     
-    //VALIDACIONES:
-    
+    // <editor-fold defaultstate="collapsed" desc="VALIDACIONES">
+
     /**
      * Chequea que existan:
      * <li>Planilla Ent</li>
@@ -1442,7 +1435,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
      * <li>Exista directorio de salida</li>
      * <li>Advierte que prorratas a Excel es demandante</li>
      *
-     * @return true si pasa todas las validaciones
+     * @return true si aprueba todas las validaciones
      */
     private boolean continueToProrrata() {
         if (!existsEnt()) {
@@ -1562,33 +1555,39 @@ public class PeajesCDEC extends javax.swing.JFrame {
     }
     
     private boolean existsEnt () {
-        String sAnoEvaluar = cuadroAnoAEvaluar.getSelectedItem().toString();
+        String sAnoAEvaluar = cuadroAnoAEvaluar.getSelectedItem().toString();
         String sDirectorioEnt = campoDirectorioEntrada.getText();
-        String sEntPath = sDirectorioEnt + SLASH + "Ent" + sAnoEvaluar + ".xlsx";
+        String sEntPath = sDirectorioEnt + SLASH + "Ent" + sAnoAEvaluar + ".xlsx";
         File f_Ent = new File (sEntPath);
         return f_Ent.exists();
     }
     
     private boolean existsProrrata () {
         //Chequeamos que el archivo prorratas exista, dependiendo del horizonte:
-        File f_ProrrCSV;
+        File f_ProrrGCSV;
+        File f_ProrrCCSV;
         File f_ProrrExcel;
         int nAnoAEvaluar = getSelectedAnoAEvaluar();
-        int nMesAEvaluar = getSelectedMes();
+        String sMesAEvaluar = Mes.getSelectedItem().toString();
         switch (getSelectedHorizon()){
             case Anual:
-                f_ProrrCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + ".csv");
+                f_ProrrGCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + ".csv");
+                f_ProrrCCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATACONSUMO + nAnoAEvaluar + ".csv");
                 break;
             case Mensual:
-                f_ProrrCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + String.valueOf(nMesAEvaluar) + ".csv");
+                f_ProrrGCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + sMesAEvaluar + ".csv");
+                f_ProrrCCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATACONSUMO + nAnoAEvaluar + sMesAEvaluar + ".csv");
                 break;
             default:
-                f_ProrrCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + ".csv");
+                f_ProrrGCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + ".csv");
+                f_ProrrCCSV = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATACONSUMO + nAnoAEvaluar + ".csv");
                 break;
         }
-        f_ProrrExcel = new File (getSelectedDirectorioSalida() + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + nAnoAEvaluar + ".xlsx");
-        return (f_ProrrCSV.exists() || f_ProrrExcel.exists());
+        f_ProrrExcel = new File (getSelectedDirectorioSalida() + SLASH + "Prorrata" + nAnoAEvaluar + ".xlsx");
+        return ((f_ProrrGCSV.exists() && f_ProrrCCSV.exists()) || f_ProrrExcel.exists());
     }
+    
+    // </editor-fold>
     
     private String getSelectedDirectorioEntrada () {
         return campoDirectorioEntrada.getText();
@@ -1637,6 +1636,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
     }
             
 
+    // <editor-fold defaultstate="collapsed" desc="Reliquidacion">
       //Calculo de Reliquidacion
     private File nombreDirEnt;
     private File nombreDirSal;
@@ -1727,6 +1727,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         System.out.println("");
         System.out.println("Reliquidación "+mesAEvaluar+" finalizada");
     }
+    //</editor-fold>
  
     private void salirPeajes() {
         //Delete all registered temp files:
@@ -2019,7 +2020,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
     }
     
     private static final java.util.List<File> lTempFiles = new java.util.LinkedList<File>();
-
     /**
      * Crea un nuevo archivo temporal (contralado por la VM Java)
      * <br>Se supone la VM limpia estos temporales (no creo que sirva)
