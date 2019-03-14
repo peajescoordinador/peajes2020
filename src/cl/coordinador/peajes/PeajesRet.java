@@ -499,7 +499,13 @@ public class PeajesRet {
         
         //Lee prorratas desde csv (defecto):
         long tInicioLecturaProrratas = System.currentTimeMillis();
-        File f_prorratasCCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_PRORRATACONSUMO + Ano + ".csv");
+        
+        File f_prorratasCCSV;
+        if (horizon == PeajesConstant.HorizonteCalculo.Anual) {
+            f_prorratasCCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_PRORRATACONSUMO + Ano + ".csv");
+        } else {
+            f_prorratasCCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_PRORRATACONSUMO + Ano + MESES[Mes] + ".csv");
+        }
         File f_GMesCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_GMES + Ano + ".csv");
         File f_CMesCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_CMES + Ano + ".csv");
         
@@ -915,12 +921,8 @@ public class PeajesRet {
         }
  
         //imprime prorratas
-        
-        try
-	{
-            FileWriter writer = new FileWriter(DirBaseSal + SLASH +"prorratas_pago_ret.csv");
-           
-            
+        try {
+            FileWriter writer = new FileWriter(DirBaseSal + SLASH + "prorratas_pago_ret.csv");
             writer.append("Central");
             writer.append(',');
             writer.append("Linea");
@@ -933,10 +935,9 @@ public class PeajesRet {
             writer.append(',');
             writer.append("Prorrata3");
             writer.append('\n');
-            
-            for (int m=0; m<NUMERO_MESES; m++) {
-                for (int i = 0 ; i < numEmp; i++){
-                    for (int t=0; t<numLinTx; t++) {
+            for (int m = 0; m < NUMERO_MESES; m++) {
+                for (int i = 0; i < numEmp; i++) {
+                    for (int t = 0; t < numLinTx; t++) {
                         writer.append(nomEmp[i]);
                         writer.append(',');
                         writer.append(nomLinTx[t]);
@@ -954,13 +955,10 @@ public class PeajesRet {
             }
             writer.flush();
             writer.close();
+        } catch (IOException e) {
+            System.out.println("No se pudo escribir con exito prorratas_pago_ret.csv");
+            e.printStackTrace(System.out);
         }
-        
-        catch(IOException e)
-	{
-	     e.printStackTrace();
-             //continue;
-	} 
         
           /*****************************
          * Pagos Clientes exentos

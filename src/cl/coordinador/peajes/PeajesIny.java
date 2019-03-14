@@ -397,7 +397,12 @@ public class PeajesIny {
         //Lee prorratas desde csv (defecto):
         long tInicioLecturaProrratas = System.currentTimeMillis();
         System.out.println("Inicio lectura prorratas.."); //TEMP!
-        File f_prorratasGCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + Ano + ".csv");
+        File f_prorratasGCSV;
+        if (horizon == PeajesConstant.HorizonteCalculo.Anual) {
+            f_prorratasGCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + Ano + ".csv");
+        } else {
+            f_prorratasGCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_PRORRATAGEN + Ano + MESES[Mes] + ".csv");
+        }
         File f_GMesCSV = new File(DirBaseSal + SLASH + PeajesConstant.PREFIJO_GMES + Ano + ".csv");
         if (f_prorratasGCSV.exists() && f_GMesCSV.exists()) {
             System.out.println("Leyendo archivos csv de prorratas y generacion mensual..");
