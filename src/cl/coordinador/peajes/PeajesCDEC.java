@@ -510,12 +510,12 @@ public class PeajesCDEC extends javax.swing.JFrame {
                         .add(5, 5, 5)
                         .add(btnLiquidaMensual))
                     .add(jPanel4Layout.createSequentialGroup()
-                        .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 105, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(43, 43, 43)
+                        .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 130, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(18, 18, 18)
                         .add(progreso, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 230, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(12, 12, 12)
                         .add(etiquetaTiempo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1427,7 +1427,26 @@ public class PeajesCDEC extends javax.swing.JFrame {
     }
     
     // <editor-fold defaultstate="collapsed" desc="VALIDACIONES">
-
+    /**
+     * Chequea que existan:
+     * <li>Planilla Ent</li>
+     * <li>Exista directorio de salida</li>
+     *
+     * @return true si aprueba todas las validaciones
+     */
+    private boolean continueToPeajes() {
+        if (!existsEnt()) {
+            JOptionPane.showMessageDialog(this, "No se encontró la planilla ENT para el año " + getSelectedAnoAEvaluar() + " en la ruta " + getSelectedDirectorioEntrada(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        File f_Salida = new File(getSelectedDirectorioSalida());
+        if (!f_Salida.exists()) {
+            JOptionPane.showMessageDialog(this, "No existe directorio de salida: " + getSelectedDirectorioSalida() + "\nDebe ingresar una ruta valida", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * Chequea que existan:
      * <li>Planilla Ent</li>
@@ -1444,7 +1463,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         }
         String sProrrExcel = getOptionValue("Imprime prorratas a Excel", PeajesConstant.DataType.BOOLEAN);
         if (Boolean.parseBoolean(sProrrExcel)) {
-            int yesno = JOptionPane.showConfirmDialog(this, "ADVERTENCIA: Escribir prorratas a Excel puede requerir vastos recursos y tiempo computacional \n¿Está seguro desea continuar? Para modificar ir a File->Configuración", "Prorratas a Excel", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            int yesno = JOptionPane.showConfirmDialog(this, "ADVERTENCIA: Escribir prorratas a Excel puede requerir excesivos recursos y tiempo computacional \n¿Está seguro desea continuar? Para modificar ir a File->Configuración", "Prorratas a Excel", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (yesno == JOptionPane.NO_OPTION) {
                 return false;
             }
@@ -1462,26 +1481,6 @@ public class PeajesCDEC extends javax.swing.JFrame {
         File f_Salida = new File(getSelectedDirectorioSalida());
         if (!f_Salida.exists()) {
             JOptionPane.showMessageDialog(this, "No existe directorio de salida: " + getSelectedDirectorioEntrada() + "\nDebe ingresar una ruta valida", "Error de validación", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Chequea que existan:
-     * <li>Planilla Ent</li>
-     * <li>Exista directorio de salida</li>
-     *
-     * @return true si aprueba todas las validaciones
-     */
-    private boolean continueToPeajes() {
-        if (!existsEnt()) {
-            JOptionPane.showMessageDialog(this, "No se encontró la planilla ENT para el año " + getSelectedAnoAEvaluar() + " en la ruta " + getSelectedDirectorioEntrada(), "Error de validación", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        File f_Salida = new File(getSelectedDirectorioSalida());
-        if (!f_Salida.exists()) {
-            JOptionPane.showMessageDialog(this, "No existe directorio de salida: " + getSelectedDirectorioSalida() + "\nDebe ingresar una ruta valida", "Error de validación", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -1521,7 +1520,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
         }
         String sPagosExcel = getOptionValue("Imprime pagos a Excel", PeajesConstant.DataType.BOOLEAN);
         if (Boolean.parseBoolean(sPagosExcel)) {
-            int yesno = JOptionPane.showConfirmDialog(this, "ADVERTENCIA: Escribir pagos a Excel puede requerir vastos recursos y tiempo computacional \n¿Está seguro desea continuar? Para modificar ir a File->Configuración", "Pagos a Excel", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            int yesno = JOptionPane.showConfirmDialog(this, "ADVERTENCIA: Escribir pagos a Excel puede requerir excesivos recursos y tiempo computacional \n¿Está seguro desea continuar? Para modificar ir a File->Configuración", "Pagos a Excel", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (yesno == JOptionPane.NO_OPTION) {
                 return false;
             }
