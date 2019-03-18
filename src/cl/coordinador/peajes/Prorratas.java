@@ -455,6 +455,7 @@ public class Prorratas {
         int cuenta = 0; //Contador de lineas
         int numHidCenPLP = 0; //Numero de hidrologias
         File testReadFile = new File(ArchivoDespachoGeneradores);
+        String sEncodingPLP = PeajesCDEC.getOptionValue("Encoding PLP", PeajesConstant.DataType.STRING);
         BufferedReader input = null;
         Gx = new float[numGen][numEtapas][numHid]; //Despacho PLP
         FallaEtaHid = new float[numEtapas][numHid];   //Falla PLP
@@ -482,7 +483,8 @@ public class Prorratas {
         if (USE_BUFFEREDSTREAM) {
             try {
                 //input = new BufferedReader( new FileReader(testReadFile) );
-                input = new BufferedReader( new InputStreamReader(new FileInputStream(testReadFile), "Latin1"));
+                
+                input = new BufferedReader( new InputStreamReader(new FileInputStream(testReadFile), sEncodingPLP));
                 String line = null;
                 cuenta=0;
                 int indGen=0;
@@ -573,10 +575,8 @@ public class Prorratas {
                     }
                     cuenta++;
                 }
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace(System.out);
-            } catch (IOException ex) {
-                ex.printStackTrace(System.out);
+            } catch (java.io.UnsupportedEncodingException ex) {
+                throw new IOException("Encoding invalido '" + sEncodingPLP + "' archivo despachos plp. Detalles: '" + ex.getMessage() +"'", ex);
             } catch (NumberFormatException e) {
                 throw new IOException("No fue posible convertir valor en linea '" + cuenta + "' archivo plp '" + ArchivoDespachoGeneradores +"'", e);
             } finally {
@@ -655,7 +655,7 @@ public class Prorratas {
         if (USE_SCANNER) {
             RandomAccessFile aFile = new RandomAccessFile(ArchivoDespachoGeneradores, "r");
             FileChannel inChannel = aFile.getChannel();
-            Scanner fileScanner = new Scanner(inChannel, StandardCharsets.ISO_8859_1.name());
+            Scanner fileScanner = new Scanner(inChannel, sEncodingPLP);
 //            Scanner fileScanner = new Scanner(new BufferedReader(new InputStreamReader(new FileInputStream(ArchivoDespachoGeneradores), StandardCharsets.ISO_8859_1.name())));
             String line = "";
             int indGen = 0;
@@ -731,7 +731,7 @@ public class Prorratas {
             }
         }
         try {
-            input = new BufferedReader( new InputStreamReader(new FileInputStream(testReadFile), "Latin1"));
+            input = new BufferedReader( new InputStreamReader(new FileInputStream(testReadFile), sEncodingPLP));
             String line = null;
             cuenta=0;
             int indLin=0;
@@ -793,10 +793,8 @@ public class Prorratas {
                 }
                 cuenta++;
             }
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace(System.out);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.out);
+        } catch (java.io.UnsupportedEncodingException ex) {
+                throw new IOException("Encoding invalido '" + sEncodingPLP + "' archivo flujos plp. Detalles: '" + ex.getMessage() +"'", ex);
         } catch (NumberFormatException e) {
             throw new IOException("No fue posible convertir valor en linea '" + cuenta + "' archivo plp '" + ArchivoPerdidasLineas +"'", e);
         } finally {
