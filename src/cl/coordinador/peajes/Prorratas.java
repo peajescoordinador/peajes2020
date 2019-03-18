@@ -92,6 +92,8 @@ public class Prorratas {
     private static int[][] paramBarTroncal; //datos de barras troncal en planilla Ent
     private static float[][] ConsumosClaves; //consumos reales en planilla Ent
     private static int[][] datosClaves;  //datos de consumos en planilla Ent
+    private static int[] centralesFlujo; //datos de centrales para imprimir en archivos debug
+    private static int[] lineasFlujo; //datos de lineas para imprimir en archivos debug
     
     @Deprecated
     public static void CalculaProrratas(File DirEntrada, File DirSalida, int AnoAEvaluar, int tipoCalc, int AnoBase,
@@ -644,7 +646,7 @@ public class Prorratas {
                         cuenta++;
                     }
                 }
-                buffer.clear(); // do something with the data and clear/compact it.
+                buffer.clear();
             }
             inChannel.close();
             aFile.close();
@@ -864,42 +866,51 @@ public class Prorratas {
         System.out.println("Calculando...");
         //
         
-        int[] centralesFlujo;
-        int[] lineasFlujo;
+        
 //        centralesFlujo = Lee.leeCentralesFlujo(rutaLibroEnt, nomGen,"centrales_flujo");
         centralesFlujo = Lee.leeCentralesFlujo(wb_Ent, nomGen,"centrales_flujo", false); //TODO: move to config file
 //        lineasFlujo = Lee.leeCentralesFlujo(rutaLibroEnt, nombreLineas,"lineas_flujo");
         lineasFlujo = Lee.leeCentralesFlujo(wb_Ent, nombreLineas,"lineas_flujo", false); //TODO: move to config file
+        wb_Ent.close();
         
-        //Escritura del header archivo prorratas.csv:
-        FileWriter writerProrratas = new FileWriter(DirBaseSalida + SLASH + "prorratas.csv");
-
-        writerProrratas.append("Etapa");
-        writerProrratas.append(',');
-        writerProrratas.append("Hidrologia");
-        writerProrratas.append(',');
-        writerProrratas.append("Línea");
-        writerProrratas.append(',');
-        writerProrratas.append("Central");
-        writerProrratas.append(',');
-        writerProrratas.append("Prorrata");
-        writerProrratas.append(',');
-        writerProrratas.append("Gx");
-        writerProrratas.append(',');
-        writerProrratas.append("GGDF");
-        writerProrratas.append('\n');
-
-        writerProrratas.flush();
-        writerProrratas.close();
+        //Escritura de archivos DEBUG:
+        String sPrintDebug = PeajesCDEC.getOptionValue("Imprime archivos 'debug' prorratas", PeajesConstant.DataType.BOOLEAN);
+        boolean bPrintDebug = Boolean.parseBoolean(sPrintDebug);
         
-        //Escritura del header archivo consumos.csv:
-        FileWriter writerConsumos = new FileWriter(DirBaseSalida + SLASH + "consumos.csv");
-        writerConsumos.append("Hidrologia,Etapa");
-        for (int b = 0; b < numBarras; b++) {
-            writerConsumos.append(",");
-            writerConsumos.append(Float.toString(b));
+        if (bPrintDebug) {
+            //Escritura del header archivo prorratas.csv:
+            BufferedWriter writerProrratas = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(DirBaseSalida + SLASH + "prorratas.csv", false), PeajesConstant.CSV_ENCODING));
+            writerProrratas.append("Etapa");
+            writerProrratas.append(',');
+            writerProrratas.append("Hidrologia");
+            writerProrratas.append(',');
+            writerProrratas.append("Línea");
+            writerProrratas.append(',');
+            writerProrratas.append("Central");
+            writerProrratas.append(',');
+            writerProrratas.append("Prorrata");
+            writerProrratas.append(',');
+            writerProrratas.append("Gx");
+            writerProrratas.append(',');
+            writerProrratas.append("GGDF");
+            writerProrratas.append(',');
+            writerProrratas.append("A");
+            writerProrratas.append(',');
+            writerProrratas.append("GGDF(ref)");
+            writerProrratas.write('\n');
+//            writerProrratas.flush();
+            writerProrratas.close();
+            
+            //Escritura del header archivo consumos.csv:
+            BufferedWriter writerConsumos = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(DirBaseSalida + SLASH + "consumos.csv", false), PeajesConstant.CSV_ENCODING));
+            writerConsumos.append("Hidrologia,Etapa");
+            for (int b = 0; b < numBarras; b++) {
+                writerConsumos.append(",");
+                writerConsumos.append(Float.toString(b));
+            }
+            writerConsumos.write('\n');
+            writerConsumos.close();
         }
-        writerConsumos.append("\n");
         
         
         
@@ -967,7 +978,12 @@ public class Prorratas {
                 useDisk = false;
                 break;
         }
-        System.out.println("Usando executor: Total etapas=" + numEtapasProrr + ". Threads Paralelo=" + nMaxThreads + ". Uso Memoria=" + !useDisk);
+        if (nMaxThreads > 1) {
+            System.out.println("Usando 'parallel executor': Total etapas=" + numEtapasProrr + ". Threads Paralelo=" + nMaxThreads + ". Uso Memoria=" + !useDisk);
+        } else {
+            System.out.println("Ejecutando calculo sequencial: Total etapas=" + numEtapasProrr + ". Uso Memoria=" + !useDisk);
+        }
+        
         ExecutorService exeService;
         if (USE_FACTORY) {
             if (nMaxThreads > 1) {
@@ -1000,7 +1016,7 @@ public class Prorratas {
                 paramLinEta[indiceLintron[l]][9] = datosLintron[l][2];
             }
             
-            exeService.submit(new ProrratasExe(etapa, nBarraSlack, numGen, numLin, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk));
+            exeService.submit(new ProrratasExe(etapa, nBarraSlack, numGen, numLin, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk, bPrintDebug));
         }
         long elapsed = System.currentTimeMillis() - initExecutorTime;
         System.out.println("===========Submitted all tasks: Time: " + elapsed / 1000 + "[sec]===========");
@@ -1014,9 +1030,6 @@ public class Prorratas {
         }
         elapsed = System.currentTimeMillis() - initExecutorTime;
         System.out.println("===========Finished Parallel Execution! Total time: " + elapsed / 1000 + "[sec]===========");
-
-        writerConsumos.flush();
-        writerConsumos.close();
 
         long tfinIteraciones = System.currentTimeMillis();
 
@@ -1051,7 +1064,7 @@ public class Prorratas {
         }
         writerFlujosHidrologia.flush();
         writerFlujosHidrologia.close();
-        
+
         //Escribe flujos medios (promedios de hidrologias):
         FileWriter writerFlujosMedios = new FileWriter(DirBaseSalida + SLASH + "flujos_medios.csv");
         float[][] FlujoMedio = new float[numLin][numEtapas];
@@ -1272,7 +1285,7 @@ public class Prorratas {
                             sLineText += zona[l] + ",";
                             sLineText += nomCli[c] + ",";
                             sLineText += MESES[m] + ",";
-                            sLineText += prorrMesTroncC[l][c][m] * FactorC[l][m];;
+                            sLineText += prorrMesTroncC[l][c][m] * FactorC[l][m];
                             writerCSV.write(sLineText);
                             writerCSV.newLine();
                         }
@@ -1557,17 +1570,19 @@ public class Prorratas {
                         "Mes", MESES, EnergiaCU, "CU",
                         wb_salida, "CMesCli", "0.0;[Red]-0.0;\"-\"");
                 System.out.println("Acaba de crear la hoja xls CMesCli");
+                // Graba y cierra conexion:
+                Escribe.guardaLibroDisco(wb_salida, libroSalidaXLS);
+                wb_salida.close();
+                
                 //ACTUALIZA PLANILLA ENT CON VERIFICACION DE PRORRATAS:
+                wb_Ent = new XSSFWorkbook(new FileInputStream( rutaLibroEnt ));
                 Escribe.crea_verifProrrPeaj(prorrataLineaTron,
                         nomLinTron,
                         wb_Ent, "verProrr", "0.000%;[Red]-0.000%;\"-\"", 12);
                 System.out.println("Acaba de actualiza planilla Ent hoja xls verProrr");
-
                 // Graba y cierra conexion:
                 Escribe.guardaLibroDisco(wb_Ent, rutaLibroEnt);
-                Escribe.guardaLibroDisco(wb_salida, libroSalidaXLS);
                 wb_Ent.close();
-                wb_salida.close();
             }
         }
         
@@ -1588,7 +1603,7 @@ public class Prorratas {
         completo=true;
     }
 
-    public static void calculaEtapa(int etapa, int nBarraSlack, int numGen, int numLin, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk) throws IOException {
+    public static void calculaEtapa(int etapa, int nBarraSlack, int numGen, int numLin, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk, boolean printDebug) throws IOException {
         Matriz Ybarra;
         Matriz Xbarra;
         float[][] flujoDCEtapa = new float[numLin][numHid];
@@ -1758,6 +1773,11 @@ public class Prorratas {
 //                    prorrCx[l][datosClaves[c][2]][etapa] += prorrEtaCons[l][c];
 //                }
 //            }
+            if (printDebug) {
+                Escribe.appendToDebugProrrata(DirBaseSalida, lineasFlujo, centralesFlujo, etapa, Gx, GGDFEtapa, paramGener, GSDF, GGDFref, prorrGx); //yiks!!
+                Escribe.appendToDebugConsumo(DirBaseSalida, etapa, conAjustado);
+            }
+            
         } finally {
             if (GGDFEtapa != null) {
                 GGDFEtapa.close();
@@ -1879,8 +1899,9 @@ class ProrratasExe implements Runnable {
     private int numClaves;
     private float[][] paramLinEta;
     private boolean useDisk;
+    private boolean printDebug;
 
-    public ProrratasExe(int etapa, int nBarraSlack, int numGen, int numLin, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk) {
+    public ProrratasExe(int etapa, int nBarraSlack, int numGen, int numLin, int numBarras, int numHid, String DirBaseSalida, int numClaves, float[][] paramLinEta, boolean useDisk, boolean printDebug) {
         this.etapa = etapa;
         this.nBarraSlack = nBarraSlack;
         this.numGen = numGen;
@@ -1891,12 +1912,13 @@ class ProrratasExe implements Runnable {
         this.numClaves = numClaves;
         this.paramLinEta = paramLinEta;
         this.useDisk = useDisk;
+        this.printDebug = printDebug;
     }
     
     @Override
     public void run() {
         try {
-            Prorratas.calculaEtapa(etapa, nBarraSlack, numGen, numLin, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk);
+            Prorratas.calculaEtapa(etapa, nBarraSlack, numGen, numLin, numBarras, numHid, DirBaseSalida, numClaves, paramLinEta, useDisk, printDebug);
         } catch (IOException e) {
             e.printStackTrace(System.out);
         } catch (Exception e) {

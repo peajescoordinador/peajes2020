@@ -1468,6 +1468,17 @@ public class PeajesCDEC extends javax.swing.JFrame {
                 return false;
             }
         }
+        String sPrintDebug = getOptionValue("Imprime archivos 'debug' prorratas", PeajesConstant.DataType.BOOLEAN);
+        String sMaxThreads = PeajesCDEC.getOptionValue("Max Threads", PeajesConstant.DataType.INTEGER);
+        if (Boolean.parseBoolean(sPrintDebug) && Integer.parseInt(sMaxThreads) > 1) {
+            int yesno = JOptionPane.showConfirmDialog(this, "ADVERTENCIA: Ud. ha seleccionado escribir archivos debug prorratas con multi-thread."
+                    + "\nEsto requiere intensivo uso de disco y puede entorpecer el progreso del cálculo paralelo."
+                    + "\nSe recomienda desactivar cálculo paralelo (Max threads = 1) o cambiar Impresión archivos debug a 'false'"
+                    + "\n¿Está seguro desea continuar? Para modificar ir a File->Configuración", "Archivos debug en paralelo", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (yesno == JOptionPane.NO_OPTION) {
+                return false;
+            }
+        }
         File f_plpcen = new File(getSelectedDirectorioEntrada() + SLASH + "plpcen.csv");
         if (!f_plpcen.exists()) {
             JOptionPane.showMessageDialog(this, "No se encontró archivo plpcen.csv en directorio " + getSelectedDirectorioEntrada() + "\nDebe copiar archivos plp al directorio", "Error de validación", JOptionPane.ERROR_MESSAGE);

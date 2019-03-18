@@ -16,11 +16,13 @@
 package cl.coordinador.peajes;
 
 import static cl.coordinador.peajes.PeajesConstant.MESES;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 import java.util.Properties;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -8228,6 +8230,97 @@ public class Escribe {
             System.out.println("No se se puede acceder al archivo " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace(System.out);
+        }
+    }
+    
+    static void appendToDebugProrrata(String DirBaseSalida, int[] lineasFlujo, int[] gflux, int e, float[][][] Gx, GGDF D, int[][] datosGener, float[][] A, float[][] Dref, float[][][] Prorratas) {
+        BufferedWriter writerCSV = null;
+        try {
+            writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(DirBaseSalida + PeajesConstant.SLASH + "prorratas.csv", true), PeajesConstant.CSV_ENCODING));
+            int numHid = D.getNumHidro();
+            for (int h = 0; h < numHid; h++) {
+                for (int l = 0; l < lineasFlujo.length; l++) {
+                    for (int g = 0; g < gflux.length; g++) {
+                        //for(int g=0;g<numGeneradores;g++){
+                        writerCSV.write(String.valueOf(e));
+                        writerCSV.write(',');
+                        writerCSV.write(String.valueOf(h));
+                        writerCSV.write(',');
+                        writerCSV.write(String.valueOf(lineasFlujo[l]));
+                        writerCSV.write(',');
+                        writerCSV.write(String.valueOf(gflux[g]));
+                        writerCSV.write(',');
+//                        writer.append(String.valueOf((genEquiv[gflux[g]][lineasFlujo[l]][h]) / (genEquivTotal[lineasFlujo[l]][h])));
+                        writerCSV.write("na");
+                        writerCSV.write(',');
+                        writerCSV.write("" + (Gx[gflux[g]][e][h]));
+                        writerCSV.write(',');
+//                        writer.append("" + (D[datosGener[gflux[g]][0]][lineasFlujo[l]][h]));
+                        writerCSV.write("" + D.get(datosGener[gflux[g]][0], lineasFlujo[l], h));
+                        writerCSV.write(',');
+                        writerCSV.write("" + (A[datosGener[gflux[g]][0]][lineasFlujo[l]]));
+                        writerCSV.write(',');
+                        writerCSV.write("" + (Dref[lineasFlujo[l]][h]));
+                        writerCSV.write('\n');
+                    }
+                }
+            }
+            for (int l = 0; l < lineasFlujo.length; l++) {
+                for (int g = 0; g < gflux.length; g++) {
+                    writerCSV.write(String.valueOf(e));
+                    writerCSV.write(',');
+                    writerCSV.write("med");
+                    writerCSV.write(',');
+                    writerCSV.write(String.valueOf(lineasFlujo[l]));
+                    writerCSV.write(',');
+                    writerCSV.write(String.valueOf(gflux[g]));
+                    writerCSV.write(',');
+                    writerCSV.write("" + (Prorratas[lineasFlujo[l]][gflux[g]][e]));
+                    writerCSV.write('\n');
+                }
+            }
+        } catch (IOException f) {
+            f.printStackTrace(System.out);
+        } finally {
+            if (writerCSV != null) {
+                try {
+                    writerCSV.close();
+                } catch (IOException ex) {
+                    System.out.println("No se pudo cerrar conexion con prorratas.csv. Error: " + ex.getMessage());
+                    ex.printStackTrace(System.out);
+                }
+            }
+        }
+    }
+    
+    static void appendToDebugConsumo(String DirBaseSalida, int etapa, float[][]conAjustado) {
+        BufferedWriter writerCSV = null;
+        try {
+            writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(DirBaseSalida + PeajesConstant.SLASH + "consumos.csv", true), PeajesConstant.CSV_ENCODING));
+            int numBarras = conAjustado.length;
+            int numHid = conAjustado[0].length;
+            for (int h = 0; h < numHid; h++) {
+
+                writerCSV.write(Float.toString(h));
+                writerCSV.write(",");
+                writerCSV.write(Float.toString(etapa));
+                for (int b = 0; b < numBarras; b++) {
+                    writerCSV.write(",");
+                    writerCSV.write(Float.toString(conAjustado[b][h]));
+                }
+                writerCSV.write('\n');
+            }
+        } catch (IOException f) {
+            f.printStackTrace(System.out);
+        } finally {
+            if (writerCSV != null) {
+                try {
+                    writerCSV.close();
+                } catch (IOException ex) {
+                    System.out.println("No se pudo cerrar conexion con consumos.csv. Error: " + ex.getMessage());
+                    ex.printStackTrace(System.out);
+                }
+            }
         }
     }
 

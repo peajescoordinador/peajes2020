@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>---PEAJATOR CONFIG FILE---</comment>
-<entry key="Version">0.0.7</entry>
+<entry key="Version">0.0.8</entry>
 <entry key="Idioma::STRING::Espanol">Espanol</entry>
 <entry key="Min Hidrologias::INTEGER">40</entry>
 <entry key="Max Hidrologias::INTEGER">65</entry>
@@ -18,5 +18,6 @@
 <entry key="Imprime prorratas a csv::BOOLEAN">true</entry>
 <entry key="Imprime pagos a Excel::BOOLEAN">false</entry>
 <entry key="Imprime prorratas a Excel::BOOLEAN">false</entry>
+<entry key="Imprime archivos 'debug' prorratas::BOOLEAN">false</entry>
 <entry key="Muestra menu re-liquidacion::BOOLEAN">false</entry>
 </properties>
