@@ -15,6 +15,7 @@
  */
 package cl.coordinador.peajes;
 
+import java.awt.event.MouseEvent;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -334,6 +335,25 @@ class KeyPropertyTable extends javax.swing.JTable {
 //        row[1] = value;
 //        row[2] = key;
         model.addRow(row);
+    }
+
+    /**
+     * Devuelve el mismo texto de la celda si el mouse esta sobre la primera
+     * columna
+     *
+     * @param event mouse event
+     * @return el mismo texto de la celda si el mouse esta sobre la primera
+     * columna
+     */
+    @Override
+    public String getToolTipText(MouseEvent event) {
+        int nRow = this.rowAtPoint(event.getPoint());
+        int nCol = this.columnAtPoint(event.getPoint());
+        if (nCol == 0) {
+            return this.getValueAt(nRow, 0).toString();
+        } else {
+            return super.getToolTipText(event);
+        }
     }
 
     /**
