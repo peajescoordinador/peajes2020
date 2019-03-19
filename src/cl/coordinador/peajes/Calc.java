@@ -1486,6 +1486,57 @@ public class Calc {
         }
         return Transpuesta;
     }
+    
+    /**
+     * Funcion de estimacion de uso de memoria por cada etapa (thread) basado en
+     * profile fecha Mar 2019
+     *
+     * @param b numBarras
+     * @param l numLin
+     * @param g numGen
+     * @param h numHidro
+     * @param c numCli
+     * @param e numEtapas (total, no de optimizacion)
+     * @param m NUMERO_MESES
+     * @return estimacion de memoria en MB asumiendo variables tipo float (4
+     * bytes)
+     */
+    static public long getUsoEstimadoMemoriaFija(int b, int l, int g, int h, int c, int e, int m) {
+        long fix_2f;
+        long fix_3f;
+        fix_2f = 2 * b * e + 2 * l * e + 6 * l * g;
+        fix_3f = (g * h + l * h + l * g + l * c) * e + (3 * l * g + 3 * l * c) * m;
+        return (fix_2f + fix_3f) * 4;
+    }
+    
+    /**
+     * Funcion de estimacion de uso de memoria por cada etapa (thread) basado en
+     * profile fecha Mar 2019
+     *
+     * @param b numBarras
+     * @param l numLin
+     * @param g numGen
+     * @param h numHidro
+     * @param c numCli
+     * @param useDisk usar true para estimar memoria guardando GGDF a disco
+     * @return estimacion de memoria en MB asumiendo variables tipo float (4
+     * bytes)
+     */
+    static public long getUsoEstimadoMemoriaVariable(int b, int l, int g, int h, int c, boolean useDisk) {
+        long var_1f;
+        long var_2f;
+        long var_3f;
+
+        var_1f = (2 * b + 10 * l + 7 * h) + (g + 4 * l) * h;
+        var_2f = (5 * l * h + 3 * b * h + b * l + l * g + l * c) + b * l * h;
+//        var_3f = l * g * h + l * h * c + 2 * b * l * h; //Deprecated: Esto fue mejorado al cambiar calculo prorratas
+        var_3f = 2 * b * l * h;
+        
+        if (useDisk) {
+            return (var_1f + var_2f) * 4;
+        }
+        return (var_1f + var_2f + var_3f) * 4;
+    }
 
     //----------------------------------
     //Determina si quedan barras "sueltas"

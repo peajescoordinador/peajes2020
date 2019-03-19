@@ -956,7 +956,11 @@ public class Prorratas {
         String sMaxThreads = PeajesCDEC.getOptionValue("Max Threads", PeajesConstant.DataType.INTEGER);
         assert(sMaxThreads != null): "Como puede ser nulo esta importante llave? Cambiaste archivo config?";
         int nMaxThreads = Math.max(Math.min(numEtapasProrr, Integer.parseInt(sMaxThreads)), 1);
-        
+        int nProcessors = Runtime.getRuntime().availableProcessors();
+        if (nMaxThreads > nProcessors) {
+            System.out.println("WARNING: El numero de threads especificado "+ nMaxThreads + " excede el numero de procesadores disponibles para la VM");
+            System.out.println("Considere reducir parametro de configuracion 'Max Threads' a max " + nProcessors);
+        }
         String sTimeOut = PeajesCDEC.getOptionValue("Thread timeout (en minutos)", PeajesConstant.DataType.INTEGER);
         assert(sMaxThreads != null): "Como puede ser nulo 'Thread timeout'? Cambiaste archivo config?";
         int nTimeOut = Integer.parseInt(sTimeOut);
@@ -964,10 +968,47 @@ public class Prorratas {
         //Lee opciones de uso de memoria:
         String sMemoryUsage = PeajesCDEC.getOptionValue("Uso Memoria::STRING::Auto::Max::Min", PeajesConstant.DataType.STRING);
         PeajesConstant.UsoMemoria memory = PeajesConstant.UsoMemoria.valueOf(sMemoryUsage);
+        
+        long nMemoryFix = Calc.getUsoEstimadoMemoriaFija(numBarras, numLin, numGen, numHid, numCli, numEtapas, NUMERO_MESES);
+        long nMemoryVar = Calc.getUsoEstimadoMemoriaVariable(numBarras, numLin, numGen, numHid, numCli, false);
+        long nMemoryVarDisk = Calc.getUsoEstimadoMemoriaVariable(numBarras, numLin, numGen, numHid, numCli, true);
+        long nMaxMemoryVM = Runtime.getRuntime().maxMemory();
+        long allocatedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+        double dMimMemoryReq = (double) (nMemoryFix + nMemoryVarDisk) / 1e6; //1 thread
+        double dMaxCalcMemoryReq  = (double) (nMemoryVar * nMaxThreads) / 1e6;
+        double dMaxCalcMemoryReqDisk  = (double) (nMemoryVarDisk * nMaxThreads) / 1e6;
+        double dMaxMemoryReq = (double) (nMemoryFix + nMemoryVar * nMaxThreads) / 1e6;
+        double dMaxMemoryReqDisk = (double) (nMemoryFix + nMemoryVarDisk * nMaxThreads) / 1e6;
+        double presumableFreeMemory = (double) (nMaxMemoryVM - allocatedMemory) / 1e6; //memoria disponible en este instante
+        double dMaxFreeMemory = (double) (nMaxMemoryVM - nMemoryFix) / 1e6; //Esta es una estimacion 'optimista' de la memoria que deberia estar disponible
+        
+        if (dMimMemoryReq > nMaxMemoryVM) {
+            System.out.println("WARNING: requerimiento de memoria minimo parece exceder limite de memoria de la VM");
+            System.out.println("Considere re-ejecutar app con un limite mayor usando comando -Xmx (eg. Asigna 24GB: -Xmx24g");
+        }
+        if (dMaxMemoryReqDisk > nMaxMemoryVM) {
+            System.out.println("WARNING: requerimiento de memoria parece exceder limite de memoria de la VM");
+            System.out.println("Configure menos threads o considere re-ejecutar app con un limite mayor de memoria usando comando -Xmx (eg. Asigna 24GB: -Xmx24g");
+        }
+        
+//        System.out.println("Requerimiento minimo memoria [MB]: " + dMimMemoryReq);
+        System.out.println("Memoria disponible           [MB]: " + dosDecimales.format(presumableFreeMemory));
+        System.out.println("Limite memoria VM            [MB]: " + dosDecimales.format(nMaxMemoryVM / 1e6));
+        
         boolean useDisk = false;
         switch (memory) {
             case Auto:
-                useDisk = (nMaxThreads >= 4);
+//                useDisk = (nMaxThreads >= 4); //Deprecated
+                if ((double) (allocatedMemory / nMemoryFix) < 10) {
+                    useDisk = (dMaxCalcMemoryReq / presumableFreeMemory) > 1.2;
+                } else {
+                    useDisk = (dMaxCalcMemoryReq / dMaxFreeMemory) > 1.2;
+                }
+                if (useDisk) {
+                    System.out.println("Memoria requerida calculos   [MB]: " + dosDecimales.format(dMaxCalcMemoryReqDisk));
+                } else {
+                    System.out.println("Memoria requerida calculos   [MB]: " + dosDecimales.format(dMaxCalcMemoryReq));
+                }
                 break;
             case Min:
                 useDisk = true;
