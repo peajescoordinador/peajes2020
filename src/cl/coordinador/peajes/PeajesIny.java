@@ -556,7 +556,7 @@ public class PeajesIny {
         
         
          /******************************************
-         * Calcula Excencion de Centrales
+         * Calcula Exencion de Centrales
          ******************************************/
         double[][] facPago=new double[numCen][NUMERO_MESES];
         double[] CapConjExcep=new double[NUMERO_MESES];
@@ -999,7 +999,7 @@ public class PeajesIny {
                             "Pago de Peaje por Línea y Central [$]", peajeLinGO,
                             "Línea", nomLineasN,
                             "Central", nomGenO,
-                            "Factor de Excención", MGNCO,
+                            "Factor de Exención", MGNCO,
                             "Mes", MESES,
                             libroSalidaGXLS, "PjeCenLin",
                             "#,###,##0;[Red]-#,###,##0;\"-\"");
@@ -1020,7 +1020,7 @@ public class PeajesIny {
                                 CapConjExcep, FCorrec,
                                 "Central", nomGenO,
                                 "Transmisor", nombreTx,
-                                "Factor Excención", MGNCO,
+                                "Factor Exención", MGNCO,
                                 //"PNeta", PotNetaO,
                                 //"Inyeccion Mensual", GenPromMesCenO,
                                 //"Factor",facPagoO ,
@@ -1048,7 +1048,7 @@ public class PeajesIny {
                                 "Pago de Peaje por Línea y Central [$]", peajeLinGO,
                                 "Línea", nomLineasN,
                                 "Central", nomGenO,
-                                "Factor de Excención", MGNCO,
+                                "Factor de Exención", MGNCO,
                                 "Mes", MESES,
                                 wb_salida, "PjeCenLin",
                                 "#,###,##0;[Red]-#,###,##0;\"-\"");
@@ -1068,7 +1068,7 @@ public class PeajesIny {
                                     CapConjExcep, FCorrec,
                                     "Central", nomGenO,
                                     "Transmisor", nombreTx,
-                                    "Factor Excención", MGNCO,
+                                    "Factor Exención", MGNCO,
                                     //"PNeta", PotNetaO,
                                     //"Inyeccion Mensual", GenPromMesCenO,
                                     //"Factor",facPagoO ,
@@ -1111,7 +1111,7 @@ public class PeajesIny {
                     writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(libroSalidaGCSV), StandardCharsets.ISO_8859_1));
                     String sLineText;
                     //Escribimos el header:
-                    writerCSV.write("Tramo,Transmisor,Central,Empresa Generación,Mes,Factor de Excención,Pago de Peaje [$]");
+                    writerCSV.write("Tramo,Transmisor,Central,Empresa Generación,Mes,Factor de Exención,Pago de Peaje [$]");
                     writerCSV.newLine();
                     //Escribimos los datos:
                     for (int l = 0; l < numLinTx; l++) {

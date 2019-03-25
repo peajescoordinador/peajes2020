@@ -196,7 +196,7 @@ public class EscribeArchivosFinales {
                 "P. Neta [MW]", PeajesIny.PotNetaMGNCO,
                 libroSalidaGXLSAno, "PagMGNC", Ano, "#,##0.00");
         Escribe.crea_1TablaTx_2C(
-                "Excención de Pagos de Peajes de Inyección por MGNC (Valores en $)", PeajesIny.ExcenAnualMGNCTxO,
+                "Exención de Pagos de Peajes de Inyección por MGNC (Valores en $)", PeajesIny.ExcenAnualMGNCTxO,
                 PeajesIny.ExcenAnualMGNCO,
                 "Central", PeajesIny.nomMGNCO,
                 "Transmisor", PeajesIny.nombreTx,

@@ -3197,7 +3197,7 @@ public class Escribe {
 
         //cellTC = rowTmp.createCell(6+(4*dim2+1));
         cellTC = rowTmp.createCell(3 + (4 * dim2 + 1));
-        cellTC.setCellValue("Excención MGNC");
+        cellTC.setCellValue("Exención MGNC");
         cellTC.setCellStyle(estiloTitulo1);
         RefI = new CellReference(cellTC.getRowIndex(), cellTC.getColumnIndex());
         //RefF = new CellReference(cellTC.getRowIndex(),5+(5*dim2+2));
@@ -3484,7 +3484,7 @@ public class Escribe {
 
         cellTC = rowTmp.getCell(2 + (dim2 + 1));
         //cellTC.setCellValue("Ajuste por MGNC");
-        cellTC.setCellValue("Excenciones");
+        cellTC.setCellValue("Exenciones");
         cellTC.setCellStyle(estiloTitulo1);
         RefI = new CellReference(cellTC.getRowIndex(), cellTC.getColumnIndex());
         RefF = new CellReference(cellTC.getRowIndex(), 1 + (dim2 + 1) * 2);
@@ -3493,7 +3493,7 @@ public class Escribe {
 
         cellTC = rowTmp.getCell(2 + (dim2 + 1) * 2);
         //cellTC.setCellValue("Pago Incluyendo Ajuste por MGNC");
-        cellTC.setCellValue("Pago Incluyendo Excenciones");
+        cellTC.setCellValue("Pago Incluyendo Exenciones");
         cellTC.setCellStyle(estiloTitulo1);
         RefI = new CellReference(cellTC.getRowIndex(), cellTC.getColumnIndex());
         RefF = new CellReference(cellTC.getRowIndex(), 1 + (dim2 + 1) * 3);

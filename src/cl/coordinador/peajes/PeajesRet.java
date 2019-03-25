@@ -787,7 +787,7 @@ public class PeajesRet {
                 }
 
           /*****************************
-         * Pagos por Empresa Clientes No Excentos
+         * Pagos por Empresa Clientes No Exentos
          *****************************/
         double[][][] pjeEmpSinAjuTx = new double[numEmp][numTx][NUMERO_MESES];// el nombre que posee en peajes ret es: pjeEmpCNoExTx
         double[][] pjeEmpSinAju = new double[numEmp][NUMERO_MESES];
@@ -994,7 +994,7 @@ public class PeajesRet {
        }
        }
          /*****************************
-         * Asigna Ajuste de Excentos a las empresas
+         * Asigna Ajuste de Exentos a las empresas
          *****************************/
        double[][][] pagoEmpAjusTx= new double[numEmp][numTx][NUMERO_MESES];
        double[][] pagoEmpAjus= new double[numEmp][NUMERO_MESES];
@@ -1022,7 +1022,7 @@ public class PeajesRet {
         double[] TotAnualPjeRetEmpGRE2288 = new double[numEmp];
         
 
-        //Pago Total (No exento + Ajustex Excento)
+        //Pago Total (No exento + Ajustex Exento)
         double[][][] TotRetEmpTx = new double[numEmp][numTx][NUMERO_MESES];
         double[][] TotRetEmp = new double[numEmp][NUMERO_MESES];
         double[][][] TotItRetEmpTx = new double[numEmp][numTx][NUMERO_MESES];
@@ -1447,14 +1447,14 @@ public class PeajesRet {
                             libroSalidaCXLS, "PagosDx", "#,###,##0;[Red]-#,###,##0;\"-\"");
 
                     Escribe.creaH2F_3d_double(
-                            "Pagos de Peaje de Retiro RE2288 por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxRE2288O,
+                            "Pagos de Peaje de Retiro RE2288 por Empresa y Transmisor [$] (Incluye ajuste por Exentos)", TotRetEmpTxRE2288O,
                             "Empresa", nomSumiRM88O,
                             "Transmisor", nombreTx,
                             "Mes", MESES,
                             libroSalidaCXLS, "PagosRE2288",
                             "#,###,##0;[Red]-#,###,##0;\"-\"");
                     Escribe.creaH2F_3d_double(
-                            "Pagos de Peaje de Retiro por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxO,
+                            "Pagos de Peaje de Retiro por Empresa y Transmisor [$] (Incluye ajuste por Exentos)", TotRetEmpTxO,
                             "Empresa", nomEmpO,
                             "Transmisor", nombreTx,
                             "Mes", MESES,
@@ -1539,14 +1539,14 @@ public class PeajesRet {
                                 "Transmisor", nombreTx,
                                 wb_salida, "PagosDx", "#,###,##0;[Red]-#,###,##0;\"-\"");
                         Escribe.creaH2F_3d_double(
-                                "Pagos de Peaje de Retiro RE2288 por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxRE2288O,
+                                "Pagos de Peaje de Retiro RE2288 por Empresa y Transmisor [$] (Incluye ajuste por Exentos)", TotRetEmpTxRE2288O,
                                 "Empresa", nomSumiRM88O,
                                 "Transmisor", nombreTx,
                                 "Mes", MESES,
                                 wb_salida, "PagosRE2288",
                                 "#,###,##0;[Red]-#,###,##0;\"-\"");
                         Escribe.creaH2F_3d_double(
-                                "Pagos de Peaje de Retiro por Empresa y Transmisor [$] (Incluye ajuste por Excentos)", TotRetEmpTxO,
+                                "Pagos de Peaje de Retiro por Empresa y Transmisor [$] (Incluye ajuste por Exentos)", TotRetEmpTxO,
                                 "Empresa", nomEmpO,
                                 "Transmisor", nombreTx,
                                 "Mes", MESES,

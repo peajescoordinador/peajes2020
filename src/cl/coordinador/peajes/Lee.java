@@ -1838,7 +1838,7 @@ public class Lee {
 
             
             System.out.println("Acaba de extraer y escribir en la hoja 'clientes' los Clientes asociados a los consumos");
-            System.out.println("Recuerde indicar los clientes excentos antes de calcular los pagos");
+            System.out.println("Recuerde indicar los clientes exentos antes de calcular los pagos");
         
         return numClaves;
     }
