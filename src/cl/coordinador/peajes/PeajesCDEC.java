@@ -1773,7 +1773,7 @@ public class PeajesCDEC extends javax.swing.JFrame {
             int nValues = Lee.leePropiedades(propiedades, ArchivoConfiguracion);
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
-            System.out.println("Archivo de configuracion de caso no encontrado. Asegurese que el archivo se encuentra en la ruta de entrada y su nombre se 'config.properties'");
+            System.out.println("Archivo de configuracion de caso no encontrado. Asegurese que el archivo se encuentra en la ruta de entrada y su nombre sea 'config.properties'");
             return;
         } catch (IOException e) {
             e.printStackTrace(System.out);
@@ -1814,12 +1814,20 @@ public class PeajesCDEC extends javax.swing.JFrame {
  
     private void EscribrePropiedades(){
         propiedades = new Properties();
-        if (nombreDirEnt == null) {
+//        if (nombreDirEnt == null) {
+//            abrirDirectorioEntAccion();
+//        }
+        String DirBaseEntrada = campoDirectorioEntrada.getText();
+        if (DirBaseEntrada.isEmpty()) {
             abrirDirectorioEntAccion();
         }
-        String DirBaseEntrada = nombreDirEnt.toString();
+        DirBaseEntrada = campoDirectorioEntrada.getText();
+        File f_nombreDirEnt = new File (DirBaseEntrada);
         String ArchivoConfiguracion = DirBaseEntrada + SLASH +  "config.properties";
         System.out.println("Guardando archivo");
+        
+        String DirBaseSalida = campoDirectorioSalida.getText();
+        File f_nombreDirSal = new File (DirBaseSalida);
         
         LiquidacionReliquidacion=(cuadroSeleccionTipoCalculo.getSelectedItem().equals("Cálculo de Liquidación"));
         
@@ -1836,13 +1844,13 @@ public class PeajesCDEC extends javax.swing.JFrame {
         propiedades.setProperty("a_evaluar", (String) cuadroAnoAEvaluar.getSelectedItem());
         propiedades.setProperty("a_base", (String) String.valueOf(anoBase));
         propiedades.setProperty("mes_evaluar_rit", (String) Mes1.getSelectedItem());
-        propiedades.setProperty("dir_entrada", nombreDirEnt.toString());
-        propiedades.setProperty("dir_salida", nombreDirSal == null?"":nombreDirSal.toString());
+        propiedades.setProperty("dir_entrada", f_nombreDirEnt.toString());
+        propiedades.setProperty("dir_salida", f_nombreDirSal.toString());
         propiedades.setProperty("liquidacionreliquidacion", String.valueOf(LiquidacionReliquidacion));
         propiedades.setProperty("num_etapas_anno", cuadroSeleccionNEtapas.getText());
         propiedades.setProperty("offset", cuadroSeleccionOffset.getText());
         propiedades.setProperty("num_barra_slack",cuadroSeleccionSlack.getText());
-        propiedades.setProperty("num_hidro",(String) cuadroSeleccionHidro.getSelectedItem());
+        propiedades.setProperty("num_hidro",String.valueOf (cuadroSeleccionHidro.getSelectedItem()));
         propiedades.setProperty("clientes",String.valueOf (ActClientes.getInheritsPopupMenu()));
         propiedades.setProperty("mes_evaluar_liq", (String) Mes.getSelectedItem());
         propiedades.setProperty("dir_liqmes",nombreDirLiq == null?"":nombreDirLiq.toString());
@@ -1963,8 +1971,20 @@ public class PeajesCDEC extends javax.swing.JFrame {
     }
     
     private static java.io.File getUserOptionFile () {
-//        String folderPath = System.getProperty("user.home") + File.separator + ".calculapeajes"; //TODO: May be implement for other OS
-        String folderPath = System.getenv("APPDATA") + File.separator + "coordinador";
+        String os_name = System.getProperty("os.name");
+        String folderPath;
+        if (os_name.toLowerCase().startsWith("windows")) {
+            String appPath = System.getenv("APPDATA");
+            if (appPath != null) {
+                folderPath = appPath + File.separator + "coordinador";
+            } else {
+                folderPath = System.getProperty("user.home") + File.separator + "coordinador";
+            }
+        } else if (os_name.toLowerCase().startsWith("linux")) {
+            folderPath = System.getProperty("user.home") + File.separator + ".coordinador";
+        } else {
+            folderPath = System.getProperty("user.home") + File.separator + ".coordinador"; //TODO: May be implement for other OS
+        }
         String fileConfig = folderPath + File.separator + ARCHIVO_CONFIG;
         File f_fileConfig = new File (fileConfig);
         return f_fileConfig;
