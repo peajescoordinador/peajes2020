@@ -111,6 +111,12 @@ public class PeajesRet {
         long tInicioLectura = System.currentTimeMillis();
         org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
 
+        //Lee opciones de configuracion:
+        int maxLeeLINEA = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de LINEAS leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        int maxLeeGEN = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de CENTRALES leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        int maxLeeCLIENTE = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de CLIENTES leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        int maxLeeZONA = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de ZONAS a leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        
         // Libro peajes
         String libroEntradaPeajes = DirBaseSal + SLASH + "Peaje" + Ano + ".xlsx";
         XSSFWorkbook wb_Peajes;
@@ -125,13 +131,13 @@ public class PeajesRet {
         /************
          * lee Peajes e IT
          ************/
-        double[][] longAux = new double[1000][NUMERO_MESES];
-        double[][] longAuxVATT = new double[1000][NUMERO_MESES];
-        double[][] longAuxIT = new double[1000][NUMERO_MESES];
-        double[][] longAuxITG = new double[1000][NUMERO_MESES];
-        double[][] longAuxITP = new double[1000][NUMERO_MESES];
-        String[] TxtTemp = new String[1000];
-        String[] TxtTempIT = new String[1000];
+        double[][] longAux = new double[maxLeeLINEA][NUMERO_MESES];
+        double[][] longAuxVATT = new double[maxLeeLINEA][NUMERO_MESES];
+        double[][] longAuxIT = new double[maxLeeLINEA][NUMERO_MESES];
+        double[][] longAuxITG = new double[maxLeeLINEA][NUMERO_MESES];
+        double[][] longAuxITP = new double[maxLeeLINEA][NUMERO_MESES];
+        String[] TxtTemp = new String[maxLeeLINEA];
+        String[] TxtTempIT = new String[maxLeeLINEA];
         int numLinea;
         int numLineaVATT;
         int numLineaIT;
@@ -189,9 +195,9 @@ public class PeajesRet {
         /**********
          * lee VATT
          **********/
-        double[][] Aux = new double[2500][NUMERO_MESES];
-        String[] TxtTemp1 = new String[2500];
-        String[] TxtTemp2 = new String[2500];
+        double[][] Aux = new double[maxLeeLINEA][NUMERO_MESES];
+        String[] TxtTemp1 = new String[maxLeeLINEA];
+        String[] TxtTemp2 = new String[maxLeeLINEA];
         int numLineasVATT;
         if (USE_MEMORY_READER) {
             numLineasVATT = Lee.leeVATT(wb_Ent, TxtTemp1, TxtTemp2, Aux);
@@ -246,7 +252,7 @@ public class PeajesRet {
         /**************
          * lee Clientes
          **************/
-        String[] Exen = new String[2500];
+        String[] Exen = new String[maxLeeCLIENTE];
         int numCli;
         if (USE_MEMORY_READER) {
             numCli = Lee.leeClientes(wb_Ent, TxtTemp1, Exen);
@@ -347,9 +353,9 @@ public class PeajesRet {
         /***************
          * Lee Centrales
          ***************/
-        TxtTemp1 = new String[600];
-        float[] Temp1 = new float[600];
-        float[] Temp2= new float[600];
+        TxtTemp1 = new String[maxLeeGEN];
+        float[] Temp1 = new float[maxLeeGEN];
+        float[] Temp2= new float[maxLeeGEN];
         int numCen;
         if (USE_MEMORY_READER) {
             numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2);
@@ -377,7 +383,7 @@ public class PeajesRet {
         /************
          * lee Lineas
          *************/
-        TxtTemp1 = new String[2000];
+        TxtTemp1 = new String[maxLeeLINEA];
         int numLineas;
         if (USE_MEMORY_READER) {
             numLineas = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);
@@ -396,10 +402,10 @@ public class PeajesRet {
         /**********************
          * lee Lineas Troncales
          **********************/
-        TxtTemp1 = new String[2000];
-        TxtTemp2 = new String[2000];
-        int[] intAux1 = new int[600];
-        int[][] intAux2 = new int[600][NUMERO_MESES];
+        TxtTemp1 = new String[maxLeeLINEA];
+        TxtTemp2 = new String[maxLeeLINEA];
+        int[] intAux1 = new int[maxLeeZONA];
+        int[][] intAux2 = new int[maxLeeZONA][NUMERO_MESES];
         int numLinIT;
         if (USE_MEMORY_READER) {
             numLinIT = Lee.leeLintron(wb_Ent, TxtTemp1, nomLin, TxtTemp2,intAux1, intAux2);

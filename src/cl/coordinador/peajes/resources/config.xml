@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>---PEAJATOR CONFIG FILE---</comment>
-<entry key="Version">0.0.8</entry>
+<entry key="Version">0.0.9</entry>
 <entry key="Idioma::STRING::Espanol">Espanol</entry>
 <entry key="Min Hidrologias::INTEGER">40</entry>
 <entry key="Max Hidrologias::INTEGER">65</entry>
@@ -21,4 +21,10 @@
 <entry key="Imprime prorratas a Excel::BOOLEAN">false</entry>
 <entry key="Imprime archivos 'debug' prorratas::BOOLEAN">false</entry>
 <entry key="Muestra menu re-liquidacion::BOOLEAN">false</entry>
+<entry key="Maximo numero de LINEAS leer en planillas Ent::INTEGER">3000</entry>
+<entry key="Maximo numero de BARRAS leer en planillas Ent::INTEGER">2500</entry>
+<entry key="Maximo numero de ETAPAS en despachos::INTEGER">600</entry>
+<entry key="Maximo numero de CENTRALES leer en planillas Ent::INTEGER">1500</entry>
+<entry key="Maximo numero de CLIENTES leer en planillas Ent::INTEGER">4000</entry>
+<entry key="Maximo numero de ZONAS a leer en planillas Ent::INTEGER">600</entry>
 </properties>

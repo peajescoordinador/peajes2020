@@ -38,7 +38,6 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
@@ -139,12 +138,19 @@ public class Prorratas {
         String[] EnergiaCU={"CUE2","CUE30","EUnit"};
         org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
         
+        //Lee opciones de configuracion:
+        int maxLeeLINEA = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de LINEAS leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        int maxLeeBARRA = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de BARRAS leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        int maxLeeETAPA = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de ETAPAS en despachos",PeajesConstant.DataType.INTEGER));
+        int maxLeeGEN = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de CENTRALES leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        int maxLeeCLIENTE = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de CLIENTES leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        
         /**************
          * lee de Meses
          **************/
         System.out.println("Importando Informacion y Parametros");
         XSSFWorkbook wb_Ent = new XSSFWorkbook(new FileInputStream( rutaLibroEnt ));
-        int[] intAux1=new int[600];
+        int[] intAux1=new int[maxLeeETAPA];
         int numSp = Lee.leeMeses(wb_Ent, intAux1, MESES);
         int[] paramEtapa = new int[numEtapas];
         System.arraycopy(intAux1, 0, paramEtapa, 0, numEtapas);
@@ -153,8 +159,8 @@ public class Prorratas {
          * Lectura de parametros de lineas
          * ===============================
          */
-        TxtTemp1=new String[2500];
-        double[][] Aux=new double[2500][11];
+        TxtTemp1=new String[maxLeeLINEA];
+        double[][] Aux=new double[maxLeeLINEA][11];
         numLin = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);
         float[][] paramLineas;
         System.out.println("Lineas: "+numLin);
@@ -171,10 +177,10 @@ public class Prorratas {
          * lee Lineas Troncales
          * ====================
          */
-        intAux1=new int[2500];
-        int[][] intAux2 = new int[2500][3];
-        TxtTemp1=new String[2500];
-        TxtTemp2=new String[2500];
+        intAux1=new int[maxLeeLINEA];
+        int[][] intAux2 = new int[maxLeeLINEA][3];
+        TxtTemp1=new String[maxLeeLINEA];
+        TxtTemp2=new String[maxLeeLINEA];
         numLinTron = Lee.leeLintron(wb_Ent, TxtTemp1, nombreLineas,TxtTemp2, intAux1, intAux2);
         String[] nomLinTron = new String[numLinTron];
         int[] indiceLintron = new int[numLinTron];
@@ -236,8 +242,8 @@ public class Prorratas {
          * lee de Barras
          * =============
          */
-        TxtTemp1=new String[2500];
-        int[][] intAux3=new int[2500][4];
+        TxtTemp1=new String[maxLeeBARRA];
+        int[][] intAux3=new int[maxLeeBARRA][4];
         numBarras = Lee.leeDefbar(wb_Ent, TxtTemp1, intAux3);
         String [] nomBar = new String[numBarras];
         paramBarTroncal = new int[numBarras][3];
@@ -296,10 +302,10 @@ public class Prorratas {
         /*******************
         Lectura de Centrales
         ********************/
-        TxtTemp1 = new String[700];
-        String [] TxtTemp1_2 = new String[700];
-        float[] Temp1 = new float[700];
-        float[] Temp2= new float[700];
+        TxtTemp1 = new String[maxLeeGEN];
+        String [] TxtTemp1_2 = new String[maxLeeGEN];
+        float[] Temp1 = new float[maxLeeGEN];
+        float[] Temp2= new float[maxLeeGEN];
         int numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2);
         String[] nombreCentrales = new String[numCen];
         System.arraycopy(TxtTemp1, 0, nombreCentrales, 0, numCen);
@@ -307,7 +313,7 @@ public class Prorratas {
         /******************************
         Lectura de datos de generadores
         *******************************/
-        TxtTemp1 = new String[1000];
+        TxtTemp1 = new String[maxLeeGEN];
         
         numGen = Lee.leePlpcnfe(wb_Ent,TxtTemp1,
                 intAux3,nombreCentrales);
@@ -360,9 +366,9 @@ public class Prorratas {
          * =============================
          */
 
-        float[][] Temporal1 = new float[2500][numEtapas];
-        float[][] Temporal2 = new float[2500][NUMERO_MESES];
-        float[][][] Temporal3 = new float[2500][3][NUMERO_MESES];
+        float[][] Temporal1 = new float[maxLeeCLIENTE][numEtapas];
+        float[][] Temporal2 = new float[maxLeeCLIENTE][NUMERO_MESES];
+        float[][][] Temporal3 = new float[maxLeeCLIENTE][3][NUMERO_MESES];
         int numClaves;
 
         if (ActClientes) {
@@ -403,8 +409,8 @@ public class Prorratas {
         /******************
         Lectura de Clientes
         *******************/
-        TxtTemp1 = new String[2500];
-        String[] Exen = new String[2500];
+        TxtTemp1 = new String[maxLeeCLIENTE];
+        String[] Exen = new String[maxLeeCLIENTE];
         int numCli = Lee.leeClientes(wb_Ent, TxtTemp1,Exen);
         String [] nomCli = new String[numCli];
         System.arraycopy(TxtTemp1, 0, nomCli, 0, numCli);
@@ -412,8 +418,8 @@ public class Prorratas {
         /*************************
         Lectura de Datos de Claves
         **************************/
-        TxtTemp1 = new String[2500];
-        TxtTemp2 = new String[2500];
+        TxtTemp1 = new String[maxLeeCLIENTE];
+        TxtTemp2 = new String[maxLeeCLIENTE];
         int clav = Lee.leeBarcli(wb_Ent, TxtTemp1,
                 TxtTemp2, intAux3, nomCli, nomBar);
         String[] nombreClaves = new String[numClaves];
@@ -700,8 +706,8 @@ public class Prorratas {
          * ===============================================
          */
         long time_flow = System.currentTimeMillis();
-        TxtTemp1=new String[600];
-        float[][] Aux1 = new float[600][1];
+        TxtTemp1=new String[maxLeeLINEA];
+        float[][] Aux1 = new float[maxLeeLINEA][1];
         int numLinSistRed = Lee.leeLinPLP(wb_Ent, TxtTemp1, Aux1);
         int[] paramLinSistRed=new int[numLinSistRed];
         String [] nombreLineasSistRed = new String[numLinSistRed];

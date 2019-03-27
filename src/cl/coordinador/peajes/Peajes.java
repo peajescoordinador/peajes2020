@@ -15,7 +15,6 @@
  */
 package cl.coordinador.peajes;
 
-import static cl.coordinador.peajes.PeajesConstant.INIT_SIZE_ARRAY;
 import static cl.coordinador.peajes.PeajesConstant.NUMERO_MESES;
 import static cl.coordinador.peajes.PeajesConstant.MAX_COMPRESSION_RATIO;
 import static cl.coordinador.peajes.PeajesConstant.MESES;
@@ -40,6 +39,9 @@ public class Peajes {
         System.out.println(libroEntrada);
         org.apache.poi.openxml4j.util.ZipSecureFile.setMinInflateRatio(MAX_COMPRESSION_RATIO);
         
+        //Lee opciones de configuracion:
+        int maxLeeLINEA = Integer.parseInt(PeajesCDEC.getOptionValue("Maximo numero de LINEAS leer en planillas Ent",PeajesConstant.DataType.INTEGER));
+        
         //Abre las conexiones:
         XSSFWorkbook wb_Ent;
         try {
@@ -56,9 +58,9 @@ public class Peajes {
 //        String LibroAVI= DirBaseEnt + SLASH +"AVI_COMA.xls"; //Deprecated
         //Lee.leeEscribeArchivoVATT(libroEntrada,LibroAVI, Ano);
 
-        double[][] Aux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
-        String[] TxtTemp1 = new String[INIT_SIZE_ARRAY];
-        String[] TxtTemp2 = new String[INIT_SIZE_ARRAY];
+        double[][] Aux = new double[maxLeeLINEA][NUMERO_MESES];
+        String[] TxtTemp1 = new String[maxLeeLINEA];
+        String[] TxtTemp2 = new String[maxLeeLINEA];
         int numLineasVATT = Lee.leeVATT(wb_Ent, TxtTemp1, TxtTemp2, Aux);
         double[][] VATT = new double[numLineasVATT][NUMERO_MESES];
         String[] nomLinVATT = new String[numLineasVATT];
@@ -98,7 +100,7 @@ public class Peajes {
         /************
          * lee Lineas
          *************/
-        TxtTemp1 = new String[INIT_SIZE_ARRAY];
+        TxtTemp1 = new String[maxLeeLINEA];
         int numLineas = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);
         double[][] paramLineas = new double[numLineas][10];
         String[] nomLin = new String[numLineas];
@@ -119,14 +121,14 @@ public class Peajes {
         /**********************
          * lee Lineas Troncales
          **********************/
-        TxtTemp1 = new String[INIT_SIZE_ARRAY];
-        TxtTemp2 = new String[INIT_SIZE_ARRAY];
-        int[] intAux1 = new int[INIT_SIZE_ARRAY];
+        TxtTemp1 = new String[maxLeeLINEA];
+        TxtTemp2 = new String[maxLeeLINEA];
+        int[] intAux1 = new int[maxLeeLINEA];
         int[] numLineasIT=new int[1];
-        double[][] ITEAux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
-        double[][] ITEGAux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
-        double[][] ITERAux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
-        double[][] ITPAux = new double[INIT_SIZE_ARRAY][NUMERO_MESES];
+        double[][] ITEAux = new double[maxLeeLINEA][NUMERO_MESES];
+        double[][] ITEGAux = new double[maxLeeLINEA][NUMERO_MESES];
+        double[][] ITERAux = new double[maxLeeLINEA][NUMERO_MESES];
+        double[][] ITPAux = new double[maxLeeLINEA][NUMERO_MESES];
         int numLinT = Lee.leeLintronIT2(wb_Ent, TxtTemp1, TxtTemp2,
                 nomLin, intAux1, ITEAux,ITEGAux,ITERAux, ITPAux,numLineasIT);
         String[] nomLinIT = new String[numLinT];
