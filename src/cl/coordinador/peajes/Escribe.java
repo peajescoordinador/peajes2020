@@ -6481,12 +6481,13 @@ public class Escribe {
             cell.setCellStyle(estiloDatos4);
         }
 
-        // Crea nombre de rango de salida
-        Name nombreCel = wb.createName();
-        nombreCel.setNameName(nomHoja); // Nombre del rango igual al nombre de la hoja
-        // CellReference cellRef = new CellReference(cell.getRowIndex(), cell.getColumnIndex());
-        //String reference = nomHoja+"!$D$6:"+cellRef.formatAsString(); // area reference
-        //nombreCel.setRefersToFormula(reference);
+        // Crea nombre de rango de salida (deprecated: estan desplazados y generan un error de consistencia en Excel)
+//        Name nombreCel = wb.createName();
+//        nombreCel.setNameName(nomHoja); // Nombre del rango igual al nombre de la hoja
+//        CellReference cellRef = new CellReference(cell.getRowIndex(), cell.getColumnIndex());
+//        String reference = nomHoja+"!$D$6:"+cellRef.formatAsString(); // area reference
+//        nombreCel.setRefersToFormula(reference);
+        
         // Ajusta anchos
         hoja.setColumnWidth(0, 2 * 256);
         for (int i = 1; i < (dim2 + 3) * 3; i++) {
