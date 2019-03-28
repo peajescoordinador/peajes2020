@@ -303,7 +303,6 @@ public class Prorratas {
         Lectura de Centrales
         ********************/
         TxtTemp1 = new String[maxLeeGEN];
-        String [] TxtTemp1_2 = new String[maxLeeGEN];
         float[] Temp1 = new float[maxLeeGEN];
         float[] Temp2= new float[maxLeeGEN];
         int numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2);
@@ -314,10 +313,10 @@ public class Prorratas {
         Lectura de datos de generadores
         *******************************/
         TxtTemp1 = new String[maxLeeGEN];
-        
+        intAux3=new int[maxLeeGEN][4];
         numGen = Lee.leePlpcnfe(wb_Ent,TxtTemp1,
                 intAux3,nombreCentrales);
-        
+        String [] TxtTemp1_2 = new String[maxLeeGEN];
         int numGen_Sin_Fallas = Lee.leePlpcnfe(wb_Ent,TxtTemp1_2,nombreCentrales);
         
         
@@ -420,6 +419,7 @@ public class Prorratas {
         **************************/
         TxtTemp1 = new String[maxLeeCLIENTE];
         TxtTemp2 = new String[maxLeeCLIENTE];
+        intAux3 = new int[maxLeeBARRA][4];
         int clav = Lee.leeBarcli(wb_Ent, TxtTemp1,
                 TxtTemp2, intAux3, nomCli, nomBar);
         String[] nombreClaves = new String[numClaves];

@@ -295,6 +295,7 @@ public class PeajesIny {
          * lee Lineas
          *************/
         TxtTemp1 = new String[maxLeeLINEA];
+        Aux = new double[maxLeeLINEA][NUMERO_MESES];
         int numLineas;
         if (USE_MEMORY_READER) {
             numLineas = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);

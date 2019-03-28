@@ -253,6 +253,7 @@ public class PeajesRet {
          * lee Clientes
          **************/
         String[] Exen = new String[maxLeeCLIENTE];
+        TxtTemp1 = new String[maxLeeCLIENTE];
         int numCli;
         if (USE_MEMORY_READER) {
             numCli = Lee.leeClientes(wb_Ent, TxtTemp1, Exen);
@@ -384,6 +385,7 @@ public class PeajesRet {
          * lee Lineas
          *************/
         TxtTemp1 = new String[maxLeeLINEA];
+        Aux = new double[maxLeeLINEA][NUMERO_MESES];
         int numLineas;
         if (USE_MEMORY_READER) {
             numLineas = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);

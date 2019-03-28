@@ -101,6 +101,7 @@ public class Peajes {
          * lee Lineas
          *************/
         TxtTemp1 = new String[maxLeeLINEA];
+        Aux = new double[maxLeeLINEA][NUMERO_MESES];
         int numLineas = Lee.leeDeflin(wb_Ent, TxtTemp1, Aux);
         double[][] paramLineas = new double[numLineas][10];
         String[] nomLin = new String[numLineas];
