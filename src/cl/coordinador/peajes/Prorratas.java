@@ -513,7 +513,7 @@ public class Prorratas {
                                     sNomGenPrev = sNomGenActual;
                                 }
                                 indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
-                                indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                indEta = Integer.valueOf((line.substring(9, line.indexOf(",", 9))).trim()) - 1;
                                 if (indHid > numHidCenPLP) {
                                     numHidCenPLP = indHid;
                                 }
@@ -524,13 +524,13 @@ public class Prorratas {
                                 if (indexGenSinFallas != null) {
                                     if (indexGen != null) {
                                         if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
-                                            Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                            Pgen = Float.valueOf((line.substring(153, line.indexOf(",", 153))).trim());
                                             Gx[indexGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                         }
                                     }
                                 } else {
                                     if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
-                                        ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                        ENS = Float.valueOf((line.substring(153, line.indexOf(",", 153))).trim());
                                         FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                     }
                                 }
@@ -543,7 +543,7 @@ public class Prorratas {
                                         
                                         //System.out.println(indGen +" "+nomGen[indGen]);
                                         indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
-                                        indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                        indEta = Integer.valueOf((line.substring(9, line.indexOf(",", 9))).trim()) - 1;
                                         if (indHid > numHidCenPLP) {
                                             numHidCenPLP = indHid;
                                         }
@@ -552,7 +552,7 @@ public class Prorratas {
                                             continue;
                                         }
                                         //Pgen=Float.valueOf((line.substring(151,158)).trim()); //Peajes
-                                        Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                        Pgen = Float.valueOf((line.substring(153, line.indexOf(",", 153))).trim());
                                         if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
                                             //System.out.println(indGen +" "+nomGen[indGen]);
                                             Gx[indGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
@@ -562,7 +562,7 @@ public class Prorratas {
                                     }
                                 } else {//suma las fallas
                                     indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
-                                    indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                    indEta = Integer.valueOf((line.substring(9, line.indexOf(",", 9))).trim()) - 1;
                                     if (indHid > numHidCenPLP) {
                                         numHidCenPLP = indHid;
                                     }
@@ -571,7 +571,7 @@ public class Prorratas {
                                         continue;
                                     }
                                     //ENS=Float.valueOf((line.substring(151,158)).trim());
-                                    ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                    ENS = Float.valueOf((line.substring(153, line.indexOf(",", 153))).trim());
                                     if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
                                         FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                     }
@@ -632,16 +632,16 @@ public class Prorratas {
                                 if (indGen2 > -1) {
                                     if (indGen > -1) {
                                         indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
-                                        indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
-                                        Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                        indEta = Integer.valueOf((line.substring(9, line.indexOf(",", 9))).trim()) - 1;
+                                        Pgen = Float.valueOf((line.substring(153, line.indexOf(",", 153))).trim());
                                         if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
                                             Gx[indGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                         }
                                     }
                                 } else {//suma las fallas
                                     indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
-                                    indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
-                                    ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                    indEta = Integer.valueOf((line.substring(9, line.indexOf(",", 9))).trim()) - 1;
+                                    ENS = Float.valueOf((line.substring(153, line.indexOf(",", 153))).trim());
                                     if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
                                         FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                     }
@@ -679,16 +679,16 @@ public class Prorratas {
                         if (indGen2 > -1) {
                             if (indGen > -1) {
                                 indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
-                                indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
-                                Pgen = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                                indEta = Integer.valueOf((line.substring(9, line.indexOf(",", 9))).trim()) - 1;
+                                Pgen = Float.valueOf((line.substring(153, line.indexOf(",", 153))).trim());
                                 if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
                                     Gx[indGen][indEta - etapaPeriodoIni][indHid] = Pgen; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                                 }
                             }
                         } else {//suma las fallas
                             indHid = Integer.valueOf((line.substring(4, line.indexOf(",", 4))).trim()) - 1;
-                            indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
-                            ENS = Float.valueOf((line.substring(103, line.indexOf(",", 103))).trim());
+                            indEta = Integer.valueOf((line.substring(9, line.indexOf(",", 9))).trim()) - 1;
+                            ENS = Float.valueOf((line.substring(153, line.indexOf(",", 153))).trim());
                             if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
                                 FallaEtaHid[indEta - etapaPeriodoIni][indHid] += ENS; //TODO: This can cause an java.lang.ArrayIndexOutOfBoundsException when the selected hydro is lower than the values in plp file!
                             }
