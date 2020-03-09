@@ -750,7 +750,7 @@ public class Prorratas {
                 if(cuenta>0){
                     if (USE_MAPPED_NAMES) {
                         if ((line.substring(0, 5).trim()).equals("MEDIA") == false && (line.substring(0, 3).trim()).equals("Sim") == true) {
-                            String sNomLineaActual = (line.substring(32, 79)).trim();
+                            String sNomLineaActual = (line.substring(33, 81)).trim();
                             if (!sNomLineaActual.equals(sNomLineaPrev)) {
                                 indexLin = m_nombreLineasSistRed.get(sNomLineaActual);
                                 sNomLineaPrev = sNomLineaActual;
@@ -775,7 +775,7 @@ public class Prorratas {
                         }
                     } else {
                     if((line.substring(0,5).trim()).equals("MEDIA")==false && (line.substring(0,3).trim()).equals("Sim")==true){
-                        indLin=Calc.Buscar((line.substring(32,79)).trim(),nombreLineasSistRed);
+                        indLin=Calc.Buscar((line.substring(33,81)).trim(),nombreLineasSistRed);
                         if(indLin>-1){
                             //System.out.println(indLin+" "+nombreLineasSistRed[indLin]);
                             indHid=Integer.valueOf((line.substring(4,line.indexOf(",",4))).trim())-1;
