@@ -765,9 +765,9 @@ public class Prorratas {
                                         cuenta++;
                                         continue;
                                     }
-                                    indEta = Integer.valueOf((line.substring(8, line.indexOf(",", 8))).trim()) - 1;
+                                    indEta = Integer.valueOf((line.substring(9, line.indexOf(",", 9))).trim()) - 1;
                                     if (indEta < etapaPeriodoFin && indEta >= etapaPeriodoIni) {
-                                        Perd = Float.valueOf(line.substring(111, line.indexOf(",", 111)).trim());
+                                        Perd = Float.valueOf(line.substring(129, line.indexOf(",", 129)).trim());
                                         perdidasPLPMayor110[indEta - etapaPeriodoIni][indHid] += Perd;
                                     }
                                 }
@@ -779,8 +779,8 @@ public class Prorratas {
                         if(indLin>-1){
                             //System.out.println(indLin+" "+nombreLineasSistRed[indLin]);
                             indHid=Integer.valueOf((line.substring(4,line.indexOf(",",4))).trim())-1;
-                            indEta=Integer.valueOf((line.substring(8,line.indexOf(",",8))).trim())-1;
-                            Perd=Float.valueOf(line.substring(111,line.indexOf(",",111)).trim());
+                            indEta=Integer.valueOf((line.substring(9,line.indexOf(",",9))).trim())-1;
+                            Perd=Float.valueOf(line.substring(129,line.indexOf(",",129)).trim());
                             if (indHid > numHidLinPLP) {
                                 numHidLinPLP = indHid;
                             }
