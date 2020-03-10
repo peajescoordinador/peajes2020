@@ -47,6 +47,9 @@ public class PeajesIny {
     static double peajeEmpGO[][]; //TODO: Encapsulate
     static float MGNCO[]; //TODO: Encapsulate
     static double[] PotNetaO; //TODO: Encapsulate
+    static float[] FAERO; //TODO: Encapsulate
+    static float[] CETO; //TODO: Encapsulate
+    static float[] Tabla1O; //TODO: Encapsulate
     static double[][] GenPromMesCenO; //TODO: Encapsulate
     static double[][] facPagoO; //TODO: Encapsulate
     static double[][] peajeGenO ; //TODO: Encapsulate
@@ -250,15 +253,21 @@ public class PeajesIny {
         double PotNetaTot=0;
         float[] Temp1 = new float[maxLeeGEN];
         float[] Temp2= new float[maxLeeGEN];
+        float[] Temp3= new float[maxLeeGEN];
+        float[] Temp4= new float[maxLeeGEN];
+        float[] Temp5= new float[maxLeeGEN];
         int numCen;
         if (USE_MEMORY_READER) {
-            numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2);
+            numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2,Temp3,Temp4,Temp5);
         } else {
-            numCen = Lee.leeCentrales(libroEntrada, TxtTemp1,Temp1,Temp2);
+            numCen = Lee.leeCentrales(libroEntrada, TxtTemp1,Temp1,Temp2,Temp3,Temp4,Temp5);
         }
         nomGen = new String[numCen];
         double[] PotNeta = new double[numCen];
         float[] MGNC = new float[numCen];
+        float[] FAER = new float[numCen];
+        float[] CET = new float[numCen];
+        float[] Tabla1 = new float[numCen];
         int numMGNC=0;
 //        int[] indMGNC=new int[numCen];
 
@@ -267,6 +276,9 @@ public class PeajesIny {
             PotNeta[i] = Temp1[i];
             PotNetaTot+=PotNeta[i];
             MGNC[i] = Temp2[i];
+            FAER[i] = Temp3[i];
+            CET[i] = Temp4[i];
+            Tabla1[i] = Temp5[i];
             //if(MGNC[i]==1){
 //                indMGNC[numMGNC]=i;
                 numMGNC++;
@@ -679,6 +691,7 @@ public class PeajesIny {
         double[] peajeAnualMGNC=new double[numMGNC];
         String nomMGNC[]=new String[numMGNC];
         double[] PotNetaMGNC = new double[numMGNC];
+        
         int aux=0;
         double[][][] ExcenMGNCTx=new double[numMGNC][numTx][NUMERO_MESES];
         double[][] ExcenMGNC=new double[numMGNC][NUMERO_MESES];
@@ -896,6 +909,9 @@ public class PeajesIny {
         // -------------------------------------------------------------------
         MGNCO = new float[numCen];
         PotNetaO = new double[numCen];
+        FAERO = new float[numCen];
+        CETO= new float[numCen];
+        Tabla1O= new float[numCen];       
         GenPromMesCenO= new double[numCen][NUMERO_MESES];
         facPagoO=new double[numCen][NUMERO_MESES];
         peajeGenO = new double[numCen][NUMERO_MESES];
@@ -911,6 +927,9 @@ public class PeajesIny {
         for (int i = 0; i < numCen; i++) {
             MGNCO[i]=MGNC[ng[i]];
             PotNetaO[i]=PotNeta[ng[i]];
+            FAERO[i]=FAER[ng[i]];
+            CETO[i]=CET[ng[i]];
+            Tabla1O[i]=Tabla1[ng[i]];
             for (int k = 0; k < NUMERO_MESES; k++) {
                 GenPromMesCenO[i][k]=GenPromMesCen[ng[i]][k];
                 facPagoO[i][k]=facPago[ng[i]][k];
@@ -1117,7 +1136,7 @@ public class PeajesIny {
                     writerCSV = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(libroSalidaGCSV), StandardCharsets.ISO_8859_1));
                     String sLineText;
                     //Escribimos el header:
-                    writerCSV.write("Tramo,Transmisor,Central,Empresa Generación,Mes,Factor de Exención,Pago de Peaje [$]");
+                    writerCSV.write("Tramo,Transmisor,Central,Empresa Generación,Mes,Factor de Exención,FAER,CET,Tabla 1,Pago de Peaje [$]");
                     writerCSV.newLine();
                     //Escribimos los datos:
                     for (int l = 0; l < numLinTx; l++) {
@@ -1135,6 +1154,9 @@ public class PeajesIny {
                                 sLineText += sEmpresaGen[0] + ",";
                                 sLineText += MESES[m] + ",";
                                 sLineText += MGNCO[g] + ",";
+                                sLineText += FAERO[g] + ",";
+                                sLineText += CETO[g] + ",";
+                                sLineText += Tabla1O[g] + ",";
                                 sLineText += peajeLinGO[l][g][m];
                                 writerCSV.write(sLineText);
                                 writerCSV.newLine();
