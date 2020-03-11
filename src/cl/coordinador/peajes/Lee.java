@@ -79,10 +79,10 @@ public class Lee {
         return numClientes;
     }
     
-    public static int leeCentrales(String libroEntrada, String[] TextoTemporal,float[] Potencia, float[] MedioGene) {
+    public static int leeCentrales(String libroEntrada, String[] TextoTemporal,float[] Potencia, float[] MedioGene,float[] FAER,float[] CET, float[] Tabla1) {
         try {
             XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream( libroEntrada ));
-            return leeCentrales(wb, TextoTemporal, Potencia, MedioGene);
+            return leeCentrales(wb, TextoTemporal, Potencia, MedioGene,FAER,CET,Tabla1);
         }
         catch (java.io.FileNotFoundException e) {
                 System.out.println( "No se se puede acceder al archivo " + e.getMessage());
@@ -93,26 +93,35 @@ public class Lee {
         return 0;
     }
 
-    public static int leeCentrales(XSSFWorkbook wb, String[] TextoTemporal, float[] Potencia, float[] MedioGene) {
+    public static int leeCentrales(XSSFWorkbook wb, String[] TextoTemporal, float[] Potencia, float[] MedioGene,float[] FAER,float[] CET, float[] Tabla1) {
         int numCentrales = 0;
         Cell c1 = null;
         Cell c2 = null;
         Cell c3 = null;
         Cell c4 = null;
+        Cell c5 = null;
+        Cell c6 = null;
+        Cell c7 = null;
         AreaReference aref;
         CellReference[] crefs;
         Name nomRango = wb.getName("centrales");
         aref = new AreaReference(nomRango.getRefersToFormula(), wb.getSpreadsheetVersion());
         crefs = aref.getAllReferencedCells();
         Sheet s = wb.getSheet(crefs[0].getSheetName());
-        for (int i = 0; i < crefs.length; i += 4) {
+        for (int i = 0; i < crefs.length; i += 7) {
             Row r = s.getRow(crefs[i].getRow());
             c1 = r.getCell(crefs[i].getCol());
             c2 = r.getCell(crefs[i + 1].getCol());
             c3 = r.getCell(crefs[i + 2].getCol());
             c4 = r.getCell(crefs[i + 3].getCol());
+            c5 = r.getCell(crefs[i + 4].getCol());
+            c6 = r.getCell(crefs[i + 5].getCol());
+            c7 = r.getCell(crefs[i + 6].getCol());
             Potencia[numCentrales] = (float) c3.getNumericCellValue();
             MedioGene[numCentrales] = (float) c4.getNumericCellValue();
+            FAER[numCentrales] = (float) c5.getNumericCellValue();
+            CET[numCentrales] = (float) c6.getNumericCellValue();
+            Tabla1[numCentrales] = (float) c7.getNumericCellValue();
             TextoTemporal[numCentrales] = c2.toString().trim() + "#" + c1.toString().trim(); // Nombre
             numCentrales++;
         }
