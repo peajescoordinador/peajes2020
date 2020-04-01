@@ -357,11 +357,14 @@ public class PeajesRet {
         TxtTemp1 = new String[maxLeeGEN];
         float[] Temp1 = new float[maxLeeGEN];
         float[] Temp2= new float[maxLeeGEN];
+        float[] Temp3= new float[maxLeeGEN];
+        float[] Temp4= new float[maxLeeGEN];
+        float[] Temp5= new float[maxLeeGEN];
         int numCen;
         if (USE_MEMORY_READER) {
-            numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2);
+            numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2,Temp3,Temp4,Temp5);
         } else {
-            numCen = Lee.leeCentrales(libroEntrada, TxtTemp1,Temp1,Temp2);
+            numCen = Lee.leeCentrales(libroEntrada, TxtTemp1,Temp1,Temp2,Temp3,Temp4,Temp5);
         }
         String[] nomCen = new String[numCen];
         System.arraycopy(TxtTemp1, 0, nomCen, 0, numCen);

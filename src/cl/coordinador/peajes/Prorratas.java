@@ -305,7 +305,10 @@ public class Prorratas {
         TxtTemp1 = new String[maxLeeGEN];
         float[] Temp1 = new float[maxLeeGEN];
         float[] Temp2= new float[maxLeeGEN];
-        int numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2);
+        float[] Temp3= new float[maxLeeGEN];
+        float[] Temp4= new float[maxLeeGEN];
+        float[] Temp5= new float[maxLeeGEN];
+        int numCen = Lee.leeCentrales(wb_Ent, TxtTemp1,Temp1,Temp2,Temp3,Temp4,Temp5);
         String[] nombreCentrales = new String[numCen];
         System.arraycopy(TxtTemp1, 0, nombreCentrales, 0, numCen);
 
