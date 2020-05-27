@@ -1274,7 +1274,7 @@ public class Prorratas {
                 writerCSV.newLine();
                 //Escribe prorratas generacion (por central):
                 for (int m = mesIniProrr; m <= mesFinProrr; m++) {
-                    float[][] prorrMesLinCentral = new float[numLinTx][numCen];
+                    double[][] prorrMesLinCentral = new double[numLinTx][numCen];
                     for (int g = 0; g < numGen; g++) {
                         for (int l = 0; l < numLinTx; l++) {
                             if (sumPorrMesG[g] != 0) {
