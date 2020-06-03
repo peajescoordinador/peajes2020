@@ -851,7 +851,7 @@ public class Lee {
                                 if (sValues.length != 5) {
                                     throw new IOException("Error archivo de prorratas linea " + cont + ". Se esperan 5 columnas pero se encontraron " + sValues.length + " . Chequee que la codificación usada sea " + PeajesConstant.CSV_ENCODING.displayName());
                                 }
-                                prorrataMes[l][c][m] = Float.parseFloat(sValues[4]);
+                                prorrataMes[l][c][m] = Double.parseDouble(sValues[4]);
                                 cont++;
                             } else {
                                 throw new IOException("Error archivo de prorratas. Se esperan '" + (numLineas * numCentrales * numMeses) + "' filas (datos) pero se encontraron '" + cont + "'. Asegurese que el archivo de prorratas en carpeta de salida corresponde con planilla ENT en carperta de entrada");
